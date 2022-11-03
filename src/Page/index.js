@@ -1,0 +1,8 @@
+export { default as MainPage } from './MainPage';
+export { default as OrderListPage } from './OrderListPage';
+export { default as IngredientListPage } from './IngredientListPage';
+export { default as IngredientOrderPage } from './IngredientOrderPage';
+export { default as CustomerListPage } from './CustomerListPage';
+export { default as StaffLoginPage } from './StaffLoginPage';
+export { default as StaffSignupPage } from './StaffSignupPage';
+export { default as StaffListPage } from './StaffListPage';
