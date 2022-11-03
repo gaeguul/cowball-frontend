@@ -12,10 +12,10 @@ function SpeechExample() {
 
   return (
     <div>
-      <div>{value}</div>
       <button onMouseDown={listen} onMouseUp={stop}>
         🎤
       </button>
+      <div>{value}</div>
       {listening && <div>음성인식 활성화 중</div>}
     </div>
   );
