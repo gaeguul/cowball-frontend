@@ -1,2 +1,111 @@
 @import './component/layout';
 @import './component/nav';
+
+.logo-container {
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-container {
+  height: 80%;
+  display: grid;
+  grid-template-columns: 150px 250px minmax(max-content, 1fr);
+
+  .nav-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      list-style: none;
+      padding-left: 0px;
+      margin: 0 0 20px 0;
+
+      li {
+        margin-bottom: 10px;
+      }
+      li > a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .active {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .orderlist-container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto repeat(auto-fill, max-content);
+
+    .orderlist-title {
+      display: flex;
+    }
+
+    .order {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+
+      .order-id {
+        font-size: 1.3em;
+      }
+      .rsv-date {
+        color: red;
+      }
+    }
+  }
+
+  .orderdetail-container {
+    display: flex;
+    flex-direction: column;
+
+    .top {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .id-and-button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .order-id {
+          font-size: 2em;
+        }
+
+        .state-button {
+          display: inline-block;
+          box-sizing: border-box;
+
+          margin: 10px 30px;
+
+          width: 140px;
+          height: 44px;
+          left: 795px;
+          top: 203px;
+
+          background: #ffc72c;
+          border: 3px solid #2d2d2d;
+          /* 버튼그림자 */
+
+          box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.51);
+          border-radius: 20px;
+
+          text-align: center;
+          line-height: 40px;
+          font-weight: 600;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}
