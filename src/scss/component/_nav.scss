@@ -1,0 +1,46 @@
+.logo-nav-container {
+  .logo-container {
+    display: flex;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      height: 40px;
+    }
+  }
+
+  .nav-container {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    width: 150px;
+    height: 80vh;
+    padding-top: 20px;
+    background: #f2f2f2;
+
+    .nav-container-inner {
+      display: grid;
+      grid-template-columns: max-content;
+      grid-template-rows: repeat(9, max-content);
+      gap: 10px;
+
+      .nav-manage {
+        margin-top: 30px;
+      }
+    }
+
+    .nav-title {
+      font-weight: 600;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+}
+
+.nexttonav {
+  margin-left: 150px; //nav width: 150px
+}

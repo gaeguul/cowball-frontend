@@ -1,0 +1,83 @@
+@import './component/layout';
+@import './component/nav';
+
+.ingredientlist-container {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 50px;
+
+  .title-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+
+    .title-main {
+      font-size: 2em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .title-detail {
+      margin-left: 20px;
+      font-size: 0.8em;
+      color: grey;
+      text-align: left;
+    }
+  }
+
+  .content-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 90%;
+    height: 100%;
+    white-space: nowrap;
+    overflow: auto;
+
+    table {
+      width: 100%;
+      padding-top: 40px;
+      border-spacing: 0;
+      white-space: nowrap;
+      overflow: auto;
+
+      th,
+      td {
+        padding: 10px 20px;
+      }
+      thead {
+        font-weight: 600;
+        font-size: 1.2em;
+      }
+
+      thead > :nth-child(1),
+      tr > :nth-child(1) {
+        text-align: left;
+      }
+
+      tr:hover {
+        background-color: #f5f5f5;
+      }
+
+      .alcohol-arrived {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .button {
+          color: #b1b1b1;
+          display: flex;
+          align-items: flex-end;
+
+          :hover {
+            color: #ffc72c;
+          }
+        }
+
+        .number {
+          margin-left: 5px;
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}
