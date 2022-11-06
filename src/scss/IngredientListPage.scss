@@ -9,7 +9,10 @@
   .title-container {
     display: flex;
     justify-content: flex-start;
-    align-items: flex-end;
+    align-items: center;
+
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(35, 35, 35, 1);
 
     .title-main {
       font-size: 2em;
@@ -35,7 +38,7 @@
 
     table {
       width: 100%;
-      padding-top: 40px;
+      padding-top: 30px;
       border-spacing: 0;
       white-space: nowrap;
       overflow: auto;
@@ -44,6 +47,7 @@
       td {
         padding: 10px 20px;
       }
+
       thead {
         font-weight: 600;
         font-size: 1.2em;

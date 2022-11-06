@@ -9,7 +9,7 @@ function IngredientList() {
           <div className='title-main'>재고현황</div>
           <div className='title-detail'>
             어제 재고현황과 오늘 재고현황을 보여줍니다.<br></br>술 상품은
-            상점에서 구매한 수량만큼 당일입고 수량을 직접 변경할 수 있습니다
+            상점에서 구매한 수량만큼 당일입고 수량을 직접 변경할 수 있습니다.
           </div>
         </div>
         <div className='content-container'>

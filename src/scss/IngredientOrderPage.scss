@@ -1,0 +1,30 @@
+@import './component/layout';
+@import './component/logonav';
+
+.ingredientorder-container {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 50px;
+
+  .title-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(35, 35, 35, 1);
+
+    .title-main {
+      font-size: 2em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .title-detail {
+      margin-left: 20px;
+      font-size: 0.8em;
+      color: grey;
+      text-align: left;
+    }
+  }
+}
