@@ -14,5 +14,8 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "rules": { "prettier/prettier": ["error", { "endOfLine": "auto" }] }
+  "rules": {
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "react/prop-types": 0
+  }
 }
