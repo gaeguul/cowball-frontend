@@ -1,0 +1,212 @@
+.orderlist-container {
+  height: 80vh;
+  display: grid;
+  grid-template-columns: max-content minmax(max-content, 1fr);
+
+  .left-container {
+    // position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 270px;
+    height: 80vh;
+    background: #f2f2f2;
+    overflow: auto;
+    padding: 0px 10px;
+    border-left: 5px solid rgb(255, 255, 255);
+
+    .left-title-container {
+      display: flex;
+      width: 80%;
+      padding-top: 20px;
+      padding-bottom: 10px;
+      flex-direction: row;
+      justify-content: flex-start;
+
+      .left-title {
+        font-weight: 600;
+      }
+    }
+
+    .order {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      border-radius: 15px;
+      padding: 20px 20px;
+
+      .order-id {
+        font-size: 1.1em;
+        font-weight: 600;
+      }
+      .rsv-date {
+        font-weight: 600;
+        font-size: 0.9em;
+
+        color: #da291c;
+      }
+    }
+
+    .order:hover {
+      cursor: pointer;
+    }
+  }
+
+  .detail-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 40px;
+    overflow: auto;
+    // align-items: center;
+    // height: 80vh;
+    // position: fixed;
+    // margin-left: 295px;
+
+    .top {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 40px;
+
+      .id-and-button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .order-id {
+          font-size: 1.7em;
+          font-weight: 600;
+        }
+
+        .state-button {
+          display: inline-block;
+          box-sizing: border-box;
+
+          margin: 10px 30px;
+
+          width: 140px;
+          height: 44px;
+          left: 795px;
+          top: 203px;
+
+          border: 2px solid #2d2d2d;
+          border-radius: 20px;
+
+          text-align: center;
+          line-height: 40px;
+          font-weight: 600;
+          font-size: 20px;
+
+          // background: #ffc72c;
+          // box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.51);
+        }
+
+        .state-button:hover {
+          background: #ffc72c;
+          box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
+          cursor: pointer;
+        }
+      }
+
+      .rsv-date,
+      .number-and-price {
+        font-size: 1.2em;
+        font-weight: 600;
+      }
+
+      .rsv-date {
+        padding-bottom: 5px;
+      }
+
+      .number-and-price {
+        .delimiter {
+          margin: 0px 10px;
+        }
+      }
+    }
+
+    .bottom {
+      display: flex;
+      flex-direction: column;
+
+      > * {
+        margin-bottom: 40px;
+      }
+
+      .title {
+        font-size: 1.2em;
+        font-weight: 600;
+        padding-top: 20px;
+        padding-bottom: 10px;
+      }
+
+      .request {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .menu-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .menu-container {
+          display: grid;
+          gap: 30px;
+
+          .dinner {
+            display: grid;
+            grid-template-columns: 1fr 50px 100px;
+            gap: 30px;
+
+            .dinner-and-style {
+              display: grid;
+              grid-template-columns: auto;
+              gap: 10px;
+
+              > * {
+                display: flex;
+              }
+
+              .dinner-name {
+                font-weight: 600;
+              }
+
+              .dinner-option,
+              .style-option {
+                color: #787878;
+              }
+            }
+          }
+
+          .total-container {
+            display: grid;
+            justify-content: end;
+            grid-template-columns: 50px 100px;
+            gap: 30px;
+          }
+        }
+      }
+
+      .order-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .content {
+          display: grid;
+          grid-template-columns: max-content 1fr;
+          grid-template-rows: repeat(3, max-content);
+          gap: 10px 20px;
+
+          > * {
+            display: flex;
+            justify-content: flex-start;
+          }
+        }
+      }
+    }
+  }
+}
