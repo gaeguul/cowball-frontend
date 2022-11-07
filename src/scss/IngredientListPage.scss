@@ -67,13 +67,18 @@
         justify-content: center;
         align-items: center;
 
-        .button {
+        .button-container {
           color: #b1b1b1;
           display: flex;
           align-items: flex-end;
 
           :hover {
             color: #ffc72c;
+          }
+
+          .button {
+            height: 20px;
+            width: 20px;
           }
         }
 

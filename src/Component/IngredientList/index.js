@@ -52,12 +52,12 @@ function IngredientList() {
                 <td>술</td>
                 <td>10</td>
                 <td className='alcohol-arrived'>
-                  <div className='button'>
-                    <HiMinusCircle />
+                  <div className='button-container'>
+                    <HiMinusCircle className='button' />
                   </div>
                   <span className='number'>50</span>
-                  <div className='button'>
-                    <HiPlusCircle />
+                  <div className='button-container'>
+                    <HiPlusCircle className='button' />
                   </div>
                 </td>
                 <td>30</td>
@@ -68,12 +68,12 @@ function IngredientList() {
                 <td>술</td>
                 <td>10</td>
                 <td className='alcohol-arrived'>
-                  <div className='button'>
-                    <HiMinusCircle />
+                  <div className='button-container'>
+                    <HiMinusCircle className='button' />
                   </div>
                   <span className='number'>50</span>
-                  <div className='button'>
-                    <HiPlusCircle />
+                  <div className='button-container'>
+                    <HiPlusCircle className='button' />
                   </div>
                 </td>
                 <td>30</td>
