@@ -33,6 +33,8 @@
 
     .nav-title {
       font-weight: 600;
+      font-size: 0.9em;
+      color: grey;
     }
 
     a {
@@ -40,8 +42,11 @@
       color: inherit;
     }
 
+    a:hover {
+      text-decoration-line: underline;
+    }
+
     .active {
-      background-color: #fff154;
       font-weight: 600;
     }
   }
