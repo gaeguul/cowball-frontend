@@ -16,7 +16,7 @@
     justify-content: center;
     width: 150px;
     height: 80vh;
-    padding-top: 20px;
+    // padding-top: 20px;
     background: #f2f2f2;
 
     .nav-container-inner {
@@ -24,6 +24,7 @@
       grid-template-columns: max-content;
       grid-template-rows: repeat(9, max-content);
       gap: 10px;
+      padding-top: 20px;
 
       .nav-manage {
         margin-top: 30px;
@@ -37,6 +38,11 @@
     a {
       text-decoration: none;
       color: inherit;
+    }
+
+    .active {
+      background-color: #fff154;
+      font-weight: 600;
     }
   }
 }

@@ -1,62 +1,32 @@
 @import './component/layout';
 @import './component/logonav';
 
-.logo-container {
-  display: flex;
-  height: 100px;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    height: 40px;
-  }
-}
-
-.main-container {
+.orderlist-container {
   height: 80vh;
   display: grid;
-  grid-template-columns: max-content max-content minmax(max-content, 1fr);
-  grid-template-rows: 100%;
-  gap: 50px;
+  grid-template-columns: max-content minmax(max-content, 1fr);
 
-  .nav-container {
+  .left-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    width: 270px;
+    height: 80vh;
+    background: #f2f2f2;
+    overflow: auto;
+    padding: 0px 10px;
+    border-left: 5px solid rgb(255, 255, 255);
 
-    ul {
+    .left-title-container {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      list-style: none;
-      padding-left: 0px;
-      margin: 0 0 20px 0;
+      width: 80%;
+      padding-top: 20px;
+      flex-direction: row;
+      justify-content: flex-start;
 
-      li {
-        margin-bottom: 10px;
-      }
-      li > a {
-        text-decoration: none;
-        color: inherit;
-      }
-
-      .active {
-        color: blue;
+      .left-title {
         font-weight: 600;
       }
-    }
-  }
-
-  .orderlist-container {
-    display: grid;
-    grid-template-columns: auto;
-    grid-auto-rows: max-content;
-    gap: 20px 0;
-    overflow: auto;
-
-    .orderlist-title {
-      display: flex;
-      font-weight: 600;
     }
 
     .order {
@@ -64,145 +34,27 @@
       flex-direction: column;
       align-items: flex-start;
       text-align: left;
+      border-radius: 15px;
+      padding: 10px 20px;
+      margin: 10px;
 
       .order-id {
-        font-size: 1.3em;
+        font-size: 1.1em;
+        font-weight: 600;
       }
       .rsv-date {
         color: red;
       }
     }
+
+    .order:hover {
+      background-color: white;
+    }
   }
 
-  .orderdetail-container {
+  .detail-container {
     display: flex;
     flex-direction: column;
-
-    .top {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-
-      .id-and-button {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
-        .order-id {
-          font-size: 2em;
-          font-weight: 600;
-        }
-
-        .state-button {
-          display: inline-block;
-          box-sizing: border-box;
-
-          margin: 10px 30px;
-
-          width: 140px;
-          height: 44px;
-          left: 795px;
-          top: 203px;
-
-          background: #ffc72c;
-          border: 3px solid #2d2d2d;
-          /* 버튼그림자 */
-
-          box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.51);
-          border-radius: 20px;
-
-          text-align: center;
-          line-height: 40px;
-          font-weight: 600;
-          font-size: 20px;
-        }
-      }
-
-      .rsv-date,
-      .number-and-price {
-        font-size: 1.5em;
-        font-weight: 600;
-      }
-    }
-
-    .bottom {
-      display: flex;
-      flex-direction: column;
-      overflow: auto;
-
-      .title {
-        font-size: 1.2em;
-        font-weight: 600;
-        padding-top: 20px;
-        padding-bottom: 10px;
-      }
-
-      .request {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .menu-info {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-
-        .menu-container {
-          display: grid;
-          gap: 30px;
-
-          .dinner {
-            display: grid;
-            grid-template-columns: 1fr 50px 100px;
-            gap: 30px;
-
-            .dinner-and-style {
-              display: grid;
-              grid-template-columns: auto;
-              gap: 10px;
-
-              > * {
-                display: flex;
-              }
-
-              .dinner-name {
-                font-weight: 600;
-              }
-
-              .dinner-option,
-              .style-option {
-                color: #787878;
-              }
-            }
-          }
-
-          .total-container {
-            display: grid;
-            justify-content: end;
-            grid-template-columns: 50px 100px;
-            gap: 30px;
-          }
-        }
-      }
-
-      .order-info {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-
-        .content {
-          display: grid;
-          grid-template-columns: max-content 1fr;
-          grid-template-rows: repeat(3, max-content);
-          gap: 10px 20px;
-
-          > * {
-            display: flex;
-            justify-content: flex-start;
-          }
-        }
-      }
-    }
+    align-items: center;
   }
 }
