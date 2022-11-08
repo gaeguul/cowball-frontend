@@ -1,5 +1,21 @@
 import React from 'react';
-import { HiPlusCircle, HiMinusCircle } from 'react-icons/hi';
+import { BiPlus, BiMinus } from 'react-icons/bi';
+
+function ArrivedNumberButton({ number }) {
+  return (
+    <div className='arrived-number-button-container'>
+      <div className='arrived-number-button'>
+        <div className='button-container'>
+          <BiMinus className='button' />
+        </div>
+        <div className='number'>{number}</div>
+        <div className='button-container'>
+          <BiPlus className='button ' />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function IngredientList() {
   return (
@@ -43,7 +59,9 @@ function IngredientList() {
                 <td>에그스크램블</td>
                 <td>식사</td>
                 <td>10</td>
-                <td>50</td>
+                <td>
+                  <ArrivedNumberButton number={100} />
+                </td>
                 <td>30</td>
                 <td>30</td>
               </tr>
@@ -51,14 +69,8 @@ function IngredientList() {
                 <td>와인</td>
                 <td>술</td>
                 <td>10</td>
-                <td className='alcohol-arrived'>
-                  <div className='button-container'>
-                    <HiMinusCircle className='button' />
-                  </div>
-                  <span className='number'>50</span>
-                  <div className='button-container'>
-                    <HiPlusCircle className='button' />
-                  </div>
+                <td>
+                  <ArrivedNumberButton number={40} />
                 </td>
                 <td>30</td>
                 <td>30</td>
@@ -67,14 +79,8 @@ function IngredientList() {
                 <td>샴페인</td>
                 <td>술</td>
                 <td>10</td>
-                <td className='alcohol-arrived'>
-                  <div className='button-container'>
-                    <HiMinusCircle className='button' />
-                  </div>
-                  <span className='number'>50</span>
-                  <div className='button-container'>
-                    <HiPlusCircle className='button' />
-                  </div>
+                <td>
+                  <ArrivedNumberButton number={10} />
                 </td>
                 <td>30</td>
                 <td>30</td>

@@ -1,4 +1,5 @@
 import React from 'react';
+import OrderNumberButton from './OrderNumberButton';
 
 function IngredientOrder() {
   return (
@@ -25,63 +26,72 @@ function IngredientOrder() {
                   <td>스테이크</td>
                   <td>식사</td>
                   <td>20,000원</td>
-                  <td>50</td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>에그스크램블</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>50</td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>베이컨</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>50</td>
+                  <td>
+                    <OrderNumberButton number={100} />
+                  </td>
                   <td>1,000,000원</td>
                 </tr>
                 <tr>
                   <td>스테이크</td>
                   <td>식사</td>
                   <td>20,000원</td>
-                  <td>50</td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>에그스크램블</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>50</td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>베이컨</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>50</td>
+                  <td>
+                    <OrderNumberButton number={10} />
+                  </td>
                   <td>1,000,000원</td>
                 </tr>
                 <tr>
                   <td>스테이크</td>
                   <td>식사</td>
                   <td>20,000원</td>
-                  <td>50</td>
+                  <td>
+                    <OrderNumberButton number={100} />
+                  </td>
                   <td>1,000,000원</td>
                 </tr>
                 <tr>
-                  <td>에그스크램블</td>
+                  <td>스테이크</td>
                   <td>식사</td>
                   <td>20,000원</td>
-                  <td>50</td>
+                  <td>
+                    <OrderNumberButton number={10} />
+                  </td>
                   <td>1,000,000원</td>
                 </tr>
                 <tr>
-                  <td>베이컨</td>
+                  <td>스테이크</td>
                   <td>식사</td>
                   <td>20,000원</td>
-                  <td>50</td>
+                  <td>
+                    <OrderNumberButton number={100} />
+                  </td>
+                  <td>1,000,000원</td>
+                </tr>
+                <tr>
+                  <td>스테이크</td>
+                  <td>식사</td>
+                  <td>20,000원</td>
+                  <td>
+                    <OrderNumberButton number={10} />
+                  </td>
+                  <td>1,000,000원</td>
+                </tr>
+                <tr>
+                  <td>스테이크</td>
+                  <td>식사</td>
+                  <td>20,000원</td>
+                  <td>
+                    <OrderNumberButton number={100} />
+                  </td>
+                  <td>1,000,000원</td>
+                </tr>
+                <tr>
+                  <td>스테이크</td>
+                  <td>식사</td>
+                  <td>20,000원</td>
+                  <td>
+                    <OrderNumberButton number={10} />
+                  </td>
                   <td>1,000,000원</td>
                 </tr>
               </tbody>
