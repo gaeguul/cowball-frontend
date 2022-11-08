@@ -10,7 +10,7 @@ function ArrivedNumberButton({ number }) {
         </div>
         <div className='number'>{number}</div>
         <div className='button-container'>
-          <BiPlus className='button ' />
+          <BiPlus className='button' />
         </div>
       </div>
     </div>
@@ -59,9 +59,7 @@ function IngredientList() {
                 <td>에그스크램블</td>
                 <td>식사</td>
                 <td>10</td>
-                <td>
-                  <ArrivedNumberButton number={100} />
-                </td>
+                <td>100</td>
                 <td>30</td>
                 <td>30</td>
               </tr>

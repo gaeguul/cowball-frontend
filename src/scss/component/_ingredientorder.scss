@@ -86,12 +86,13 @@
               padding: 0px 5px;
 
               .button {
-                color: #e9b422;
+                color: #ffc72c;
 
                 &:hover {
                   border-radius: 50%;
-                  background-color: #e9b422;
+                  background-color: #ffc72c;
                   color: white;
+                  cursor: pointer;
                 }
               }
             }
@@ -128,26 +129,32 @@
 
       .order-button-container {
         .order-button {
-          display: inline-block;
           box-sizing: border-box;
+          display: flex;
+          justify-content: center;
+          align-items: center;
 
           margin: 10px 30px;
 
-          width: 140px;
-          height: 44px;
-          left: 795px;
-          top: 203px;
+          width: 120px;
+          height: 40px;
 
           border: 2px solid #2d2d2d;
           border-radius: 20px;
 
-          text-align: center;
-          line-height: 40px;
-          font-weight: 600;
-          font-size: 20px;
-
           background: #ffc72c;
           box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
+
+          .button-title {
+            font-weight: 600;
+            font-size: 1.3em;
+          }
+
+          &:hover {
+            // background: #ffd255;
+            cursor: pointer;
+            box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.438);
+          }
         }
 
         .order-button:hover {

@@ -36,7 +36,7 @@ function LogoNav() {
             <NavLink to='/ingredientorder'>발주관리</NavLink>
           </div>
           <div>
-            <NavLink to='/customerlist'>단골관리</NavLink>
+            <NavLink to='/customerlist'>고객관리</NavLink>
           </div>
         </div>
       </div>

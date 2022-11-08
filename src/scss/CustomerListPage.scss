@@ -1,4 +1,9 @@
-.ingredientlist-container {
+@import './base/base';
+
+@import './component/layout';
+@import './component/logonav';
+
+.customerlist-container {
   display: flex;
   flex-direction: column;
   padding-left: 50px;
@@ -53,50 +58,31 @@
         font-size: 1.2em;
       }
 
-      thead > :nth-child(1),
-      tr > :nth-child(1) {
-        text-align: left;
-      }
-
       tr:hover {
         background-color: #f5f5f5;
       }
-
-      .arrived-number-button-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .arrived-number-button {
-          display: flex;
-          flex-direction: row;
-          padding: 5px 5px;
-          border-radius: 10px;
-
-          background-color: rgb(255, 247, 222);
-
-          .button-container {
-            display: flex;
-            align-items: center;
-            padding: 0px 5px;
-
-            .button {
-              color: #e9b422;
-
-              &:hover {
-                border-radius: 50%;
-                background-color: #ffc72c;
-                color: white;
-                cursor: pointer;
-              }
-            }
-          }
-
-          .number {
-            width: 30px;
-          }
-        }
-      }
     }
+  }
+}
+
+.grade-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @mixin grade {
+    border: 2px solid #2d2d2d;
+    border-radius: 15px;
+    padding: 3px 12px;
+    font-weight: 600;
+    // box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.397);
+  }
+  .vip-grade {
+    @include grade;
+    background: #ffc72cc5;
+  }
+  .default-grade {
+    @include grade;
+    // background: #e6e6e6;
   }
 }

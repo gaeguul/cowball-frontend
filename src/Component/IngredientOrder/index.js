@@ -103,7 +103,9 @@ function IngredientOrder() {
               <span className='number'>1,000,000원</span>
             </div>
             <div className='order-button-container'>
-              <div className='order-button'>발주하기</div>
+              <div className='order-button'>
+                <div className='button-title'>발주하기</div>
+              </div>
             </div>
           </div>
         </div>

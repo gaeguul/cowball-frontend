@@ -58,7 +58,9 @@ function OrderList() {
           <div className='top'>
             <div className='id-and-button'>
               <span className='order-id'>배달 1234</span>
-              <div className='state-button'>조리시작</div>
+              <div className='state-button'>
+                <div className='button-title'>조리시작</div>
+              </div>
             </div>
             <div className='rsv-date'>예약 2022.10.03(월) 14:00</div>
             <div className='number-and-price'>
@@ -76,10 +78,18 @@ function OrderList() {
               <div className='title'>메뉴정보</div>
               <div className='menu-container'>
                 <div className='dinner'>
-                  <div className='dinner-and-style'>
-                    <div className='dinner-name'>프렌치 디너</div>
+                  <div className='dinner-and-style-container'>
+                    <div className='dinner-title'>
+                      <div className='dinner-name'>프렌치 디너</div>
+                      <div className='steak-degree-container'>
+                        <div className='steak-degree-title'>레어</div>
+                      </div>
+                    </div>
                     <div className='dinner-option'>
-                      + 스테이크 1인분 추가 (20,000원)
+                      - 에그스크램블 삭제 (-5,000원)
+                    </div>
+                    <div className='dinner-option'>
+                      + 레어 스테이크 1인분 추가 (20,000원)
                     </div>
                     <div className='dinner-option'>
                       + 베이컨 1장 추가 (2,000원)
@@ -91,8 +101,13 @@ function OrderList() {
                   <div className='dinner-price'>40,000원</div>
                 </div>
                 <div className='dinner'>
-                  <div className='dinner-and-style'>
-                    <div className='dinner-name'>프렌치 디너</div>
+                  <div className='dinner-and-style-container'>
+                    <div className='dinner-title'>
+                      <div className='dinner-name'>프렌치 디너</div>
+                      <div className='steak-degree-container'>
+                        <div className='steak-degree-title'>미디움</div>
+                      </div>
+                    </div>
                     <div className='style-name'>그랜드 스타일 (15,000원)</div>
                   </div>
                   <div className='dinner-number'>1</div>

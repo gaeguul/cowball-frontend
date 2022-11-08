@@ -16,15 +16,16 @@
     justify-content: center;
     width: 150px;
     height: 80vh;
-    // padding-top: 20px;
     background: #f2f2f2;
+    border-radius: 14px;
 
     .nav-container-inner {
       display: grid;
       grid-template-columns: max-content;
       grid-template-rows: repeat(9, max-content);
-      gap: 10px;
+      gap: 15px;
       padding-top: 20px;
+      justify-items: flex-start;
 
       .nav-manage {
         margin-top: 30px;
