@@ -98,13 +98,12 @@
           font-weight: 600;
           font-size: 20px;
 
-          // background: #ffc72c;
-          // box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.51);
+          background: #ffc72c;
+          box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
         }
 
         .state-button:hover {
-          background: #ffc72c;
-          box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
+          // background: #ffc72c;
           cursor: pointer;
         }
       }
