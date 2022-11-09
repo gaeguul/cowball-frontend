@@ -38,7 +38,7 @@
       display: flex;
       justify-content: flex-start;
       width: 100%;
-      height: 100%;
+      // height: 100%;
       white-space: nowrap;
       overflow: auto;
 
@@ -47,6 +47,10 @@
         padding-top: 30px;
         border-spacing: 0;
         white-space: nowrap;
+
+        tbody td {
+          min-height: 40px;
+        }
 
         th,
         td {
