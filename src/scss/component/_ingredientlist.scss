@@ -53,10 +53,9 @@
         font-size: 1.2em;
       }
 
-      thead > :nth-child(1),
-      tr > :nth-child(1) {
-        text-align: left;
-      }
+      // tr > :nth-child(1) {
+      //   text-align: left;
+      // }
 
       tr:hover {
         background-color: #f5f5f5;
@@ -82,14 +81,23 @@
 
             .button {
               color: #e9b422;
+              border-radius: 50%;
 
               &:hover {
-                border-radius: 50%;
                 background-color: #ffc72c;
                 color: white;
                 cursor: pointer;
               }
             }
+
+            // .inactive {
+            //   color: rgb(184, 184, 184);
+
+            //   &:hover {
+            //     background-color: #7b7b7b33;
+            //     cursor: default;
+            //   }
+            // }
           }
 
           .number {

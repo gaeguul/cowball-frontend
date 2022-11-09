@@ -16,12 +16,14 @@ function CustomerList() {
         <div className='content-container'>
           <table>
             <thead>
-              <th>등급</th>
-              <th>회원명</th>
-              <th>회원아이디</th>
-              <th>주문횟수</th>
-              <th>가입일</th>
-              <th>전화번호</th>
+              <tr>
+                <th>등급</th>
+                <th>회원명</th>
+                <th>회원아이디</th>
+                <th>주문횟수</th>
+                <th>가입일</th>
+                <th>전화번호</th>
+              </tr>
             </thead>
             <tbody>
               <tr>

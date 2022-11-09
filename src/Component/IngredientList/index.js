@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 
-function ArrivedNumberButton({ number }) {
+function ArrivedNumberButton() {
+  const [arrivedNumber, setArrivedNumber] = useState(0);
+
+  const decreaseArrivedNumber = () => {
+    if (arrivedNumber == 0) {
+      console.log('더 이상 줄일 수 없습니다');
+    } else {
+      setArrivedNumber(arrivedNumber - 1);
+    }
+  };
+
+  const increaseArrivedNumber = () => {
+    setArrivedNumber(arrivedNumber + 1);
+  };
+
+  useEffect(() => {
+    console.log('arrived number:', arrivedNumber);
+  }, [arrivedNumber]);
+
   return (
     <div className='arrived-number-button-container'>
       <div className='arrived-number-button'>
         <div className='button-container'>
-          <BiMinus className='button' />
+          <BiMinus className='button' onClick={decreaseArrivedNumber} />
         </div>
-        <div className='number'>{number}</div>
+        <div className='number'>{arrivedNumber}</div>
         <div className='button-container'>
-          <BiPlus className='button' />
+          <BiPlus className='button' onClick={increaseArrivedNumber} />
         </div>
       </div>
     </div>
@@ -31,12 +49,14 @@ function IngredientList() {
         <div className='content-container'>
           <table>
             <thead>
-              <th>상품명</th>
-              <th>카테고리</th>
-              <th>전일재고</th>
-              <th>당일입고</th>
-              <th>당일출고</th>
-              <th>현재재고</th>
+              <tr>
+                <th>상품명</th>
+                <th>카테고리</th>
+                <th>전일재고</th>
+                <th>당일입고</th>
+                <th>당일출고</th>
+                <th>현재재고</th>
+              </tr>
             </thead>
             <tbody>
               <tr>
@@ -68,7 +88,7 @@ function IngredientList() {
                 <td>술</td>
                 <td>10</td>
                 <td>
-                  <ArrivedNumberButton number={40} />
+                  <ArrivedNumberButton />
                 </td>
                 <td>30</td>
                 <td>30</td>
@@ -78,7 +98,7 @@ function IngredientList() {
                 <td>술</td>
                 <td>10</td>
                 <td>
-                  <ArrivedNumberButton number={10} />
+                  <ArrivedNumberButton />
                 </td>
                 <td>30</td>
                 <td>30</td>

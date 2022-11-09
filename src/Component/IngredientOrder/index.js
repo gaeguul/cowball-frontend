@@ -15,11 +15,13 @@ function IngredientOrder() {
           <div className='table-container'>
             <table>
               <thead>
-                <th>상품명</th>
-                <th>카테고리</th>
-                <th>단가</th>
-                <th>수량</th>
-                <th>총금액</th>
+                <tr>
+                  <th>상품명</th>
+                  <th>카테고리</th>
+                  <th>단가</th>
+                  <th>수량</th>
+                  <th>총금액</th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
@@ -27,7 +29,7 @@ function IngredientOrder() {
                   <td>식사</td>
                   <td>20,000원</td>
                   <td>
-                    <OrderNumberButton number={100} />
+                    <OrderNumberButton />
                   </td>
                   <td>1,000,000원</td>
                 </tr>
@@ -36,7 +38,7 @@ function IngredientOrder() {
                   <td>식사</td>
                   <td>20,000원</td>
                   <td>
-                    <OrderNumberButton number={10} />
+                    <OrderNumberButton />
                   </td>
                   <td>1,000,000원</td>
                 </tr>
@@ -45,7 +47,7 @@ function IngredientOrder() {
                   <td>식사</td>
                   <td>20,000원</td>
                   <td>
-                    <OrderNumberButton number={100} />
+                    <OrderNumberButton />
                   </td>
                   <td>1,000,000원</td>
                 </tr>
@@ -54,7 +56,7 @@ function IngredientOrder() {
                   <td>식사</td>
                   <td>20,000원</td>
                   <td>
-                    <OrderNumberButton number={10} />
+                    <OrderNumberButton />
                   </td>
                   <td>1,000,000원</td>
                 </tr>
@@ -63,7 +65,7 @@ function IngredientOrder() {
                   <td>식사</td>
                   <td>20,000원</td>
                   <td>
-                    <OrderNumberButton number={100} />
+                    <OrderNumberButton />
                   </td>
                   <td>1,000,000원</td>
                 </tr>
@@ -72,7 +74,7 @@ function IngredientOrder() {
                   <td>식사</td>
                   <td>20,000원</td>
                   <td>
-                    <OrderNumberButton number={10} />
+                    <OrderNumberButton />
                   </td>
                   <td>1,000,000원</td>
                 </tr>
@@ -81,7 +83,7 @@ function IngredientOrder() {
                   <td>식사</td>
                   <td>20,000원</td>
                   <td>
-                    <OrderNumberButton number={100} />
+                    <OrderNumberButton />
                   </td>
                   <td>1,000,000원</td>
                 </tr>
@@ -90,7 +92,25 @@ function IngredientOrder() {
                   <td>식사</td>
                   <td>20,000원</td>
                   <td>
-                    <OrderNumberButton number={10} />
+                    <OrderNumberButton />
+                  </td>
+                  <td>1,000,000원</td>
+                </tr>
+                <tr>
+                  <td>스테이크</td>
+                  <td>식사</td>
+                  <td>20,000원</td>
+                  <td>
+                    <OrderNumberButton />
+                  </td>
+                  <td>1,000,000원</td>
+                </tr>
+                <tr>
+                  <td>스테이크</td>
+                  <td>식사</td>
+                  <td>20,000원</td>
+                  <td>
+                    <OrderNumberButton />
                   </td>
                   <td>1,000,000원</td>
                 </tr>
