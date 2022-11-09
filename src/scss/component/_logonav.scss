@@ -4,9 +4,36 @@
     height: 100px;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
 
     img {
       height: 40px;
+    }
+  }
+
+  .user-menu-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+
+    .user-button-container {
+      display: flex;
+      min-width: max-content;
+      font-weight: 500;
+
+      .signup-button {
+        margin-right: 30px;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .user-button:hover {
+        text-decoration-line: underline;
+        cursor: pointer;
+      }
     }
   }
 
