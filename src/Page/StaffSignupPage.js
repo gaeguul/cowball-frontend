@@ -83,6 +83,17 @@ function StaffSignupForm({
             {errors.number.message}
           </small>
         )}
+        <p className='role-title'>지원역할</p>
+        <div className='role-container'>
+          <label>
+            <input type='radio' name='role' id='delivery' value='delivery' />
+            배달
+          </label>
+          <label>
+            <input type='radio' name='role' id='cook' value='cook' />
+            조리
+          </label>
+        </div>
         <div className='signup-button-container'>
           <button
             className='signup-button'

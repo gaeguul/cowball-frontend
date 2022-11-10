@@ -46,7 +46,7 @@
       grid-template-columns: max-content 1fr;
       gap: 0px 15px;
 
-      input {
+      > input {
         @include input-field(180px);
 
         border-radius: 15px;
@@ -55,8 +55,8 @@
         background: #ffffff;
       }
 
-      input[type='number']::-webkit-outer-spin-button,
-      input[type='number']::-webkit-inner-spin-button {
+      > input[type='number']::-webkit-outer-spin-button,
+      > input[type='number']::-webkit-inner-spin-button {
         all: unset;
       }
 
@@ -81,11 +81,43 @@
         }
       }
 
-      label {
-        // display: inline-block;
+      > label {
         line-height: 50px;
         text-align: left;
+        font-weight: 500;
       }
+
+      .role-title {
+        text-align: left;
+        font-weight: 500;
+      }
+
+      .role-container {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        // justify-content: flex-start;
+        // width: 120px;
+
+        font-weight: 600;
+
+        [type='radio'] {
+          vertical-align: middle;
+          appearance: none;
+          border: 2px solid #2c2c2c;
+          border-radius: 50%;
+          width: 1.25em;
+          height: 1.25em;
+          //   transition: border 0.5s ease-in-out;
+          margin-top: 0px;
+
+          &:checked {
+            // border: 0.4em solid tomato;
+            background-color: #ffc72c;
+          }
+        }
+      }
+
       .input-alert {
         color: rgb(214, 3, 3);
         grid-column: 1 / -1;
