@@ -69,24 +69,25 @@
   }
 }
 
+@mixin grade {
+  border-radius: 15px;
+  padding: 3px 12px;
+  font-weight: 600;
+  // border: 2px solid #2d2d2d;
+  // box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.397);
+}
+
 .grade-container {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  @mixin grade {
-    border: 2px solid #2d2d2d;
-    border-radius: 15px;
-    padding: 3px 12px;
-    font-weight: 600;
-    // box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.397);
-  }
   .vip-grade {
     @include grade;
-    background: #ffc72cc5;
+    background: #ffd051c5;
   }
   .default-grade {
     @include grade;
-    // background: #e6e6e6;
+    background: #eeeeee;
   }
 }

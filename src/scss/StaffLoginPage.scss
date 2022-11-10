@@ -1,0 +1,18 @@
+@import './base/base';
+
+@import './component/layout';
+@import './component/logonav';
+
+.staff-login-container {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+
+  .staff-login-box {
+    background: #ededed;
+    border: 2px solid #000000;
+    box-shadow: 4px 6px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 36px;
+  }
+}
