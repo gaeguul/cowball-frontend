@@ -3,6 +3,45 @@
 @import './component/layout';
 @import './component/logonav';
 
+@mixin staff-list-title {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-top: 30px;
+}
+
+@mixin staff-list {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  // height: 100%;
+  white-space: nowrap;
+  overflow: auto;
+
+  table {
+    width: 100%;
+    padding-top: 30px;
+    border-spacing: 0;
+    white-space: nowrap;
+    overflow: auto;
+
+    tbody td {
+      height: 30px;
+    }
+
+    th,
+    td {
+      padding: 10px 20px;
+    }
+
+    thead {
+      font-weight: 600;
+      font-size: 1.2em;
+    }
+  }
+}
+
 .stafflist-container {
   display: flex;
   flex-direction: column;
@@ -31,5 +70,77 @@
       color: grey;
       text-align: left;
     }
+  }
+  .content-container {
+    overflow: auto;
+    .applied-staff-list-container {
+      .title {
+        @include staff-list-title;
+      }
+      .applied-staff-list {
+        @include staff-list;
+      }
+    }
+
+    .employed-staff-list-container {
+      margin-top: 30px;
+      border-top: 1px solid #888888;
+
+      .title {
+        @include staff-list-title;
+      }
+      .employed-staff-list {
+        @include staff-list;
+      }
+    }
+  }
+}
+
+@mixin staff-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin staff-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100px;
+  height: 30px;
+
+  border: 2px solid #2d2d2d;
+  border-radius: 20px;
+
+  background: #ffc72cc5;
+  color: rgb(0, 0, 0);
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.438);
+    color: rgb(0, 0, 0);
+  }
+
+  .button-title {
+    font-weight: 600;
+    font-size: 1.1em;
+  }
+}
+
+.register-staff-button-container {
+  @include staff-button-container;
+
+  .register-staff-button {
+    @include staff-button;
+  }
+}
+
+.delete-staff-button-container {
+  @include staff-button-container;
+
+  .delete-staff-button {
+    @include staff-button;
   }
 }

@@ -3,6 +3,25 @@ import Layout from '../Component/Layout';
 import LogoNav from '../Component/LogoNav';
 import '../scss/StaffListPage.scss';
 
+function RegisterStaffButton() {
+  return (
+    <div className='register-staff-button-container'>
+      <div className='register-staff-button'>
+        <div className='button-title'>직원등록</div>
+      </div>
+    </div>
+  );
+}
+function DeleteStaffButton() {
+  return (
+    <div className='delete-staff-button-container'>
+      <div className='delete-staff-button'>
+        <div className='button-title'>직원삭제</div>
+      </div>
+    </div>
+  );
+}
+
 function StaffList() {
   return (
     <div className='nexttonav'>
@@ -14,7 +33,142 @@ function StaffList() {
             <br></br>새로운 직원을 등록하고 고용된 직원들을 관리할 수 있습니다.
           </div>
         </div>
-        <div className='content-container'></div>
+        <div className='content-container'>
+          <div className='applied-staff-list-container'>
+            <div className='title'>회원가입 신청한 직원</div>
+            <div className='applied-staff-list'>
+              <table>
+                <thead>
+                  <tr>
+                    <th>직원명</th>
+                    <th>직원아이디</th>
+                    <th>역할</th>
+                    <th>신청일</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>배달</td>
+                    <td>2022.11.01</td>
+                    <td>
+                      <RegisterStaffButton />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>배달</td>
+                    <td>2022.11.01</td>
+                    <td>
+                      <RegisterStaffButton />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>배달</td>
+                    <td>2022.11.01</td>
+                    <td>
+                      <RegisterStaffButton />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className='employed-staff-list-container'>
+            <div className='title'>고용된 직원</div>
+            <div className='employed-staff-list'>
+              <table>
+                <thead>
+                  <tr>
+                    <th>직원명</th>
+                    <th>직원아이디</th>
+                    <th>역할</th>
+                    <th>가입일</th>
+                    <th>전화번호</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>배달</td>
+                    <td>2022.11.01</td>
+                    <td>010-1234-1234</td>
+                    <td>
+                      <DeleteStaffButton />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>배달</td>
+                    <td>2022.11.01</td>
+                    <td>010-1234-1234</td>
+                    <td>
+                      <DeleteStaffButton />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>배달</td>
+                    <td>2022.11.01</td>
+                    <td>010-1234-1234</td>
+                    <td>
+                      <DeleteStaffButton />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>배달</td>
+                    <td>2022.11.01</td>
+                    <td>010-1234-1234</td>
+                    <td>
+                      <DeleteStaffButton />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>조리</td>
+                    <td>2022.11.01</td>
+                    <td>010-1234-1234</td>
+                    <td>
+                      <DeleteStaffButton />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>조리</td>
+                    <td>2022.11.01</td>
+                    <td>010-1234-1234</td>
+                    <td>
+                      <DeleteStaffButton />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>김소공</td>
+                    <td>sogong</td>
+                    <td>조리</td>
+                    <td>2022.11.01</td>
+                    <td>010-1234-1234</td>
+                    <td>
+                      <DeleteStaffButton />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
