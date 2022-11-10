@@ -5,14 +5,84 @@
 
 .staff-login-container {
   display: flex;
-  height: 100%;
   justify-content: center;
   align-items: center;
+  height: 90vh;
 
   .staff-login-box {
-    background: #ededed;
+    width: max-content;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    margin: 30px 0px;
+
+    background: #f3f3f3;
     border: 2px solid #000000;
     box-shadow: 4px 6px 0px rgba(0, 0, 0, 0.2);
     border-radius: 36px;
+  }
+}
+
+.staff-login-logo-container {
+  display: flex;
+  height: max-content;
+  justify-content: center;
+  align-items: center;
+  // margin-top: 20px;
+
+  img {
+    width: 300px;
+  }
+}
+
+.staff-login-box {
+  background: #f6f6f6;
+  border: 2px solid #000000;
+  box-shadow: 4px 6px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 36px;
+}
+
+@mixin input-field($w) {
+  display: inline-block;
+  margin: 5px;
+  border: 2px solid #2c2c2c;
+  width: $w;
+}
+
+.staff-login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+
+  input {
+    @include input-field(250px);
+    border-radius: 12px;
+    padding: 10px 10px;
+
+    background: #ffffff;
+  }
+
+  button {
+    @include input-field(90px);
+    border-radius: 15px;
+    padding: 5px 10px;
+
+    background: #ffc72cc5;
+    color: rgb(0, 0, 0);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
+
+    font-weight: 600;
+    font-size: 1.1em;
+
+    &:hover {
+      cursor: pointer;
+      box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.438);
+      color: rgb(0, 0, 0);
+    }
   }
 }
