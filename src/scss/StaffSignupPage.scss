@@ -2,3 +2,99 @@
 
 @import './component/layout';
 @import './component/logonav';
+
+@mixin input-field($w) {
+  margin: 5px;
+  border: 2px solid #2c2c2c;
+  width: $w;
+}
+
+.staff-signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  .staff-signup-box {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: max-content;
+    padding: 50px 50px;
+
+    background: #f3f3f3;
+    border: 2px solid #252525;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+
+    .staff-login-logo-container {
+      display: flex;
+      height: max-content;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+
+      img {
+        width: 250px;
+      }
+    }
+
+    .staff-signup-form {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 0px 15px;
+
+      input {
+        @include input-field(180px);
+
+        border-radius: 15px;
+        padding: 10px 20px;
+
+        background: #ffffff;
+      }
+
+      input[type='number']::-webkit-outer-spin-button,
+      input[type='number']::-webkit-inner-spin-button {
+        all: unset;
+      }
+
+      button {
+        @include input-field(max-content);
+
+        border-radius: 20px;
+        padding: 6px 20px;
+
+        background: #ffc72c;
+        color: rgb(0, 0, 0);
+        box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
+
+        font-weight: 600;
+        font-size: 1.1em;
+
+        &:hover {
+          cursor: pointer;
+          box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.348);
+          color: rgb(0, 0, 0);
+        }
+      }
+
+      label {
+        // display: inline-block;
+        line-height: 50px;
+        text-align: left;
+      }
+      .input-alert {
+        color: rgb(214, 3, 3);
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 5px;
+      }
+      .signup-button-container {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+}
