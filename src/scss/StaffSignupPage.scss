@@ -63,8 +63,9 @@
       button {
         @include input-field(max-content);
 
-        border-radius: 20px;
+        border-radius: 15px;
         padding: 6px 20px;
+        margin-top: 15px;
 
         background: #ffc72c;
         color: rgb(0, 0, 0);
