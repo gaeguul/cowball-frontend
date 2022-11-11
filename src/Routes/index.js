@@ -23,7 +23,7 @@ function Router() {
         <Route path='/customerlist' element={<CustomerListPage />} />
         <Route path='/stafflogin' element={<StaffLoginPage />} />
         <Route path='/staffsignup' element={<StaffSignupPage />} />
-        <Route path='/8stafflist' element={<StaffListPage />} />
+        <Route path='/stafflist' element={<StaffListPage />} />
         <Route path='/*' element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
