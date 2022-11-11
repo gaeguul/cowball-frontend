@@ -56,6 +56,10 @@
         background: #ffffff;
       }
 
+      // input[aria-invalid='true'] {
+      //   border: 2px solid #d10000;
+      // }
+
       button {
         @include input-field(90px);
 
@@ -78,6 +82,7 @@
 
       .input-alert {
         color: rgb(208, 2, 2);
+        margin-bottom: 5px;
       }
     }
     .buttom-nav-container {

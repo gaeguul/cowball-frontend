@@ -44,7 +44,7 @@
     .staff-signup-form {
       display: grid;
       grid-template-columns: max-content 1fr;
-      gap: 0px 15px;
+      gap: 0px 25px;
 
       > input {
         @include input-field(180px);
@@ -121,8 +121,8 @@
       .input-alert {
         color: rgb(214, 3, 3);
         grid-column: 1 / -1;
-        display: flex;
-        justify-content: flex-start;
+        // display: flex;
+        // justify-content: flex-start;
         margin-bottom: 5px;
       }
       .signup-button-container {

@@ -1,19 +1,31 @@
+import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import '../scss/StaffSignupPage.scss';
 
-function StaffSignupForm({
-  onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    console.log(JSON.stringify(data));
-  },
-}) {
+function StaffSignupForm() {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      await new Promise((r) => setTimeout(r, 1000));
+
+      console.log(data);
+
+      const url =
+        'https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/staff';
+
+      const response = await axios.post(url, data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className='staff-signup-form-container'>
       <form className='staff-signup-form' onSubmit={handleSubmit(onSubmit)}>
@@ -33,20 +45,22 @@ function StaffSignupForm({
             {errors.name.message}
           </small>
         )}
-        <label htmlFor='id'>아이디</label>
+        <label htmlFor='staffId'>아이디</label>
         <input
-          id='id'
+          id='staffId'
           type='text'
-          name='id'
+          name='staffId'
           placeholder='아이디'
-          aria-invalid={!isDirty ? undefined : errors.id ? 'true' : 'false'}
-          {...register('id', {
+          aria-invalid={
+            !isDirty ? undefined : errors.staffId ? 'true' : 'false'
+          }
+          {...register('staffId', {
             required: '아이디를 입력해주세요.',
           })}
         />
-        {errors.id && (
+        {errors.staffId && (
           <small role='alert' className='input-alert'>
-            {errors.id.message}
+            {errors.staffId.message}
           </small>
         )}
         <label htmlFor='password'>비밀번호</label>
@@ -67,20 +81,22 @@ function StaffSignupForm({
             {errors.password.message}
           </small>
         )}
-        <label htmlFor='number'>전화번호</label>
+        <label htmlFor='phoneNumber'>전화번호</label>
         <input
-          id='number'
+          id='phoneNumber'
           type='number'
-          name='number'
+          name='phoneNumber'
           placeholder='전화번호'
-          aria-invalid={!isDirty ? undefined : errors.number ? 'true' : 'false'}
-          {...register('number', {
+          aria-invalid={
+            !isDirty ? undefined : errors.phoneNumber ? 'true' : 'false'
+          }
+          {...register('phoneNumber', {
             required: '전화번호를 입력해주세요.',
           })}
         />
-        {errors.number && (
+        {errors.phoneNumber && (
           <small role='alert' className='input-alert'>
-            {errors.number.message}
+            {errors.phoneNumber.message}
           </small>
         )}
         <p className='role-title'>지원역할</p>

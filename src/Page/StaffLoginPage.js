@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
@@ -17,34 +18,45 @@ function StaffLoginLogo() {
   );
 }
 
-function StaffLoginForm({
-  onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    console.log(JSON.stringify(data));
-  },
-}) {
+function StaffLoginForm() {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
 
+  const onSubmit = async (data) => {
+    try {
+      await new Promise((r) => setTimeout(r, 1000));
+
+      const url =
+        'https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/auth/staff';
+
+      const response = await axios.post(url, data);
+      console.log(response.data.result); //access-token
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className='staff-login-form-container'>
       <form className='staff-login-form' onSubmit={handleSubmit(onSubmit)}>
         <input
-          id='id'
+          id='staffId'
           type='text'
-          name='id'
+          name='staffId'
           placeholder='아이디'
-          aria-invalid={!isDirty ? undefined : errors.id ? 'true' : 'false'}
-          {...register('id', {
+          aria-invalid={
+            !isDirty ? undefined : errors.staffId ? 'true' : 'false'
+          }
+          {...register('staffId', {
             required: '아이디를 입력해주세요.',
           })}
         />
-        {errors.id && (
+        {errors.staffId && (
           <small role='alert' className='input-alert'>
-            {errors.id.message}
+            {errors.staffId.message}
           </small>
         )}
         <input
