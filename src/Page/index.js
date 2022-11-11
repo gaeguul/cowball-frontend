@@ -6,3 +6,4 @@ export { default as CustomerListPage } from './CustomerListPage';
 export { default as StaffLoginPage } from './StaffLoginPage';
 export { default as StaffSignupPage } from './StaffSignupPage';
 export { default as StaffListPage } from './StaffListPage';
+export { default as NotFoundPage } from './NotFoundPage';
