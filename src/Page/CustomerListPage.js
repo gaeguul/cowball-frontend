@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from '../Component/Layout';
-import LogoNav from '../Component/LogoNav';
+import StaffLayout from '../Component/StaffLayout';
+import StaffLogoNav from '../Component/StaffLogoNav';
 import '../scss/CustomerListPage.scss';
 
 function CustomerList() {
@@ -132,10 +132,10 @@ function CustomerList() {
 
 function CustomerListPage() {
   return (
-    <Layout>
-      <LogoNav />
+    <StaffLayout>
+      <StaffLogoNav />
       <CustomerList />
-    </Layout>
+    </StaffLayout>
   );
 }
 

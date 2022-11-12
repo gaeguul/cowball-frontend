@@ -1,15 +1,15 @@
 import React from 'react';
-import Layout from '../Component/Layout';
-import LogoNav from '../Component/LogoNav';
+import StaffLayout from '../Component/StaffLayout';
+import LogoNav from '../Component/StaffLogoNav';
 import IngredientList from '../Component/IngredientList';
 import '../scss/IngredientListPage.scss';
 
 function IngredientListPage() {
   return (
-    <Layout>
+    <StaffLayout>
       <LogoNav />
       <IngredientList />
-    </Layout>
+    </StaffLayout>
   );
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
-function Layout({ children }) {
+function StaffLayout({ children }) {
   return <div className='layout-container'>{children}</div>;
 }
 
-export default Layout;
+export default StaffLayout;

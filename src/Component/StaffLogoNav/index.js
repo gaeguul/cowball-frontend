@@ -3,7 +3,7 @@ import Logo from './Logo';
 import TopMenu from './TopMenu';
 import Nav from './Nav';
 
-function LogoNav() {
+function StaffLogoNav() {
   return (
     <div className='logo-nav-container'>
       <Logo />
@@ -13,4 +13,4 @@ function LogoNav() {
   );
 }
 
-export default LogoNav;
+export default StaffLogoNav;

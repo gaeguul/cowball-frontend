@@ -2,6 +2,15 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {
   MainPage,
+  OrderPage,
+  CartPage,
+  CartCompletePage,
+  MyOrderPage,
+  MyPage,
+  ChangePasswordPage,
+  ChangeMyInfoPage,
+  CustomerLoginPage,
+  CustomerSignupPage,
   OrderListPage,
   IngredientListPage,
   IngredientOrderPage,
@@ -17,6 +26,18 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<MainPage />} />
+        <Route path='/order/:' element={<OrderPage />} />
+        <Route path='/cart' element={<CartPage />} />
+        <Route path='/cart/complete' element={<CartCompletePage />} />
+
+        <Route path='/myorder' element={<MyOrderPage />} />
+        <Route path='/mypage' element={<MyPage />} />
+        <Route path='/mypage/changepw' element={<ChangePasswordPage />} />
+        <Route path='/mypage/changemyinfo' element={<ChangeMyInfoPage />} />
+
+        <Route path='/login' element={<CustomerLoginPage />} />
+        <Route path='/signup' element={<CustomerSignupPage />} />
+
         <Route path='/orderlist' element={<OrderListPage />} />
         <Route path='/ingredientlist' element={<IngredientListPage />} />
         <Route path='/ingredientorder' element={<IngredientOrderPage />} />
