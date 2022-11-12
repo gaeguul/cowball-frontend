@@ -36,10 +36,12 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+
         .dinner-name-ko {
           font-size: 1.1em;
           font-weight: 600;
         }
+
         .dinner-name-en {
           margin-bottom: 10px;
 
@@ -52,7 +54,7 @@
           // text-shadow: 2px 3px 0px #ffc72c;
         }
         .dinner-detail {
-          width: 350px;
+          width: 500px;
         }
       }
     }
