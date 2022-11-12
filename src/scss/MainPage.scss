@@ -1,0 +1,110 @@
+@import './base/base';
+
+.customer-layout {
+  margin: 0 auto;
+  height: 90vh;
+  // width: 80%;
+  // min-width: 1000px;
+}
+
+.header-container {
+  background-color: #ffc72c;
+  width: 100vw;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+
+  .header-inner {
+    width: 1000px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    box-sizing: border-box;
+
+    .user-menu-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    a {
+      text-decoration: none;
+      color: rgb(0, 0, 0);
+    }
+
+    .mrdaebak-logo {
+      height: 30px;
+    }
+
+    .user-button {
+      margin: 0px 30px;
+      &:hover {
+        text-decoration-line: underline;
+        cursor: pointer;
+      }
+    }
+
+    .userbutton,
+    .active {
+      font-weight: 700;
+    }
+  }
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+
+  .dinner-list-container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(4, max-content);
+
+    .dinner {
+      display: flex;
+      padding: 30px 0px;
+
+      &:hover {
+        .steak-image {
+          transform: scale(1.02);
+          box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.467);
+        }
+      }
+
+      .steak-image {
+        height: 150px;
+        transition: box-shadow 300ms ease-in-out, transform 300ms ease-in-out;
+      }
+
+      .dinner-info {
+        margin: 10px 40px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        .dinner-name-ko {
+          font-size: 1.1em;
+          font-weight: 600;
+        }
+        .dinner-name-en {
+          margin-bottom: 10px;
+
+          font-size: 1.7em;
+          font-weight: 600;
+          font-family: 'Racing Sans One', cursive;
+
+          color: #222222;
+          // -webkit-text-stroke: 0.2px #000;
+          // text-shadow: 2px 3px 0px #ffc72c;
+        }
+        .dinner-detail {
+          width: 350px;
+        }
+      }
+    }
+  }
+}

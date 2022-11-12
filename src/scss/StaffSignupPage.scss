@@ -1,7 +1,7 @@
 @import './base/base';
 
-@import './component/layout';
-@import './component/logonav';
+@import './component/stafflayout';
+@import './component/stafflogonav';
 
 @mixin input-field($w) {
   margin: 5px;
