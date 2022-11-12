@@ -41,7 +41,7 @@
 
           .dinner-price {
             display: flex;
-            justify-content: end;
+            justify-content: flex-end;
             font-weight: 600;
             font-size: 1.1em;
           }
@@ -138,8 +138,8 @@
 
     font-size: 1.4em;
     font-weight: 600;
+
     .payment-price-number {
-      font-size: 1.2em;
       font-weight: 700;
     }
 
