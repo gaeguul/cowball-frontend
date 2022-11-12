@@ -25,12 +25,10 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/' element={<MainPage />} />
         <Route path='/login' element={<CustomerLoginPage />} />
         <Route path='/signup' element={<CustomerSignupPage />} />
-
-        <Route exact path='/' element={<MainPage />} />
         <Route path='/order/:' element={<OrderPage />} />
-
         <Route path='/cart' element={<CartPage />} />
         <Route path='/cart/complete' element={<CartCompletePage />} />
         <Route path='/myorder' element={<MyOrderPage />} />
@@ -46,7 +44,7 @@ function Router() {
         <Route path='/ingredientorder' element={<IngredientOrderPage />} />
         <Route path='/customerlist' element={<CustomerListPage />} />
         <Route path='/stafflist' element={<StaffListPage />} />
-        <Route path='/*' element={<NotFoundPage />} />
+        <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

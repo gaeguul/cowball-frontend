@@ -6,93 +6,281 @@
 .main-container {
   display: flex;
   justify-content: center;
-  padding-top: 50px;
+  padding-top: 40px;
 
   .cart-container {
     width: 1000px;
+    box-sizing: border-box;
+    // padding: 30px;
 
     .main-title {
+      display: flex;
+      justify-content: flex-start;
       font-size: 2em;
       font-weight: 600;
+      padding-bottom: 30px;
     }
-  }
-}
 
-.menu-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  .menu-container {
-    display: grid;
-    gap: 30px;
-
-    .dinner {
+    .dinner-cart-list-container {
       display: grid;
-      grid-template-columns: minmax(max-content, 1fr) 50px 100px;
-      gap: 30px;
+      grid-template-columns: 500px 1fr;
+      gap: 50px;
 
-      .dinner-and-style-container {
-        display: grid;
-        grid-template-columns: auto;
-        gap: 10px;
+      .menu-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
 
-        > * {
-          display: flex;
-        }
+        .cart-dinner {
+          display: grid;
+          grid-template-columns: minmax(max-content, 1fr) 100px 80px;
+          grid-template-rows: max-content;
+          gap: 30px;
 
-        .dinner-title {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
+          position: relative;
 
-          .dinner-name {
-            font-size: 1.1em;
+          .dinner-price {
+            display: flex;
+            justify-content: end;
             font-weight: 600;
+            font-size: 1.1em;
           }
 
-          .steak-degree-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+          .dinner-and-style-container {
+            display: grid;
+            grid-template-columns: auto;
+            gap: 10px;
 
-            box-sizing: border-box;
+            > * {
+              display: flex;
+            }
 
-            min-width: 58px;
-            width: max-content;
-            height: 26px;
+            .dinner-title {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
 
-            // background: #f3f3f3;
-            border: 2px solid #2d2d2d;
-            border-radius: 15px;
+              .dinner-name {
+                font-size: 1.1em;
+                font-weight: 600;
+              }
 
-            margin-left: 10px;
+              .steak-degree-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-            .steak-degree-title {
+                box-sizing: border-box;
+
+                min-width: 58px;
+                width: max-content;
+                height: 26px;
+
+                // background: #f3f3f3;
+                border: 2px solid #2d2d2d;
+                border-radius: 15px;
+
+                margin-left: 10px;
+
+                .steak-degree-title {
+                  font-weight: 500;
+                }
+              }
+            }
+
+            .style-name {
               font-weight: 500;
+            }
+
+            .dinner-option,
+            .style-option {
+              color: #787878;
             }
           }
         }
 
-        .style-name {
-          font-weight: 500;
-        }
+        .total-container {
+          display: flex;
+          justify-content: space-between;
 
-        .dinner-option,
-        .style-option {
-          color: #787878;
+          padding-top: 20px;
+          border-top: 1px solid #c0c0c0;
+
+          font-weight: 600;
+          font-size: 1.1em;
         }
       }
     }
+  }
+}
 
-    .total-container {
-      display: grid;
-      justify-content: end;
-      grid-template-columns: 50px 100px;
-      gap: 30px;
+.right-info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .pay-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-      padding-top: 20px;
-      border-top: 1px solid #c0c0c0;
+    width: max-content;
+    height: 30px;
+
+    margin-top: 30px;
+    padding: 7px 30px;
+
+    border: 2px solid #2d2d2d;
+    border-radius: 30px;
+
+    background: #ffc72c;
+    color: rgb(0, 0, 0);
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
+
+    font-size: 1.4em;
+    font-weight: 600;
+    .payment-price-number {
+      font-size: 1.2em;
+      font-weight: 700;
     }
+
+    &:hover {
+      cursor: pointer;
+      box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.438);
+      color: rgb(0, 0, 0);
+    }
+  }
+
+  .top-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    // height: 400px;
+    padding: 40px;
+    gap: 40px;
+    // width: 100%;
+
+    .payment-info-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      text-align: right;
+
+      .content-container {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 15px 30px;
+
+        .content-title {
+          font-weight: 500;
+          text-align: left;
+        }
+
+        .discount-price-number {
+          color: rgb(230, 6, 6);
+        }
+
+        .payment-price-title {
+          font-weight: 700;
+          line-height: 35px;
+        }
+
+        .payment-price-number {
+          font-weight: 700;
+          font-size: 1.3em;
+        }
+      }
+
+      .title {
+        text-align: left;
+        font-size: 1.3em;
+        font-weight: 600;
+        padding-bottom: 20px;
+      }
+    }
+
+    .delivery-info-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      text-align: left;
+
+      .title {
+        text-align: left;
+        font-size: 1.3em;
+        font-weight: 600;
+        padding-bottom: 20px;
+      }
+
+      .content-container {
+        display: grid;
+        grid-template-columns: max-content 1fr 50px;
+        gap: 15px 30px;
+
+        .content-title {
+          font-weight: 500;
+        }
+
+        .request-container {
+          grid-column: 2 / -1;
+        }
+
+        .card-number {
+          grid-column: 2 / -1;
+        }
+      }
+    }
+  }
+}
+
+.dinner-number-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .dinner-number-button {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 5px;
+    border-radius: 10px;
+
+    background-color: rgb(255, 247, 222);
+
+    .number {
+      width: 30px;
+      font-weight: 500;
+    }
+
+    .button-container {
+      display: flex;
+      align-items: center;
+      padding: 0px 5px;
+
+      .button {
+        color: #e9b422;
+        border-radius: 50%;
+
+        &:hover {
+          background-color: #ffc72c;
+          color: white;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.delete-dinner-button {
+  position: absolute;
+  font-size: 20px;
+  bottom: -5px;
+  right: 0px;
+  color: #b3b3b3;
+
+  &:hover {
+    color: #e9b422;
+    cursor: pointer;
   }
 }

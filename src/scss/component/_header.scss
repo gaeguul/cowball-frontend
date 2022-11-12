@@ -11,14 +11,15 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 15px;
+    padding: 10px 0px;
     box-sizing: border-box;
 
     .user-menu-container {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      // justify-content: space-evenly;
       align-items: center;
+      // width: 360px;
     }
 
     a {
@@ -31,7 +32,8 @@
     }
 
     .user-button {
-      margin: 0px 30px;
+      margin-left: 50px;
+      font-size: 1.1em;
       &:hover {
         text-decoration-line: underline;
         cursor: pointer;
