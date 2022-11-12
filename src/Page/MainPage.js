@@ -1,57 +1,17 @@
 import React from 'react';
-// import CustomerLayout from '../Component/CustomerLayout';
-import { NavLink } from 'react-router-dom';
+import CustomerLayout from '../Component/CustomerLayout';
+import Header from '../Component/Header';
 import '../scss/MainPage.scss';
 
-function Header() {
-  const handleLogoutButtonClick = () => {
-    //logout 처리
-  };
-
-  return (
-    <div className='header-container'>
-      <div className='header-inner'>
-        <div className='logo-container'>
-          <NavLink to='/'>
-            <img
-              className='mrdaebak-logo'
-              alt='mrdaebak-logo'
-              src='img/MrDaebakLogo.png'
-            />
-          </NavLink>
-        </div>
-        <div
-          className='user-menu-container
-          '
-        >
-          <div className='user-button'>
-            <NavLink to='/cart'>Cart</NavLink>
-          </div>
-          <div className='user-button'>
-            <NavLink to='/myorder'>MyOrder</NavLink>
-          </div>
-          <div className='user-button'>
-            <NavLink to='/mypage'>MyPage</NavLink>
-          </div>
-          <div
-            className='user-button logout-button'
-            onClick={handleLogoutButtonClick}
-          >
-            <div>Logout</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function MainPage() {
+  const handleDinnerClick = () => {};
+
   return (
-    <div className='customer-layout'>
+    <CustomerLayout>
       <Header />
       <div className='main-container'>
         <div className='dinner-list-container'>
-          <div className='dinner'>
+          <div className='dinner' onClick={handleDinnerClick}>
             <div className='dinner-image'>
               <img
                 className='steak-image'
@@ -120,7 +80,7 @@ function MainPage() {
           </div>
         </div>
       </div>
-    </div>
+    </CustomerLayout>
   );
 }
 

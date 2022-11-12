@@ -1,58 +1,7 @@
 @import './base/base';
 
-.customer-layout {
-  margin: 0 auto;
-  height: 90vh;
-  // width: 80%;
-  // min-width: 1000px;
-}
-
-.header-container {
-  background-color: #ffc72c;
-  width: 100vw;
-  height: 70px;
-  display: flex;
-  justify-content: center;
-
-  .header-inner {
-    width: 1000px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    box-sizing: border-box;
-
-    .user-menu-container {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    a {
-      text-decoration: none;
-      color: rgb(0, 0, 0);
-    }
-
-    .mrdaebak-logo {
-      height: 30px;
-    }
-
-    .user-button {
-      margin: 0px 30px;
-      &:hover {
-        text-decoration-line: underline;
-        cursor: pointer;
-      }
-    }
-
-    .userbutton,
-    .active {
-      font-weight: 700;
-    }
-  }
-}
+@import './component/customerlayout';
+@import './component/header';
 
 .main-container {
   display: flex;
@@ -73,6 +22,7 @@
           transform: scale(1.02);
           box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.467);
         }
+        cursor: pointer;
       }
 
       .steak-image {

@@ -1,7 +1,7 @@
 import React from 'react';
 
 function CustomerLayout({ children }) {
-  return <div className='layout-container'>{children}</div>;
+  return <div className='customer-layout'>{children}</div>;
 }
 
 export default CustomerLayout;
