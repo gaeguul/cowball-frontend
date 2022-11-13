@@ -2,3 +2,286 @@
 
 @import './component/customerlayout';
 @import './component/header';
+
+@mixin title-bold {
+  font-size: 1.4em;
+  font-weight: 700;
+  padding-bottom: 5px;
+}
+
+@mixin sub-title {
+  color: rgb(136, 136, 136);
+  font-weight: 400;
+  padding-bottom: 10px;
+}
+@mixin select-item {
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.order-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+
+  // width: 1000px;
+  // margin: 0 auto;
+  .top-info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    width: 1000px;
+
+    box-sizing: border-box;
+    padding: 0px 50px;
+    padding-bottom: 30px;
+
+    .right-info-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      box-sizing: border-box;
+      height: 170px;
+
+      padding: 20px 0px;
+      // padding: 20px 0px 20px 40px;
+
+      .dinner-price-title {
+        justify-self: end;
+        align-self: flex-end;
+        font-weight: 600;
+
+        margin-top: 30px;
+
+        .dinner-price {
+          font-size: 1.2em;
+        }
+      }
+
+      .dinner-title-ko {
+        font-size: 1.1em;
+        font-weight: 600;
+      }
+
+      .dinner-title-en {
+        margin-bottom: 10px;
+
+        font-size: 1.7em;
+        font-weight: 600;
+        font-family: 'Racing Sans One', cursive;
+
+        color: #222222;
+      }
+    }
+    .steak-image {
+      height: 170px;
+    }
+  }
+}
+
+.bottom-info-container {
+  display: grid;
+  // width: 1000px;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid #000000;
+
+  .bottom-left-container {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 50px 50px 50px 20px;
+    gap: 50px;
+    border-right: 1px solid #808080;
+
+    .title-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .main-title {
+        @include title-bold();
+      }
+      .sub-title {
+        @include sub-title;
+        max-width: 380px;
+        text-align: left;
+      }
+    }
+
+    .radio-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      label {
+        @include select-item;
+        margin: 5px 0px;
+      }
+
+      [type='radio'] {
+        vertical-align: middle;
+        appearance: none;
+        border: 2px solid #707070;
+        border-radius: 50%;
+        width: 1.25em;
+        height: 1.25em;
+        //   transition: border 0.5s ease-in-out;
+        margin-top: 0px;
+
+        &:checked {
+          // border: 0.4em solid tomato;
+          background-color: #ffc72c;
+        }
+      }
+    }
+
+    // .menu-item-container {
+    //   // display: flex;
+    //   // flex-direction: column;
+    //   // align-items: flex-start;
+    // }
+  }
+
+  .bottom-right-container {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 50px 20px 50px 50px;
+
+    .dinner-number-and-price-container {
+      padding-bottom: 20px;
+    }
+
+    .title-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      .main-title {
+        @include title-bold();
+        padding-bottom: 10px;
+      }
+    }
+    .dinner-option-container {
+      display: grid;
+      grid-template-columns: max-content max-content max-content;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #8a8a8a;
+      gap: 10px 30px;
+      margin-bottom: 30px;
+
+      .dinner-option-name {
+        @include select-item;
+        display: flex;
+        align-items: center;
+      }
+
+      .dinner-option-price {
+        @include select-item;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+.radio-container input {
+  margin-right: 10px;
+}
+
+.option-number-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .option-number-button {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 5px;
+    border-radius: 10px;
+
+    background-color: rgb(255, 247, 222);
+
+    .number {
+      width: 30px;
+      font-weight: 500;
+    }
+
+    .button-container {
+      display: flex;
+      align-items: center;
+      padding: 0px 5px;
+
+      .button {
+        color: #e9b422;
+        border-radius: 50%;
+
+        &:hover {
+          background-color: #ffc72c;
+          color: white;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.dinner-number-and-price-container {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  gap: 20px 0px;
+
+  .total-price-number {
+    font-size: 1.3em;
+    font-weight: 700;
+  }
+  .title {
+    font-size: 1.1em;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .content {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.put-dinner-cart-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  .put-dinner-cart-button {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 15px 30px;
+    padding: 20px 25px;
+
+    width: max-content;
+    height: 40px;
+
+    border: 2px solid #2d2d2d;
+    border-radius: 20px;
+
+    background: #ffc72c;
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
+
+    &:hover {
+      // background: #ffd255;
+      cursor: pointer;
+      box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.438);
+    }
+
+    font-weight: 600;
+    font-size: 1.4em;
+  }
+}

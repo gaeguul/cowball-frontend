@@ -2,3 +2,226 @@
 
 @import './component/customerlayout';
 @import './component/header';
+
+.myorder-layout-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+
+  .myorder-component-container {
+    width: 1000px;
+    box-sizing: border-box;
+
+    .main-title {
+      /* 주문내역 */
+      display: flex;
+      justify-content: flex-start;
+      font-size: 2em;
+      font-weight: 600;
+    }
+  }
+}
+
+.myorder-list-container {
+  // display: flex;
+  // flex-direction: column;
+
+  .single-order-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding: 40px 0px;
+
+    .left-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+
+      .myorder-dinner {
+        display: grid;
+        grid-template-columns: minmax(max-content, 1fr) 100px 80px;
+        grid-template-rows: max-content;
+        gap: 30px;
+
+        position: relative;
+      }
+
+      .left-top-title {
+        display: flex;
+        justify-content: flex-start;
+
+        font-size: 1.5em;
+        font-weight: 600;
+
+        .dot {
+          margin: 0px 20px;
+        }
+
+        .order-state {
+          font-weight: 700;
+        }
+      }
+
+      .dinner-price {
+        display: flex;
+        justify-content: flex-end;
+        font-weight: 600;
+        font-size: 1.1em;
+      }
+
+      .dinner-and-style-container {
+        display: grid;
+        grid-template-columns: auto;
+        gap: 10px;
+
+        > * {
+          display: flex;
+        }
+
+        .dinner-title {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .dinner-name {
+            font-size: 1.1em;
+            font-weight: 600;
+          }
+
+          .steak-degree-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            box-sizing: border-box;
+
+            min-width: 58px;
+            width: max-content;
+            height: 26px;
+
+            // background: #f3f3f3;
+            border: 2px solid #2d2d2d;
+            border-radius: 15px;
+
+            margin-left: 10px;
+            padding: 0px 5px;
+
+            .steak-degree-title {
+              font-weight: 500;
+            }
+          }
+        }
+
+        .style-name {
+          font-weight: 500;
+        }
+
+        .dinner-option,
+        .style-option {
+          color: #787878;
+        }
+      }
+      .total-container {
+        display: flex;
+        justify-content: space-between;
+
+        padding-top: 20px;
+        border-top: 1px solid #c0c0c0;
+
+        font-weight: 600;
+        font-size: 1.2em;
+
+        .total-price {
+          font-weight: 700;
+        }
+      }
+    }
+    .right-container {
+      display: flex;
+      justify-content: flex-end;
+      .right-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #dddddd;
+        border-radius: 10px;
+        // height: 400px;
+        padding: 40px;
+        gap: 40px;
+        width: 400px;
+        box-sizing: border-box;
+
+        font-weight: 500;
+
+        .payment-info-container {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          text-align: right;
+
+          .content-container {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            gap: 15px 30px;
+
+            .content-title {
+              display: flex;
+              align-items: center;
+              font-weight: 500;
+              text-align: left;
+            }
+
+            .discount-price-number {
+              color: rgb(230, 6, 6);
+            }
+
+            .payment-price-title {
+              font-weight: 700;
+              line-height: 35px;
+            }
+
+            .payment-price-number {
+              font-weight: 700;
+              font-size: 1.3em;
+            }
+          }
+
+          .title {
+            text-align: left;
+            font-size: 1.3em;
+            font-weight: 600;
+            padding-bottom: 20px;
+          }
+        }
+
+        .delivery-info-container {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          text-align: left;
+
+          .title {
+            text-align: left;
+            font-size: 1.3em;
+            font-weight: 600;
+            padding-bottom: 20px;
+          }
+
+          .content-container {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            gap: 15px 50px;
+
+            .content-title {
+              display: flex;
+              align-items: center;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+  }
+}
