@@ -3,6 +3,30 @@
 @import './component/customerlayout';
 @import './component/header';
 
+input#address,
+input#request {
+  background-color: #ebebeb;
+  border: 0px;
+  height: 25px;
+  border-radius: 10px;
+  padding-left: 10px;
+  font-size: 16px;
+}
+
+.date-picker {
+  input {
+    border: 0px solid white;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: underline;
+
+    &:hover {
+      cursor: pointer;
+      font-weight: 600;
+    }
+  }
+}
+
 .main-container {
   display: flex;
   justify-content: center;
@@ -18,7 +42,6 @@
       justify-content: flex-start;
       font-size: 2em;
       font-weight: 600;
-      padding-bottom: 30px;
     }
 
     .dinner-cart-list-container {
@@ -27,6 +50,8 @@
       gap: 50px;
 
       .menu-container {
+        padding-top: 30px;
+
         display: flex;
         flex-direction: column;
         gap: 30px;
@@ -132,7 +157,7 @@
     height: 30px;
 
     margin-top: 30px;
-    padding: 7px 30px;
+    padding: 20px 30px;
 
     border: 2px solid #2d2d2d;
     border-radius: 30px;
@@ -165,7 +190,8 @@
     // height: 400px;
     padding: 40px;
     gap: 40px;
-    // width: 100%;
+    width: 400px;
+    box-sizing: border-box;
 
     .payment-info-container {
       display: flex;
@@ -179,6 +205,8 @@
         gap: 15px 30px;
 
         .content-title {
+          display: flex;
+          align-items: center;
           font-weight: 500;
           text-align: left;
         }
@@ -221,19 +249,13 @@
 
       .content-container {
         display: grid;
-        grid-template-columns: max-content 1fr 50px;
+        grid-template-columns: max-content 1fr;
         gap: 15px 30px;
 
         .content-title {
+          display: flex;
+          align-items: center;
           font-weight: 500;
-        }
-
-        .request-container {
-          grid-column: 2 / -1;
-        }
-
-        .card-number {
-          grid-column: 2 / -1;
         }
       }
     }

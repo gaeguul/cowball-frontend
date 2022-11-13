@@ -4,7 +4,7 @@ import {
   MainPage,
   OrderPage,
   CartPage,
-  CartCompletePage,
+  OrderCompletePage,
   MyOrderPage,
   MyPage,
   ChangePasswordPage,
@@ -30,7 +30,7 @@ function Router() {
         <Route path='/signup' element={<CustomerSignupPage />} />
         <Route path='/order/:' element={<OrderPage />} />
         <Route path='/cart' element={<CartPage />} />
-        <Route path='/cart/complete' element={<CartCompletePage />} />
+        <Route path='/ordercomplete' element={<OrderCompletePage />} />
         <Route path='/myorder' element={<MyOrderPage />} />
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/mypage/changepw' element={<ChangePasswordPage />} />

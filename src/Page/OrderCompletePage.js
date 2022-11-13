@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
-import '../scss/CartCompletePage.scss';
+import CustomerLayout from '../Component/CustomerLayout';
 import { BsCheckCircle } from 'react-icons/bs';
+import '../scss/OrderCompletePage.scss';
 
-function CartCompletePage() {
+function OrderCompletePage() {
   return (
     <CustomerLayout>
       <Header />
@@ -34,4 +34,4 @@ function CartCompletePage() {
   );
 }
 
-export default CartCompletePage;
+export default OrderCompletePage;

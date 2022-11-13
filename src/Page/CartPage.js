@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 import { RiCloseCircleFill } from 'react-icons/ri';
+
+import DatePicker from 'react-datepicker';
+import setHours from 'date-fns/setHours';
+import setMinutes from 'date-fns/setMinutes';
+import 'react-datepicker/dist/react-datepicker.css';
+
 import '../scss/CartPage.scss';
 
 function DeleteDinnerButton() {
@@ -46,7 +53,48 @@ function ChangeDinnerNumberButton() {
   );
 }
 
+function DatePickerComponent() {
+  const [startDate, setStartDate] = useState(
+    setHours(setMinutes(new Date(), 30), 16),
+  );
+
+  const includeTimes = [
+    setHours(setMinutes(new Date(), 30), 15),
+    setHours(setMinutes(new Date(), 0), 16),
+    setHours(setMinutes(new Date(), 30), 16),
+    setHours(setMinutes(new Date(), 0), 17),
+    setHours(setMinutes(new Date(), 30), 17),
+    setHours(setMinutes(new Date(), 0), 18),
+    setHours(setMinutes(new Date(), 30), 18),
+    setHours(setMinutes(new Date(), 0), 19),
+    setHours(setMinutes(new Date(), 30), 19),
+    setHours(setMinutes(new Date(), 0), 20),
+    setHours(setMinutes(new Date(), 30), 20),
+  ];
+
+  return (
+    <DatePicker
+      selected={startDate}
+      onChange={(date) => setStartDate(date)}
+      dateFormat='yyyy.MM.dd h:mm aa'
+      showTimeSelect
+      includeTimes={includeTimes}
+    />
+  );
+}
+
 function CartPage() {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    await new Promise((r) => setTimeout(r, 1000));
+    console.log(JSON.stringify(data));
+  };
+
   return (
     <CustomerLayout>
       <Header />
@@ -102,19 +150,36 @@ function CartPage() {
                 <div className='total-price'>73,000원</div>
               </div>
             </div>
-            <div className='right-info-container'>
+            <form
+              className='right-info-container'
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div className='top-info-container'>
                 <div className='delivery-info-container'>
                   <div className='title'>배달정보</div>
                   <div className='content-container'>
                     <div className='rsv-date-title content-title'>예약일시</div>
-                    <div className='rsv-date'>2022.01.01 (월) 19:00</div>
-                    <div className='rsv-date-change-button-container'>변경</div>
+                    <div className='rsv-date date-picker'>
+                      <DatePickerComponent />
+                    </div>
                     <div className='address-title content-title'>배송지</div>
-                    <div className='address'>서울특별시 동대문구</div>
-                    <div className='address-change-button-container'>변경</div>
+                    <div className='address-input-container'>
+                      <input
+                        id='address'
+                        type='text'
+                        name='address'
+                        {...register('address')}
+                      />
+                    </div>
                     <div className='request-title content-title'>요청사항</div>
-                    <div className='request-container'>맛있게 해주세요 ^^</div>
+                    <div className='request-input-container'>
+                      <input
+                        id='request'
+                        type='text'
+                        name='request'
+                        {...register('request')}
+                      />
+                    </div>
                     <div className='card-number-title content-title'>
                       카드번호
                     </div>
@@ -139,10 +204,14 @@ function CartPage() {
                   </div>
                 </div>
               </div>
-              <div className='pay-button'>
+              <button
+                type='submit'
+                className='pay-button'
+                disabled={isSubmitting}
+              >
                 <span className='payment-price-number'>75,000</span>원 결제하기
-              </div>
-            </div>
+              </button>
+            </form>
           </div>
         </div>
       </div>
