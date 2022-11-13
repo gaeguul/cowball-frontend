@@ -28,7 +28,7 @@ function Router() {
         <Route path='/' element={<MainPage />} />
         <Route path='/login' element={<CustomerLoginPage />} />
         <Route path='/signup' element={<CustomerSignupPage />} />
-        <Route path='/order/:' element={<OrderPage />} />
+        <Route path='/order/:dinnerId' element={<OrderPage />} />
         <Route path='/cart' element={<CartPage />} />
         <Route path='/ordercomplete' element={<OrderCompletePage />} />
         <Route path='/myorder' element={<MyOrderPage />} />

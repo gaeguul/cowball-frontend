@@ -14,7 +14,7 @@ function Header() {
             <img
               className='mrdaebak-logo'
               alt='mrdaebak-logo'
-              src='img/MrDaebakLogo.png'
+              src='/img/MrDaebakLogo.png'
             />
           </NavLink>
         </div>

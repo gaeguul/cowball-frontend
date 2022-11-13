@@ -11,7 +11,7 @@ function StaffLoginLogo() {
         <img
           className='MrDaebakStaffLogo'
           alt='MrDaebakStaffLogo'
-          src='img/MrDaebakStaffLogo.png'
+          src='/img/MrDaebakStaffLogo.png'
         />
       </NavLink>
     </div>

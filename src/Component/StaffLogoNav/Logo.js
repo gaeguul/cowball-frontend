@@ -8,7 +8,7 @@ function Logo() {
         <img
           className='MrDaebakLogo'
           alt='MrDaebakLogo'
-          src='img/MrDaebakLogo.png'
+          src='/img/MrDaebakLogo.png'
         />
       </NavLink>
     </div>

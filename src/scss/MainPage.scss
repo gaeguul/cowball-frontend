@@ -2,4 +2,67 @@
 
 @import './component/customerlayout';
 @import './component/header';
-@import './component/mainlist';
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+
+  .dinner-list-container {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: repeat(4, max-content);
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .dinner {
+      display: flex;
+      padding: 30px 0px;
+
+      &:hover {
+        cursor: pointer;
+
+        .steak-image {
+          transform: scale(1.02);
+          box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.467);
+        }
+      }
+
+      .steak-image {
+        height: 150px;
+        transition: box-shadow 300ms ease-in-out, transform 300ms ease-in-out;
+      }
+
+      .dinner-info {
+        margin: 10px 40px;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        .dinner-name-ko {
+          font-size: 1.1em;
+          font-weight: 600;
+        }
+
+        .dinner-name-en {
+          margin-bottom: 10px;
+
+          font-size: 1.7em;
+          font-weight: 600;
+          font-family: 'Racing Sans One', cursive;
+
+          color: #222222;
+          // -webkit-text-stroke: 0.2px #000;
+          // text-shadow: 2px 3px 0px #ffc72c;
+        }
+        // .dinner-detail {
+        //   width: 400px;
+        // }
+      }
+    }
+  }
+}

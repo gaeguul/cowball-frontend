@@ -1,89 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 import '../scss/MainPage.scss';
 
-function MainList() {
+function DinnerItem(props) {
+  const param = props.dinner.dinnerId;
+
+  return (
+    <Link to={`/order/${param}`}>
+      <div className='dinner'>
+        <div className='dinner-image'>
+          <img
+            className='steak-image'
+            alt='steak-image'
+            src='/img/steak2.png'
+          />
+        </div>
+        <div className='dinner-info'>
+          <div className='dinner-name-ko'>{props.dinner.dinnerName}</div>
+          <div className='dinner-name-en'>Valentine Dinner</div>
+          <div className='dinner-detail'>{props.dinner.dinnerDetail}</div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function DinnerList(props) {
   return (
     <div className='main-container'>
       <div className='dinner-list-container'>
-        <div className='dinner'>
-          <div className='dinner-image'>
-            <img
-              className='steak-image'
-              alt='steak-image'
-              src='img/steak2.png'
-            />
-          </div>
-          <div className='dinner-info'>
-            <div className='dinner-name-ko'>발렌타인 디너</div>
-            <div className='dinner-name-en'>Valentine Dinner</div>
-            <div className='dinner-detail'>
-              압도적인 크기와 풍미가 가득한 토마호크 스테이크와 셰프 가니시의
-              만남
-            </div>
-          </div>
-        </div>
-        <div className='dinner'>
-          <div className='dinner-image'>
-            <img
-              className='steak-image'
-              alt='steak-image'
-              src='img/steak2.png'
-            />
-          </div>
-          <div className='dinner-info'>
-            <div className='dinner-name-ko'>프렌치 디너</div>
-            <div className='dinner-name-en'>French Dinner</div>
-            <div className='dinner-detail'>
-              압도적인 크기와 풍미가 가득한 토마호크 스테이크와의 만남
-            </div>
-          </div>
-        </div>
-        <div className='dinner'>
-          <div className='dinner-image'>
-            <img
-              className='steak-image'
-              alt='steak-image'
-              src='img/steak2.png'
-            />
-          </div>
-          <div className='dinner-info'>
-            <div className='dinner-name-ko'>잉글리시 디너</div>
-            <div className='dinner-name-en'>English Dinner</div>
-            <div className='dinner-detail'>
-              압도적인 크기와 풍미가 가득한 토마호크 스테이크와 셰프 가니시의
-              만남
-            </div>
-          </div>
-        </div>
-        <div className='dinner'>
-          <div className='dinner-image'>
-            <img
-              className='steak-image'
-              alt='steak-image'
-              src='img/steak2.png'
-            />
-          </div>
-          <div className='dinner-info'>
-            <div className='dinner-name-ko'>샴페인 축제 디너</div>
-            <div className='dinner-name-en'>Champagne Feast Dinner</div>
-            <div className='dinner-detail'>
-              압도적인 크기와 풍미가 가득한 토마호크 스테이크와 셰프 가니시의
-              만남
-            </div>
-          </div>
-        </div>
+        {props.dinners.map((dinner) => {
+          return <DinnerItem key={dinner.dinnerId} dinner={dinner} />;
+        })}
       </div>
     </div>
   );
 }
 
 function MainPage() {
+  const [dinners, setDinners] = useState([]);
+
+  useEffect(() => {
+    const getDinners = async () => {
+      try {
+        const url =
+          'http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners';
+        const response = await axios.get(url);
+        // console.log(response.data.items);
+        setDinners(response.data.items);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getDinners();
+  }, []);
+
   return (
     <CustomerLayout>
       <Header />
-      <MainList />
+      <DinnerList dinners={dinners} />
     </CustomerLayout>
   );
 }
