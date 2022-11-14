@@ -16,7 +16,7 @@ function DeleteStaffButton() {
   return (
     <div className='delete-staff-button-container'>
       <div className='delete-staff-button'>
-        <div className='button-title'>직원삭제</div>
+        <div className='button-title'>삭제</div>
       </div>
     </div>
   );
