@@ -10,7 +10,7 @@ import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import '../scss/CartPage.scss';
+import '../scss/CartPage.module.scss';
 
 function DeleteDinnerButton() {
   const deleteDinnerButtonClick = () => {

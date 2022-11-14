@@ -1,7 +1,6 @@
 @import './base/base';
 
 @import './component/customerlayout';
-@import './component/customerlogonav';
 
 @mixin input-field($w) {
   margin: 5px;
@@ -100,8 +99,6 @@
         // width: 120px;
 
         font-weight: 600;
-
-        
       }
 
       .input-alert {
@@ -142,8 +139,6 @@
           }
         }
       }
-      
     }
-    
   }
 }

@@ -1,7 +1,6 @@
 @import './base/base';
 
 @import './component/customerlayout';
-@import './component/customerlogonav';
 
 @mixin input-field($w) {
   margin: 5px;
@@ -16,7 +15,6 @@
   justify-content: center;
   align-items: center;
   height: 90vh;
-  
 
   .customer-login-box {
     display: flex;
@@ -92,7 +90,7 @@
       width: 100%;
       display: flex;
       justify-content: space-around;
-      
+
       a {
         text-decoration: none;
         color: rgba(0, 0, 0, 0.756);

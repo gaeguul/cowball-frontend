@@ -117,12 +117,12 @@ function CustomerSignupForm() {
             {errors.address.message}
           </small>
         )}
-        <div className='confirm-container'>
+        {/* <div className='confirm-container'>
           <div className='confirm-text'>
             개인 정보 수집 및 이용에 동의합니다
           </div>
           <input type='radio' name='check' id='check' value='check' />
-        </div>
+        </div> */}
         <div className='signup-button-container'>
           <button
             className='signup-button'
