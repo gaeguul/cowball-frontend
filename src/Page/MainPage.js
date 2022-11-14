@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
-import '../scss/MainPage.module.scss';
+import '../scss/MainPage.scss';
 
 function DinnerItem(props) {
   const param = props.dinner.dinnerId;

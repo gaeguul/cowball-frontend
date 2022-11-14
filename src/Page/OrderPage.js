@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
-
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import '../scss/OrderPage.scss';
 
 // import { useForm } from 'react-hook-form';
@@ -214,6 +215,32 @@ function OrderContainer() {
 }
 
 function OrderPage() {
+  const { dinnerId } = useParams();
+  console.log(dinnerId);
+
+  // const { mainOptions, setMainOptions } = useState([]);
+  // const { extraOptions, setExtraOptions } = useState([]);
+
+  useEffect(() => {
+    const getDinnerIngredient = async () => {
+      try {
+        const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}/options`;
+        const response = await axios.get(url);
+        console.log(response.data);
+
+        {
+          response.data.map((option) => {
+            console.log(option.dinnerOptionName);
+          });
+        }
+        // setDinners(response.data.items);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getDinnerIngredient();
+  }, []);
+
   return (
     <CustomerLayout>
       <Header />
