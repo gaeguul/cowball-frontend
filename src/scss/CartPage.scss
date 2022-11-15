@@ -3,12 +3,12 @@
 @import './component/customerlayout';
 @import './component/header';
 
-input#address,
+input#delivery-address,
 input#request {
   background-color: #ebebeb;
   border: 0px;
   height: 25px;
-  border-radius: 10px;
+  border-radius: 5px;
   padding-left: 10px;
   font-size: 16px;
 }

@@ -165,10 +165,10 @@ function CartPage() {
                     <div className='address-title content-title'>배송지</div>
                     <div className='address-input-container'>
                       <input
-                        id='address'
+                        id='delivery-address'
                         type='text'
-                        name='address'
-                        {...register('address')}
+                        name='delivery-address'
+                        {...register('delivery-address')}
                       />
                     </div>
                     <div className='request-title content-title'>요청사항</div>
