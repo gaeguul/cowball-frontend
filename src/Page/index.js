@@ -10,6 +10,7 @@ export { default as ChangeMyInfoPage } from './ChangeMyInfoPage';
 
 export { default as CustomerLoginPage } from './CustomerLoginPage';
 export { default as CustomerSignupPage } from './CustomerSignupPage';
+export { default as CustomerExitPage } from './CustomerExitPage';
 
 export { default as OrderListPage } from './OrderListPage';
 export { default as IngredientListPage } from './IngredientListPage';
