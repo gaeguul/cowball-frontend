@@ -85,31 +85,64 @@ function TopInfoComponent(props) {
   );
 }
 
+function SteakDegreeComponent() {
+  return (
+    <div className='steak-degree-container'>
+      <div className='title-container'>
+        <div className='main-title'>스테이크 굽기 단계</div>
+        <div className='sub-title'>스테이크 굽기 단계를 선택해주세요.</div>
+      </div>
+      <div className='radio-container'>
+        <label>
+          <input type='radio' name='steak-degree' id='1' value='1' />
+          레어
+        </label>
+        <label>
+          <input type='radio' name='steak-degree' id='2' value='2' />
+          미디움레어
+        </label>
+        <label>
+          <input type='radio' name='steak-degree' id='3' value='3' />
+          미디움
+        </label>
+        <label>
+          <input type='radio' name='steak-degree' id='4' value='4' />
+          미디움웰
+        </label>
+        <label>
+          <input type='radio' name='steak-degree' id='5' value='5' />
+          웰던
+        </label>
+      </div>
+    </div>
+  );
+}
+
 function MainOptionComponent({ dinnerId }) {
   const [mainOptions, setMainOptions] = useState([]);
 
   useEffect(() => {
-    const getMainOptions = async () => {
+    async () => {
       try {
         const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}/options`;
         const response = await axios.get(url);
         const options = await response.data;
+
         console.log(options);
         options.map((option) => {
           if (option.dinnerOptionName == '메인메뉴 삭제') {
-            setMainOptions([...mainOptions, option]);
-            // console.log(option.dinnerOptionDetail);
+            // setMainOptions([...mainOptions, option]);
+            console.log(option);
+            setMainOptions(...mainOptions, option);
           }
         });
       } catch (error) {
         console.log(error);
       }
     };
-
-    getMainOptions();
   }, []);
-  // console.log(mainOptions);
 
+  // console.log(mainOptions);
   return (
     <div className='menu-item-container'>
       <div className='title-container'>
@@ -180,7 +213,7 @@ function OrderPage() {
         <div className='bottom-info-container'>
           <div className='bottom-left-container'>
             <MainOptionComponent dinnerId={dinnerId} />
-            <div className='steak-degree-container'>
+            {/* <div className='steak-degree-container'>
               <div className='title-container'>
                 <div className='main-title'>스테이크 굽기 단계</div>
                 <div className='sub-title'>
@@ -209,8 +242,8 @@ function OrderPage() {
                   웰던
                 </label>
               </div>
-            </div>
-
+            </div> */}
+            <SteakDegreeComponent />
             <div className='select-style-container'>
               <div className='title-container'>
                 <div className='main-title'>스타일 선택</div>
