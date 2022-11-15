@@ -118,6 +118,7 @@ function SteakDegreeComponent() {
   );
 }
 
+/*
 function MainOptionComponent({ dinnerId }) {
   const [mainOptions, setMainOptions] = useState([]);
 
@@ -165,30 +166,20 @@ function MainOptionComponent({ dinnerId }) {
             </label>
           );
         })}
-
-        {/* <label>
-          <input type='radio' name='delete-menu' id='1' value='1' />
-          와인 1잔
-        </label>
-        <label>
-          <input type='radio' name='delete-menu' id='2' value='2' />
-          하트모양과 큐피드 접시
-        </label>
-        <label>
-          <input type='radio' name='delete-menu' id='3' value='3' />
-          냅킨
-        </label> */}
       </div>
     </div>
   );
 }
+*/
 
 function OrderPage() {
   const { dinnerId } = useParams();
   // console.log(dinnerId);
 
   const [dinnerInfo, setDinnerInfo] = useState({});
-  // const [extraOptions, setExtraOptions] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [mainOptions, setMainOptions] = useState([]);
+  const [extraOptions, setExtraOptions] = useState([]);
 
   useEffect(() => {
     const getDinnerInfo = async () => {
@@ -202,6 +193,30 @@ function OrderPage() {
       }
     };
     getDinnerInfo();
+
+    const getMainOptions = async () => {
+      try {
+        const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}/options`;
+        const response = await axios.get(url);
+        setOptions(response.data);
+
+        // console.log(response.data);
+
+        options.forEach((option) => {
+          console.log(option);
+          if (option['dinnerOptionName'] === '메인메뉴 삭제') {
+            console.log(option['dinnerDetail']);
+            setMainOptions([...mainOptions, option]);
+          } else {
+            setExtraOptions([...extraOptions, option]);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getMainOptions();
   }, []);
 
   return (
@@ -209,40 +224,46 @@ function OrderPage() {
       <Header />
       <div className='order-container'>
         <TopInfoComponent dinnerInfo={dinnerInfo} />
-
         <div className='bottom-info-container'>
           <div className='bottom-left-container'>
-            <MainOptionComponent dinnerId={dinnerId} />
-            {/* <div className='steak-degree-container'>
+            {/* <MainOptionComponent dinnerId={dinnerId} /> */}
+            <div className='menu-item-container'>
               <div className='title-container'>
-                <div className='main-title'>스테이크 굽기 단계</div>
+                <div className='main-title'>메뉴 구성</div>
                 <div className='sub-title'>
-                  스테이크 굽기 단계를 선택해주세요.
+                  구성 메뉴 삭제는 스테이크를 제외한 메뉴 중 한 가지만
+                  가능합니다.
                 </div>
               </div>
               <div className='radio-container'>
-                <label>
-                  <input type='radio' name='steak-degree' id='1' value='1' />
-                  레어
+                {mainOptions.map((mainOption) => {
+                  return (
+                    <label key={mainOption.dinnerOptionId}>
+                      <input
+                        type='radio'
+                        name='delete-menu'
+                        id={mainOption.dinnerOptionId}
+                        value={mainOption.dinnerOptionId}
+                      />
+                      {mainOption.dinnerOptionDetail}
+                    </label>
+                  );
+                })}
+
+                {/* <label>
+                  <input type='radio' name='delete-menu' id='1' value='1' />
+                  와인 1잔
                 </label>
                 <label>
-                  <input type='radio' name='steak-degree' id='2' value='2' />
-                  미디움레어
+                  <input type='radio' name='delete-menu' id='2' value='2' />
+                  하트모양과 큐피드 접시
                 </label>
                 <label>
-                  <input type='radio' name='steak-degree' id='3' value='3' />
-                  미디움
-                </label>
-                <label>
-                  <input type='radio' name='steak-degree' id='4' value='4' />
-                  미디움웰
-                </label>
-                <label>
-                  <input type='radio' name='steak-degree' id='5' value='5' />
-                  웰던
-                </label>
+                  <input type='radio' name='delete-menu' id='3' value='3' />
+                  냅킨
+                </label> */}
               </div>
-            </div> */}
+            </div>
             <SteakDegreeComponent />
             <div className='select-style-container'>
               <div className='title-container'>
