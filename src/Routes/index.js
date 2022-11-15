@@ -11,6 +11,7 @@ import {
   ChangeMyInfoPage,
   CustomerLoginPage,
   CustomerSignupPage,
+  CustomerExitPage,
   OrderListPage,
   IngredientListPage,
   IngredientOrderPage,
@@ -28,6 +29,8 @@ function Router() {
         <Route path='/' element={<MainPage />} />
         <Route path='/login' element={<CustomerLoginPage />} />
         <Route path='/signup' element={<CustomerSignupPage />} />
+        <Route path='/exit' element={<CustomerExitPage />} />
+
         <Route path='/order/:dinnerId' element={<OrderPage />} />
         <Route path='/cart' element={<CartPage />} />
         <Route path='/ordercomplete' element={<OrderCompletePage />} />
