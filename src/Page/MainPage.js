@@ -44,39 +44,6 @@ function MainPage() {
   const [dinners, setDinners] = useState([]);
 
   useEffect(() => {
-    // const getDinnerInfo = async () => {
-    //   try {
-    //     const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/1`;
-    //     const response = await axios.get(url);
-    //     console.log(response.data);
-    //     // setDinnerInfo(response.data);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-    // getDinnerInfo();
-
-    // const getDinnerIngredient = async () => {
-    //   try {
-    //     const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/1/options`;
-    //     const response = await axios.get(url);
-    //     console.log(response.data);
-
-    //     response.data.map((option) => {
-    //       if (option.dinnerOptionName == '메인메뉴 삭제') {
-    //         // setMainOptions([...mainOptions, option]);
-    //         console.log(option.dinnerOptionDetail);
-    //       } else {
-    //         // setExtraOptions([...extraOptions, option]);
-    //         console.log(option.dinnerOptionDetail);
-    //       }
-    //     });
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-    // getDinnerIngredient();
-
     const getDinners = async () => {
       try {
         const url =

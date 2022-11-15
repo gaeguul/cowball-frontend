@@ -53,8 +53,8 @@ function ChangeDinnerNumberButton() {
   );
 }
 
-function DatePickerComponent() {
-  const [startDate, setStartDate] = useState(
+function DatePickerComponent(props) {
+  const [rsvDate, setRsvDate] = useState(
     setHours(setMinutes(new Date(), 30), 16),
   );
 
@@ -70,15 +70,23 @@ function DatePickerComponent() {
     setHours(setMinutes(new Date(), 30), 19),
     setHours(setMinutes(new Date(), 0), 20),
     setHours(setMinutes(new Date(), 30), 20),
+    setHours(setMinutes(new Date(), 0), 21),
+    setHours(setMinutes(new Date(), 30), 21),
+    setHours(setMinutes(new Date(), 0), 22),
   ];
+
+  console.log(rsvDate);
 
   return (
     <DatePicker
-      selected={startDate}
-      onChange={(date) => setStartDate(date)}
-      dateFormat='yyyy.MM.dd h:mm aa'
+      selected={rsvDate}
+      onChange={(date) => setRsvDate(date)}
+      dateFormat='yyyy.MM.dd (eee) h:mm aa'
       showTimeSelect
       includeTimes={includeTimes}
+      onChnage={(newDate) => {
+        props.setRsvDate(newDate);
+      }}
     />
   );
 }
@@ -90,9 +98,19 @@ function CartPage() {
     formState: { isSubmitting },
   } = useForm();
 
+  const [rsvDate, setRsvDate] = useState('');
+
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
-    console.log(JSON.stringify(data));
+    // console.log(JSON.stringify(data));
+    const newData = {
+      rsvDate: rsvDate,
+      deliveryAddress: data['delivery-address'],
+      request: data['request'],
+      cardNumber: '1235123512351235',
+      phoneNumber: '01012345678',
+    };
+    console.log(newData);
   };
 
   return (
@@ -160,7 +178,7 @@ function CartPage() {
                   <div className='content-container'>
                     <div className='rsv-date-title content-title'>예약일시</div>
                     <div className='rsv-date date-picker'>
-                      <DatePickerComponent />
+                      <DatePickerComponent setRsvDate={setRsvDate} />
                     </div>
                     <div className='address-title content-title'>배송지</div>
                     <div className='address-input-container'>
@@ -183,7 +201,7 @@ function CartPage() {
                     <div className='card-number-title content-title'>
                       카드번호
                     </div>
-                    <div className='card-number'>1235-1235-1235-1235</div>
+                    <div className='card-number'>1235123512351235</div>
                   </div>
                 </div>
                 <div className='payment-info-container'>

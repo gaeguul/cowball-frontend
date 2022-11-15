@@ -118,104 +118,61 @@ function SteakDegreeComponent() {
   );
 }
 
-/*
-function MainOptionComponent({ dinnerId }) {
-  const [mainOptions, setMainOptions] = useState([]);
-
-  useEffect(() => {
-    async () => {
-      try {
-        const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}/options`;
-        const response = await axios.get(url);
-        const options = await response.data;
-
-        console.log(options);
-        options.map((option) => {
-          if (option.dinnerOptionName == '메인메뉴 삭제') {
-            // setMainOptions([...mainOptions, option]);
-            console.log(option);
-            setMainOptions(...mainOptions, option);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-  }, []);
-
-  // console.log(mainOptions);
-  return (
-    <div className='menu-item-container'>
-      <div className='title-container'>
-        <div className='main-title'>메뉴 구성</div>
-        <div className='sub-title'>
-          구성 메뉴 삭제는 스테이크를 제외한 메뉴 중 한 가지만 가능합니다.
-        </div>
-      </div>
-      <div className='radio-container'>
-        {mainOptions.map((mainOption) => {
-          return (
-            <label key={mainOption.dinnerOptionId}>
-              <input
-                type='radio'
-                name='delete-menu'
-                id={mainOption.dinnerOptionId}
-                value={mainOption.dinnerOptionId}
-              />
-              {mainOption.dinnerOptionDetail}
-            </label>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-*/
-
 function OrderPage() {
   const { dinnerId } = useParams();
   // console.log(dinnerId);
 
   const [dinnerInfo, setDinnerInfo] = useState({});
+
   const [options, setOptions] = useState([]);
+  // const [mainOption, setMainOption] = useState({});
   const [mainOptions, setMainOptions] = useState([]);
-  const [extraOptions, setExtraOptions] = useState([]);
+  // const [extraOptions, setExtraOptions] = useState([]);
+
+  const getDinnerInfo = async () => {
+    try {
+      const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}`;
+      const response = await axios.get(url);
+      setDinnerInfo(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getMainOptions = async () => {
+    try {
+      const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}/options`;
+      const response = await axios.get(url);
+      setOptions(response.data);
+
+      let newOption;
+      let mainOptionList = [...mainOptions, newOption];
+
+      options.forEach((option) => {
+        newOption = {
+          dinnerId: option.dinnerId,
+          dinnerOptionDetail: option.dinnerOptionDetail,
+          dinnerOptionId: option.dinnerOptionId,
+          dinnerOptionName: option.dinnerOptionName,
+          dinnerOptionPrice: option.dinnerOptionPrice,
+        };
+
+        if (newOption.dinnerOptionName == '메인메뉴 삭제') {
+          console.log(newOption);
+          setMainOptions(mainOptionList);
+        } else {
+          console.log('hello');
+        }
+      });
+
+      console.log(mainOptionList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const getDinnerInfo = async () => {
-      try {
-        const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}`;
-        const response = await axios.get(url);
-        // console.log(response.data);
-        setDinnerInfo(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getDinnerInfo();
-
-    const getMainOptions = async () => {
-      try {
-        const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}/options`;
-        const response = await axios.get(url);
-        setOptions(response.data);
-
-        // console.log(response.data);
-
-        options.forEach((option) => {
-          console.log(option);
-          if (option['dinnerOptionName'] === '메인메뉴 삭제') {
-            console.log(option['dinnerDetail']);
-            setMainOptions([...mainOptions, option]);
-          } else {
-            setExtraOptions([...extraOptions, option]);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     getMainOptions();
   }, []);
 
@@ -226,7 +183,6 @@ function OrderPage() {
         <TopInfoComponent dinnerInfo={dinnerInfo} />
         <div className='bottom-info-container'>
           <div className='bottom-left-container'>
-            {/* <MainOptionComponent dinnerId={dinnerId} /> */}
             <div className='menu-item-container'>
               <div className='title-container'>
                 <div className='main-title'>메뉴 구성</div>

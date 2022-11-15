@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import { BiPlus, BiMinus } from 'react-icons/bi';
 
 function ArrivedNumberButton() {
@@ -35,7 +37,48 @@ function ArrivedNumberButton() {
   );
 }
 
+function IngredientItem(props) {
+  const ingredient = props.ingredient;
+  console.log(ingredient);
+
+  return (
+    <tr>
+      <td>{ingredient.ingredientName}</td>
+      <td>{ingredient.categoryId}</td>
+      <td>{ingredient.prevStock}</td>
+      <td>{ingredient.todayArrived}</td>
+      <td>{ingredient.todayOut}</td>
+      <td>{ingredient.currentStock}</td>
+    </tr>
+  );
+}
+
 function IngredientList() {
+  const [ingredients, setIngredients] = useState([]);
+
+  const getIngredientsOptions = {
+    method: 'GET',
+    url: 'http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/ingredients/items',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer 123',
+    },
+  };
+  const getIngredients = () =>
+    axios
+      .request(getIngredientsOptions)
+      .then((response) => {
+        setIngredients(response.data.items);
+        console.log(response.data.items);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+  useEffect(() => {
+    getIngredients();
+  }, []);
+
   return (
     <div className='nexttonav'>
       <div className='ingredientlist-container'>
@@ -59,7 +102,21 @@ function IngredientList() {
               </tr>
             </thead>
             <tbody>
+              {ingredients.map((i) => {
+                <IngredientItem key={i.ingredientId} ingredient={i} />;
+              })}
+
               <tr>
+                <td>샴페인</td>
+                <td>술</td>
+                <td>10</td>
+                <td>
+                  <ArrivedNumberButton />
+                </td>
+                <td>30</td>
+                <td>30</td>
+              </tr>
+              {/* <tr>
                 <td>스테이크</td>
                 <td>식사</td>
                 <td>10</td>
@@ -93,16 +150,7 @@ function IngredientList() {
                 <td>30</td>
                 <td>30</td>
               </tr>
-              <tr>
-                <td>샴페인</td>
-                <td>술</td>
-                <td>10</td>
-                <td>
-                  <ArrivedNumberButton />
-                </td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
+              
               <tr>
                 <td>베이컨</td>
                 <td>식사</td>
@@ -142,7 +190,7 @@ function IngredientList() {
                 <td>50</td>
                 <td>30</td>
                 <td>30</td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>
