@@ -67,7 +67,6 @@ function ChangeOptionNumberButton() {
 }
 
 function TopInfoComponent(props) {
-  console.log(props.dinnerInfo);
   return (
     <div className='top-info-container'>
       <div className='img-container'>
@@ -78,11 +77,74 @@ function TopInfoComponent(props) {
         <div className='dinner-title-en'>Valentine Dinner</div>
         <div className='dinner-detail'>{props.dinnerInfo.dinnerDetail}</div>
         <div className='dinner-price-title'>
-          <span className='dinner-price'>
-            {props.dinnerInfo.dinnerPrice.toLocaleString()}
-          </span>
+          <span className='dinner-price'>{props.dinnerInfo.dinnerPrice}</span>
           <span>원</span>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function MainOptionComponent({ dinnerId }) {
+  const [mainOptions, setMainOptions] = useState([]);
+
+  useEffect(() => {
+    const getMainOptions = async () => {
+      try {
+        const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}/options`;
+        const response = await axios.get(url);
+        const options = await response.data;
+        console.log(options);
+        options.map((option) => {
+          if (option.dinnerOptionName == '메인메뉴 삭제') {
+            setMainOptions([...mainOptions, option]);
+            // console.log(option.dinnerOptionDetail);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getMainOptions();
+  }, []);
+  // console.log(mainOptions);
+
+  return (
+    <div className='menu-item-container'>
+      <div className='title-container'>
+        <div className='main-title'>메뉴 구성</div>
+        <div className='sub-title'>
+          구성 메뉴 삭제는 스테이크를 제외한 메뉴 중 한 가지만 가능합니다.
+        </div>
+      </div>
+      <div className='radio-container'>
+        {mainOptions.map((mainOption) => {
+          return (
+            <label key={mainOption.dinnerOptionId}>
+              <input
+                type='radio'
+                name='delete-menu'
+                id={mainOption.dinnerOptionId}
+                value={mainOption.dinnerOptionId}
+              />
+              {mainOption.dinnerOptionDetail}
+            </label>
+          );
+        })}
+
+        {/* <label>
+          <input type='radio' name='delete-menu' id='1' value='1' />
+          와인 1잔
+        </label>
+        <label>
+          <input type='radio' name='delete-menu' id='2' value='2' />
+          하트모양과 큐피드 접시
+        </label>
+        <label>
+          <input type='radio' name='delete-menu' id='3' value='3' />
+          냅킨
+        </label> */}
       </div>
     </div>
   );
@@ -93,41 +155,20 @@ function OrderPage() {
   // console.log(dinnerId);
 
   const [dinnerInfo, setDinnerInfo] = useState({});
-  const [mainOptions, setMainOptions] = useState([]);
-  const [extraOptions, setExtraOptions] = useState([]);
+  // const [extraOptions, setExtraOptions] = useState([]);
 
   useEffect(() => {
     const getDinnerInfo = async () => {
       try {
         const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}`;
         const response = await axios.get(url);
-        console.log(response.data);
+        // console.log(response.data);
         setDinnerInfo(response.data);
       } catch (error) {
         console.log(error);
       }
     };
-
-    const getDinnerIngredient = async () => {
-      try {
-        const url = `http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners/${dinnerId}/options`;
-        const response = await axios.get(url);
-
-        response.data.map((option) => {
-          if (option.dinnerOptionName == '메인메뉴 삭제') {
-            setMainOptions([...mainOptions, option]);
-            console.log(option.dinnerOptionDetail);
-          } else {
-            setExtraOptions([...extraOptions, option]);
-            console.log(option.dinnerOptionDetail);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getDinnerInfo();
-    getDinnerIngredient();
   }, []);
 
   return (
@@ -138,6 +179,7 @@ function OrderPage() {
 
         <div className='bottom-info-container'>
           <div className='bottom-left-container'>
+            <MainOptionComponent dinnerId={dinnerId} />
             <div className='steak-degree-container'>
               <div className='title-container'>
                 <div className='main-title'>스테이크 굽기 단계</div>
@@ -168,6 +210,7 @@ function OrderPage() {
                 </label>
               </div>
             </div>
+
             <div className='select-style-container'>
               <div className='title-container'>
                 <div className='main-title'>스타일 선택</div>
