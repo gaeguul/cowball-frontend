@@ -149,7 +149,7 @@ function OrderPage() {
    * API 호출 후 변수 세팅까지 완료한 후에
    * 다시 한번더 렌더링하기 위해 loading 변수 추가함
    */
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   /** 선택한 디너 정보 API 호출 */
   const getDinnerInfo = async () => {
@@ -177,7 +177,7 @@ function OrderPage() {
   /** 선택한 디너 옵션 정보 호출 */
   const getOptions = async () => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const url = `menu/dinners/${dinnerId}/options`;
       const response = await axios.get(url);
       setOptions(response.data);
@@ -273,7 +273,7 @@ function OrderPage() {
             <div className='dinner-option-list'>
               <div className='dinner-option-container'>
                 {loading ? (
-                  <div className='loading'>...로딩중</div>
+                  <div className='loading'></div>
                 ) : (
                   <>
                     {extraOptions.map((extraOption) => {

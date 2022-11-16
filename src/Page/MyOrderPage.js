@@ -87,6 +87,11 @@ function MyOrderComponent() {
                     <div className='payment-price-number '>75,000원</div>
                   </div>
                 </div>
+                <div className='put-cart-button-container'>
+                  <div className='put-cart-button'>
+                    <span>장바구니에 담기</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -178,6 +183,11 @@ function MyOrderComponent() {
                       총 결제금액
                     </div>
                     <div className='payment-price-number '>75,000원</div>
+                  </div>
+                </div>
+                <div className='put-cart-button-container'>
+                  <div className='put-cart-button'>
+                    <span>장바구니에 담기</span>
                   </div>
                 </div>
               </div>

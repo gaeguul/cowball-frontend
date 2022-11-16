@@ -4,7 +4,6 @@
   grid-template-columns: max-content minmax(max-content, 1fr);
 
   .left-container {
-    // position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -15,6 +14,7 @@
     padding: 0px 10px;
     margin-left: 8px;
     border-radius: 14px;
+    gap: 10px;
 
     .left-title-container {
       display: flex;
@@ -26,6 +26,9 @@
 
       .left-title {
         font-weight: 600;
+        .order-count {
+          font-weight: 700;
+        }
       }
     }
 
@@ -36,17 +39,24 @@
       text-align: left;
       border-radius: 15px;
       padding: 20px 20px;
-
+      color: rgb(70, 70, 70);
       .order-id {
         font-size: 1.1em;
         font-weight: 600;
+        padding-bottom: 2px;
       }
       .rsv-date {
         width: 190px;
-        font-weight: 600;
+        font-weight: 500;
         font-size: 0.9em;
 
-        color: #da291c;
+        color: #a1a1a1;
+      }
+      &:hover {
+        color: #d81608;
+        .rsv-date {
+          color: #d81608;
+        }
       }
     }
 
@@ -58,12 +68,9 @@
   .detail-container {
     display: flex;
     flex-direction: column;
-    padding: 20px 40px;
+    padding: 20px 0px 20px 50px;
     overflow: auto;
-    // align-items: center;
-    // height: 80vh;
-    // position: fixed;
-    // margin-left: 295px;
+    font-weight: 500;
 
     .top {
       display: flex;
@@ -99,7 +106,6 @@
           box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
 
           &:hover {
-            // background: #ffd255;
             cursor: pointer;
             box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.438);
           }
@@ -197,12 +203,11 @@
                   width: max-content;
                   height: 26px;
 
-                  // background: #f3f3f3;
                   border: 2px solid #2d2d2d;
                   border-radius: 15px;
 
                   margin-left: 10px;
-                  padding: 0px 5px;
+                  padding: 0px 8px;
 
                   .steak-degree-title {
                     font-weight: 500;
@@ -211,6 +216,7 @@
               }
 
               .style-name {
+                padding-top: 10px;
                 font-weight: 500;
               }
 
@@ -242,7 +248,9 @@
           display: grid;
           grid-template-columns: max-content 1fr;
           grid-template-rows: repeat(3, max-content);
-          gap: 10px 20px;
+          gap: 10px 50px;
+
+          width: 100%;
 
           > * {
             display: flex;
