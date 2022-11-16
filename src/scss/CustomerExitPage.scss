@@ -1,0 +1,140 @@
+@import './base/base';
+
+@import './component/customerlayout';
+@import './component/header';
+
+@mixin input-field($w) {
+    //margin: 5px;
+    border: 2px solid #9d9d9d;
+    width: $w;
+  }
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 100px;
+
+  .exit-container {
+    box-sizing: border-box;
+    // position: absolute;
+    width: 450px;
+    // height: 456px;
+    left: 429px;
+    top: 268px;
+
+    border: 1px solid #9d9d9d;
+    border-radius: 10px;
+
+    padding: 50px;
+    .goto-main-button-container {
+      display: flex;
+      justify-content: center;
+      a {
+        text-decoration: none;
+        color: black;
+      }
+      .goto-main-button {
+        box-sizing: border-box;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: max-content;
+        height: 42px;
+
+        padding: 0px 30px;
+
+        background: #e8e8e8;
+        border-radius: 20px;
+
+        font-size: 1.1em;
+        font-weight: 600;
+        &:hover {
+          background: #dbdbdb;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .exit-info-form {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 20px;
+      padding: 60px 0px;
+      align-items: center;
+
+      .info-title {
+        color: #666666;
+        text-align: left;
+        font-weight: 500;
+      }
+
+      .info-content {
+        text-align: left;
+        font-weight: 700;
+        font-size: 1.1em;
+      }
+
+      input {
+        @include input-field(200px);
+
+        border-radius: 15px;
+        padding: 10px 20px;
+
+        background: #ffffff;
+      }
+    }
+    .exit-button {
+      padding: 15px 0px;
+      
+      button {
+        @include input-field(90px);
+  
+        border-radius: 15px;
+        padding: 5px 10px;
+  
+        background: #ffc72c;
+        color: rgb(0, 0, 0);
+        box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.438);
+  
+        font-weight: 600;
+        font-size: 1.0em;
+
+        &:hover {
+          cursor: pointer;
+          box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.348);
+          color: rgb(0, 0, 0);
+        }
+      }
+    }
+    
+    .buttom-nav-container {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+
+      a {
+        text-decoration: none;
+        color: rgba(0, 0, 0, 0.756);
+
+        &:hover {
+          text-decoration-line: underline;
+          color: black;
+        }
+      }
+    }
+    .top-title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      font-size: 1.3em;
+
+      // padding-bottom: 40px;
+      .title-text {
+        margin-left: 10px;
+      }
+    }
+  }
+}
