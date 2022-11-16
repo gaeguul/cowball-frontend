@@ -46,8 +46,7 @@ function MainPage() {
   useEffect(() => {
     const getDinners = async () => {
       try {
-        const url =
-          'http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/menu/dinners';
+        const url = `menu/dinners`;
         const response = await axios.get(url);
         // console.log(response.data.items);
         setDinners(response.data.items);
