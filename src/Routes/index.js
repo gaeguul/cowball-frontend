@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import {
   MainPage,
   OrderPage,
@@ -30,7 +30,6 @@ function Router() {
         <Route path='/login' element={<CustomerLoginPage />} />
         <Route path='/signup' element={<CustomerSignupPage />} />
         <Route path='/exit' element={<CustomerExitPage />} />
-
         <Route path='/order/:dinnerId' element={<OrderPage />} />
         <Route path='/cart' element={<CartPage />} />
         <Route path='/ordercomplete' element={<OrderCompletePage />} />
@@ -38,11 +37,13 @@ function Router() {
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/mypage/changepw' element={<ChangePasswordPage />} />
         <Route path='/mypage/changemyinfo' element={<ChangeMyInfoPage />} />
-
         <Route path='/stafflogin' element={<StaffLoginPage />} />
         <Route path='/staffsignup' element={<StaffSignupPage />} />
-
-        <Route path='/orderlist' element={<OrderListPage />} />
+        <Route
+          path='/orderlist'
+          element={<Navigate replace to='/orderlist/waiting' />}
+        />
+        <Route path='/orderlist/:state' element={<OrderListPage />} />
         <Route path='/ingredientlist' element={<IngredientListPage />} />
         <Route path='/ingredientorder' element={<IngredientOrderPage />} />
         <Route path='/customerlist' element={<CustomerListPage />} />

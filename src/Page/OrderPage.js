@@ -137,15 +137,21 @@ function ExtraOptionComponent(props) {
 
 function OrderPage() {
   const { dinnerId } = useParams();
-  // console.log(dinnerId);
 
   const [dinnerInfo, setDinnerInfo] = useState({});
+  const [styleOptions, setStyleOptions] = useState([]);
 
   const [options, setOptions] = useState([]);
-  // const [mainOption, setMainOption] = useState({});
   const [mainOptions, setMainOptions] = useState([]);
   const [extraOptions, setExtraOptions] = useState([]);
 
+  /** 무한렌더링 방지하고,
+   * API 호출 후 변수 세팅까지 완료한 후에
+   * 다시 한번더 렌더링하기 위해 loading 변수 추가함
+   */
+  const [loading, setLoading] = useState(false);
+
+  /** 선택한 디너 정보 API 호출 */
   const getDinnerInfo = async () => {
     try {
       const url = `menu/dinners/${dinnerId}`;
@@ -155,12 +161,26 @@ function OrderPage() {
       console.log(error);
     }
   };
+
+  /** 스타일 API 호출 */
+  const getStyleOptions = async () => {
+    try {
+      const url = `menu/styles`;
+      const response = await axios.get(url);
+
+      setStyleOptions(response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /** 선택한 디너 옵션 정보 호출 */
   const getOptions = async () => {
     try {
+      setLoading(true);
       const url = `menu/dinners/${dinnerId}/options`;
       const response = await axios.get(url);
       setOptions(response.data);
-      // console.log(response.data);
 
       const mainOptionList = options.filter(
         (option) => option.dinnerOptionName === '메인메뉴 삭제',
@@ -171,47 +191,21 @@ function OrderPage() {
 
       setMainOptions(mainOptionList);
       setExtraOptions(extraOptionList);
+
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // const getMainOptions = async () => {
-  //   try {
-  //     const url = `menu/dinners/${dinnerId}/options`;
-  //     const response = await axios.get(url);
-  //     setOptions(response.data);
-  //     console.log(response.data);
-  //     const mainOptionList = options.filter(
-  //       (option) => option.dinnerOptionName === '메인메뉴 삭제',
-  //     );
-  //     setMainOptions(mainOptionList);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // const getExtraOptions = async () => {
-  //   try {
-  //     const url = `menu/dinners/${dinnerId}/options`;
-  //     const response = await axios.get(url);
-  //     setOptions(response.data);
-
-  //     const extraOptionList = options.filter(
-  //       (option) => option.dinnerOptionName === '추가 구성품',
-  //     );
-
-  //     setExtraOptions(extraOptionList);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   useEffect(() => {
     getDinnerInfo();
+    getStyleOptions();
+  }, []);
+
+  useEffect(() => {
     getOptions();
-    // getMainOptions();
-    // getExtraOptions();
-  }, [mainOptions]);
+  }, [loading]);
 
   return (
     <CustomerLayout>
@@ -249,24 +243,25 @@ function OrderPage() {
               <div className='title-container'>
                 <div className='main-title'>스타일 선택</div>
                 <div className='sub-title'>
-                  심플 스타일은 상자 접시/일반 냅킨/플라스틱 쟁반, 그랜드
-                  스타일은 도자기 접시/플라스틱 컵/흰색 면 냅킨/나무 쟁반,
-                  디럭스 스타일은 은 쟁반/작은 꽃병/도자기 접시/린넨 냅킨으로
-                  구성되어 있습니다.
+                  심플 스타일: 상자 접시/일반 냅킨/플라스틱 쟁반<br></br>그랜드
+                  스타일: 도자기 접시/플라스틱 컵/흰색 면 냅킨/나무 쟁반
+                  <br></br>
+                  디럭스 스타일: 은 쟁반/작은 꽃병/도자기 접시/린넨 냅킨
                 </div>
                 <div className='radio-container'>
-                  <label>
-                    <input type='radio' name='style' id='1' value='1' />
-                    심플 스타일
-                  </label>
-                  <label>
-                    <input type='radio' name='style' id='2' value='2' />
-                    그랜드 스타일
-                  </label>
-                  <label>
-                    <input type='radio' name='style' id='3' value='3' />
-                    디럭스 스타일
-                  </label>
+                  {styleOptions.map((option) => {
+                    return (
+                      <label key={option.styleId}>
+                        <input
+                          type='radio'
+                          name='style'
+                          id={option.styleId}
+                          value={option.styleId}
+                        />
+                        {option.styleDetail}
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -277,14 +272,20 @@ function OrderPage() {
             </div>
             <div className='dinner-option-list'>
               <div className='dinner-option-container'>
-                {extraOptions.map((extraOption) => {
-                  return (
-                    <ExtraOptionComponent
-                      key={extraOption.dinnerOptionId}
-                      extraOption={extraOption}
-                    />
-                  );
-                })}
+                {loading ? (
+                  <div className='loading'>...로딩중</div>
+                ) : (
+                  <>
+                    {extraOptions.map((extraOption) => {
+                      return (
+                        <ExtraOptionComponent
+                          key={extraOption.dinnerOptionId}
+                          extraOption={extraOption}
+                        />
+                      );
+                    })}
+                  </>
+                )}
               </div>
             </div>
             <div className='dinner-number-and-price-container'>

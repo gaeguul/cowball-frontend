@@ -10,16 +10,16 @@ function Nav() {
       <div className='nav-container-inner'>
         <div className='nav-title'>주문목록</div>
         <div>
-          <NavLink to='/orderlist'>예약</NavLink>
+          <NavLink to='/orderlist/waiting'>예약</NavLink>
         </div>
         <div>
-          <NavLink to='/orderlist'>조리중</NavLink>
+          <NavLink to='/orderlist/cooking'>조리중</NavLink>
         </div>
         <div>
-          <NavLink to='/orderlist'>배달중</NavLink>
+          <NavLink to='/orderlist/in-delivery'>배달중</NavLink>
         </div>
         <div>
-          <NavLink to='/orderlist'>완료</NavLink>
+          <NavLink to='/orderlist/done'>완료</NavLink>
         </div>
         <div className='nav-title nav-manage'>우리가게관리</div>
         <div>

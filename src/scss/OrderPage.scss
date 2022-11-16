@@ -19,6 +19,12 @@
   font-weight: 500;
 }
 
+.loading {
+  color: rgb(182, 182, 182);
+  font-weight: 600;
+  font-size: 24px;
+}
+
 .order-container {
   display: flex;
   flex-direction: column;
@@ -108,7 +114,7 @@
       }
       .sub-title {
         @include sub-title;
-        max-width: 380px;
+        max-width: 420px;
         text-align: left;
       }
     }
@@ -152,6 +158,7 @@
     flex-direction: column;
     box-sizing: border-box;
     padding: 50px 20px 50px 50px;
+    width: 500px;
 
     .dinner-number-and-price-container {
       padding-bottom: 20px;
@@ -169,7 +176,7 @@
     }
     .dinner-option-container {
       display: grid;
-      grid-template-columns: max-content max-content max-content;
+      grid-template-columns: 1fr max-content max-content;
       padding-bottom: 30px;
       border-bottom: 1px solid #8a8a8a;
       gap: 10px 30px;
