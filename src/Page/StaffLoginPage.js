@@ -29,11 +29,9 @@ function StaffLoginForm() {
     try {
       await new Promise((r) => setTimeout(r, 1000));
 
-      const url =
-        'https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/auth/staff';
-
+      const url = `auth/staff`;
       const response = await axios.post(url, data);
-      console.log(response.data.result); //access-token
+      console.log(response.data['access-token']); //access-token
     } catch (error) {
       console.log(error);
     }

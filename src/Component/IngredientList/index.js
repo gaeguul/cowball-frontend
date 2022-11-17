@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 
+const CATEGORY_NAME = ['식사', '술', '음료', '기타'];
+
 function ArrivedNumberButton() {
+  /**
+   * 수량 개수 변화시켜서 post하기
+   */
   const [arrivedNumber, setArrivedNumber] = useState(0);
 
   const decreaseArrivedNumber = () => {
     if (arrivedNumber == 0) {
-      console.log('더 이상 줄일 수 없습니다');
+      alert('더 이상 줄일 수 없습니다');
     } else {
       setArrivedNumber(arrivedNumber - 1);
     }
@@ -36,12 +41,8 @@ function ArrivedNumberButton() {
   );
 }
 
-const CATEGORY_NAME = ['식사', '술', '음료', '기타'];
-
 function IngredientItem(props) {
   const ingredient = props.ingredient;
-  console.log(ingredient);
-
   const categoryName = CATEGORY_NAME[ingredient.categoryId - 1];
 
   return (
@@ -49,7 +50,9 @@ function IngredientItem(props) {
       <td>{ingredient.ingredientName}</td>
       <td>{categoryName}</td>
       <td>{ingredient.prevStock}</td>
-      <td>{ingredient.todayArrived}</td>
+      <td>
+        <ArrivedNumberButton ingredientId={ingredient.ingredientId} />
+      </td>
       <td>{ingredient.todayOut}</td>
       <td>{ingredient.currentStock}</td>
     </tr>
@@ -57,34 +60,6 @@ function IngredientItem(props) {
 }
 
 function IngredientList() {
-  /*
-  const [ingredients, setIngredients] = useState([]);
-
-  
-  const getIngredientsOptions = {
-    method: 'GET',
-    url: 'http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/ingredients/items',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer 123',
-    },
-  };
-  const getIngredients = () =>
-    axios
-      .request(getIngredientsOptions)
-      .then((response) => {
-        setIngredients(response.data.items);
-        console.log(response.data.items);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-  useEffect(() => {
-    getIngredients();
-  }, []);
-  */
-
   const [ingredientList, setIngredientList] = useState([]);
 
   const getIngredientList = async () => {
@@ -92,7 +67,6 @@ function IngredientList() {
       const url = `ingredients/items`;
       const response = await axios.get(url);
       setIngredientList(response.data.items);
-      console.log(response.data.items);
     } catch (error) {
       console.log(error);
     }
@@ -125,18 +99,6 @@ function IngredientList() {
               </tr>
             </thead>
             <tbody>
-              {/* {ingredients.map((i) => {
-                <IngredientItem key={i.ingredientId} ingredient={i} />;
-              })} */}
-              {ingredientList.map((ingredient) => {
-                return (
-                  <IngredientItem
-                    key={ingredient.ingredientId}
-                    ingredient={ingredient}
-                  />
-                );
-              })}
-
               <tr>
                 <td>샴페인</td>
                 <td>술</td>
@@ -147,6 +109,14 @@ function IngredientList() {
                 <td>30</td>
                 <td>30</td>
               </tr>
+              {ingredientList.map((ingredient) => {
+                return (
+                  <IngredientItem
+                    key={ingredient.ingredientId}
+                    ingredient={ingredient}
+                  />
+                );
+              })}
             </tbody>
           </table>
         </div>

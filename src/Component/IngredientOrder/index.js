@@ -1,7 +1,89 @@
-import React from 'react';
-import OrderNumberButton from './OrderNumberButton';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+// import OrderNumberButton from './OrderNumberButton';
+
+import { BiPlus, BiMinus } from 'react-icons/bi';
+
+function OrderNumberButton(props) {
+  const setOrderCount = props.setOrderCount;
+  const orderCount = props.orderCount;
+
+  const decreaseOrderNumber = () => {
+    if (orderCount == 0) {
+      console.log('더 이상 줄일 수 없습니다');
+    } else {
+      setOrderCount((prev) => prev - 1);
+    }
+  };
+
+  const increaseOrderNumber = () => {
+    setOrderCount((prev) => prev + 1);
+  };
+
+  return (
+    <div className='order-number-button-container'>
+      <div className='order-number-button'>
+        <div className='button-container'>
+          <BiMinus className='button' onClick={decreaseOrderNumber} />
+        </div>
+        <div className='number'>{orderCount}</div>
+        <div className='button-container'>
+          <BiPlus className='button' onClick={increaseOrderNumber} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const CATEGORY_NAME = ['식사', '술', '음료', '기타'];
+
+function IngredientItem(props) {
+  const ingredient = props.ingredient;
+  const categoryName = CATEGORY_NAME[ingredient.categoryId - 1];
+
+  const [orderCount, setOrderCount] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    setTotalPrice(orderCount * ingredient.ingredientPrice);
+    props.setTotalOrderPrice((prev) => prev + totalPrice);
+  }, [orderCount, totalPrice]);
+
+  return (
+    <tr>
+      <td>{ingredient.ingredientName}</td>
+      <td>{categoryName}</td>
+      <td>{ingredient.ingredientPrice}원</td>
+      <td>
+        <OrderNumberButton
+          setOrderCount={setOrderCount}
+          orderCount={orderCount}
+        />
+      </td>
+      <td>{totalPrice}원</td>
+    </tr>
+  );
+}
 
 function IngredientOrder() {
+  const [ingredientList, setIngredientList] = useState([]);
+  const [totalOrderPrice, setTotalOrderPrice] = useState(0);
+
+  const getIngredientList = async () => {
+    try {
+      const url = `ingredients/items`;
+      const response = await axios.get(url);
+      setIngredientList(response.data.items);
+      console.log(response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getIngredientList();
+  }, [totalOrderPrice]);
+
   return (
     <div className='nexttonav'>
       <div className='ingredientorder-container'>
@@ -24,103 +106,22 @@ function IngredientOrder() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
-                <tr>
-                  <td>스테이크</td>
-                  <td>식사</td>
-                  <td>20,000원</td>
-                  <td>
-                    <OrderNumberButton />
-                  </td>
-                  <td>1,000,000원</td>
-                </tr>
+                {ingredientList.map((ingredient) => {
+                  return (
+                    <IngredientItem
+                      key={ingredient.ingredientId}
+                      ingredient={ingredient}
+                      setTotalOrderPrice={setTotalOrderPrice}
+                    />
+                  );
+                })}
               </tbody>
             </table>
           </div>
           <div className='bottom-container'>
             <div className='total-order-price'>
               <span className='hangeul-text'>총 발주 금액</span>
-              <span className='number'>1,000,000원</span>
+              <span className='number'>{totalOrderPrice} 원</span>
             </div>
             <div className='order-button-container'>
               <div className='order-button'>
