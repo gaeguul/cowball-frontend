@@ -17,6 +17,8 @@
     "react-scripts": "5.0.1",
     "react-speech-kit": "^3.0.1",
     "react-toastify": "^9.1.1",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
