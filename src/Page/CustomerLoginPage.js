@@ -106,7 +106,7 @@ function CustomerLoginPage() {
   return (
     <div className='customer-login-container'>
       <CustomerLoginBox />
-      <div className='buttom-nav-container'>
+      <div className='buttom-nav-small-container'>
         <NavLink to='/stafflogin'>관리자 로그인</NavLink>
       </div>
     </div>

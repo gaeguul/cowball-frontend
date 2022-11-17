@@ -102,4 +102,21 @@
       }
     }
   }
+  .buttom-nav-small-container {
+    width: 360px;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0px;
+
+
+    a {
+      text-decoration: none;
+      color: rgba(0, 0, 0, 0.756);
+
+      &:hover {
+        text-decoration-line: underline;
+        color: black;
+      }
+    }
+  }
 }
