@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
 import { BiPlus, BiMinus } from 'react-icons/bi';
 
 function ArrivedNumberButton() {
@@ -37,14 +36,18 @@ function ArrivedNumberButton() {
   );
 }
 
+const CATEGORY_NAME = ['식사', '술', '음료', '기타'];
+
 function IngredientItem(props) {
   const ingredient = props.ingredient;
   console.log(ingredient);
 
+  const categoryName = CATEGORY_NAME[ingredient.categoryId - 1];
+
   return (
     <tr>
       <td>{ingredient.ingredientName}</td>
-      <td>{ingredient.categoryId}</td>
+      <td>{categoryName}</td>
       <td>{ingredient.prevStock}</td>
       <td>{ingredient.todayArrived}</td>
       <td>{ingredient.todayOut}</td>
@@ -54,8 +57,10 @@ function IngredientItem(props) {
 }
 
 function IngredientList() {
+  /*
   const [ingredients, setIngredients] = useState([]);
 
+  
   const getIngredientsOptions = {
     method: 'GET',
     url: 'http://ec2-3-39-248-238.ap-northeast-2.compute.amazonaws.com:8080/api/v1/ingredients/items',
@@ -77,6 +82,24 @@ function IngredientList() {
 
   useEffect(() => {
     getIngredients();
+  }, []);
+  */
+
+  const [ingredientList, setIngredientList] = useState([]);
+
+  const getIngredientList = async () => {
+    try {
+      const url = `ingredients/items`;
+      const response = await axios.get(url);
+      setIngredientList(response.data.items);
+      console.log(response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getIngredientList();
   }, []);
 
   return (
@@ -102,8 +125,16 @@ function IngredientList() {
               </tr>
             </thead>
             <tbody>
-              {ingredients.map((i) => {
+              {/* {ingredients.map((i) => {
                 <IngredientItem key={i.ingredientId} ingredient={i} />;
+              })} */}
+              {ingredientList.map((ingredient) => {
+                return (
+                  <IngredientItem
+                    key={ingredient.ingredientId}
+                    ingredient={ingredient}
+                  />
+                );
               })}
 
               <tr>
@@ -116,81 +147,6 @@ function IngredientList() {
                 <td>30</td>
                 <td>30</td>
               </tr>
-              {/* <tr>
-                <td>스테이크</td>
-                <td>식사</td>
-                <td>10</td>
-                <td>50</td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td>샐러드</td>
-                <td>식사</td>
-                <td>10</td>
-                <td>50</td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td>에그스크램블</td>
-                <td>식사</td>
-                <td>10</td>
-                <td>100</td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td>와인</td>
-                <td>술</td>
-                <td>10</td>
-                <td>
-                  <ArrivedNumberButton />
-                </td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
-              
-              <tr>
-                <td>베이컨</td>
-                <td>식사</td>
-                <td>10</td>
-                <td>50</td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td>베이컨</td>
-                <td>식사</td>
-                <td>10</td>
-                <td>50</td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td>베이컨</td>
-                <td>식사</td>
-                <td>10</td>
-                <td>50</td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td>베이컨</td>
-                <td>식사</td>
-                <td>10</td>
-                <td>50</td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
-              <tr>
-                <td>베이컨</td>
-                <td>식사</td>
-                <td>10</td>
-                <td>50</td>
-                <td>30</td>
-                <td>30</td>
-              </tr> */}
             </tbody>
           </table>
         </div>
