@@ -1,7 +1,7 @@
 import axios from 'axios';
-import React from 'react';
+import { React, useState, CheckBox } from 'react';
 import { useForm } from 'react-hook-form';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Route } from 'react-router-dom';
 import '../scss/CustomerSignupPage.scss';
 
 function CustomerSignupForm() {
@@ -11,6 +11,8 @@ function CustomerSignupForm() {
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
 
+  const [check] = useState(false);
+
   const onSubmit = async (data) => {
     try {
       await new Promise((r) => setTimeout(r, 1000));
@@ -18,7 +20,7 @@ function CustomerSignupForm() {
       console.log(data);
 
       const url =
-        'https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/customer';
+        'https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/users';
 
       const response = await axios.post(url, data);
       console.log(response.data);
@@ -26,6 +28,53 @@ function CustomerSignupForm() {
       console.log(error);
     }
   };
+
+  const getCheckCustomerIdMessage = (customerId) => {
+    axios.post(
+      `https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/users`,
+      {
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        params: {
+          customerId: customerId ?? '',
+        },
+      },
+    );
+    return axios;
+  };
+
+  const Signup = (customerId) => {
+    axios
+      .post({
+        url: `https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/users`,
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        data: {
+          customerId: customerId ?? '',
+        },
+      })
+      .then((res) => {
+        window.localStorage.setItem(
+          'signupResponseData',
+          JSON.stringify(res.data),
+        );
+        //Router.push('/ordercomplete');
+        <Route to={'/ordercomplete'} />;
+      });
+    return axios;
+  };
+
+  const onCustomerIdCheck = (e) => {
+    //const value = e.currentTarget.value ?? '';
+    //setPassword(value);
+    getCheckCustomerIdMessage(e.customerId);
+  };
+
+  //const
   return (
     <div className='customer-signup-form-container'>
       <form className='customer-signup-form' onSubmit={handleSubmit(onSubmit)}>
@@ -117,17 +166,19 @@ function CustomerSignupForm() {
             {errors.address.message}
           </small>
         )}
-        {/* <div className='confirm-container'>
+        <div className='confirm-container'>
           <div className='confirm-text'>
             개인 정보 수집 및 이용에 동의합니다
           </div>
-          <input type='radio' name='check' id='check' value='check' />
-        </div> */}
+          <CheckBox type='checkbox' name='check' onChange={check} />
+        </div>
         <div className='signup-button-container'>
           <button
             className='signup-button'
             type='submit'
             disabled={isSubmitting}
+            onChange={(e) => onCustomerIdCheck(e)}
+            onClick={() => Signup()}
           >
             회원가입
           </button>
