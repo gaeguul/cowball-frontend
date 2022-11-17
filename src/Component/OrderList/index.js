@@ -10,6 +10,12 @@ import axios from 'axios';
 // };
 
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
+const STATE_NAME = {
+  waiting: '예약',
+  cooking: '조리중',
+  'in-delivery': '배달중',
+  done: '완료',
+};
 
 // const SAMPLE_OrderDinnerOptions = [16, 20, 21];
 
@@ -274,7 +280,7 @@ function DetailComponent(props) {
 }
 
 function LeftComponent(props) {
-  const { state } = useParams();
+  let { state } = useParams();
   const [orderCount, setOrderCount] = useState('');
   const [orders, setOrders] = useState([]);
 
@@ -285,6 +291,7 @@ function LeftComponent(props) {
   const getOrders = async () => {
     try {
       const url = `orders`;
+      if (state === 'in-delivery') state = 'in_delivery';
       const params = {
         params: {
           state: state,
@@ -306,7 +313,8 @@ function LeftComponent(props) {
     <div className='left-container'>
       <div className='left-title-container'>
         <div className='left-title'>
-          예약 <span className='order-count'>{orderCount}</span>건
+          {STATE_NAME[state]}
+          <span className='order-count'>{orderCount}</span>건
         </div>
       </div>
       {orders.map((order) => {
