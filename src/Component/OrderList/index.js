@@ -82,7 +82,7 @@ function OrderDinnerItem(props) {
           </div>
         </div>
         <div className='style-name'>
-          {styleInfo.styleDetail} ({styleInfo.stylePrice}원)
+          {styleInfo.styleName} 스타일 (+{styleInfo.stylePrice}원)
         </div>
         {dinnerOptions.map((dinnerOption) => {
           return (
@@ -292,12 +292,12 @@ function LeftComponent(props) {
     try {
       const url = `orders`;
       if (state === 'in-delivery') state = 'in_delivery';
-      const params = {
+      const options = {
         params: {
           state: state,
         },
       };
-      const response = await axios.get(url, params);
+      const response = await axios.get(url, options);
       setOrderCount(response.data.count);
       setOrders(response.data.items);
     } catch (error) {

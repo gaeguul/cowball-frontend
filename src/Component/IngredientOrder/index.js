@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import OrderNumberButton from './OrderNumberButton';
-
 import { BiPlus, BiMinus } from 'react-icons/bi';
+// import OrderNumberButton from './OrderNumberButton';
 
 const CATEGORY_NAME = ['식사', '술', '음료', '기타'];
 
 function OrderNumberButton(props) {
-  const setOrderCount = props.setOrderCount;
   const orderCount = props.orderCount;
+  const setOrderCount = props.setOrderCount;
 
   const decreaseOrderNumber = () => {
     if (orderCount == 0) {
@@ -63,8 +62,8 @@ function IngredientItem(props) {
       <td>{ingredient.ingredientPrice}원</td>
       <td>
         <OrderNumberButton
-          setOrderCount={setOrderCount}
           orderCount={orderCount}
+          setOrderCount={setOrderCount}
         />
       </td>
       <td>{totalPrice}원</td>

@@ -126,7 +126,7 @@ function ExtraOptionComponent(props) {
         {props.extraOption.dinnerOptionDetail}
       </div>
       <div className='dinner-option-price'>
-        {props.extraOption.dinnerOptionPrice}
+        {props.extraOption.dinnerOptionPrice}원
       </div>
       <div className='dinner-option-button'>
         <ChangeOptionNumberButton />
@@ -233,6 +233,9 @@ function OrderPage() {
                         value={mainOption.dinnerOptionId}
                       />
                       {mainOption.dinnerOptionDetail}
+                      <span className='option-price'>
+                        ({mainOption.dinnerOptionPrice}원)
+                      </span>
                     </label>
                   );
                 })}
@@ -258,7 +261,10 @@ function OrderPage() {
                           id={option.styleId}
                           value={option.styleId}
                         />
-                        {option.styleDetail}
+                        {option.styleName} 스타일
+                        <span className='option-price'>
+                          (+{option.stylePrice}원)
+                        </span>
                       </label>
                     );
                   })}
