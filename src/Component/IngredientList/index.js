@@ -4,27 +4,55 @@ import { BiPlus, BiMinus } from 'react-icons/bi';
 
 const CATEGORY_NAME = ['식사', '술', '음료', '기타'];
 
-function ArrivedNumberButton() {
-  /**
-   * 수량 개수 변화시켜서 post하기
-   */
-  const [arrivedNumber, setArrivedNumber] = useState(0);
+function ArrivedNumberButton(props) {
+  const ingredientId = props.ingredientId;
+  const [todayArrivedCount, setTodayArrivedCount] = useState(0);
+
+  /** 버튼 눌러서 'todayArrivedCount' 변경시키면 실행됨 */
+  const putTodayArrivedIngredient = async () => {
+    try {
+      const url = `ingredients/stocks`;
+      const data = { ingredientId: ingredientId, amount: todayArrivedCount };
+      const response = await axios.put(url, data);
+      console.log('[putTodayArrivedIngredient] ', response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const decreaseArrivedNumber = () => {
-    if (arrivedNumber == 0) {
-      alert('더 이상 줄일 수 없습니다');
+    if (todayArrivedCount == 0) {
+      console.log('더 이상 줄일 수 없습니다');
     } else {
-      setArrivedNumber(arrivedNumber - 1);
+      setTodayArrivedCount((prev) => prev - 1);
+      putTodayArrivedIngredient();
     }
   };
 
   const increaseArrivedNumber = () => {
-    setArrivedNumber(arrivedNumber + 1);
+    setTodayArrivedCount((prev) => prev + 1);
+    putTodayArrivedIngredient();
+  };
+
+  const getTodayArrivedIngredient = async () => {
+    try {
+      const url = `ingredients/items`;
+
+      const response = await axios.get(url);
+      const tmpCount = response.data.items[ingredientId - 1].todayArrived;
+      setTodayArrivedCount(tmpCount);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    console.log('arrived number:', arrivedNumber);
-  }, [arrivedNumber]);
+    getTodayArrivedIngredient();
+  }, []);
+
+  // useEffect(() => {
+  //   putTodayArrivedIngredient();
+  // }, [decreaseArrivedNumber, increaseArrivedNumber]);
 
   return (
     <div className='arrived-number-button-container'>
@@ -32,7 +60,7 @@ function ArrivedNumberButton() {
         <div className='button-container'>
           <BiMinus className='button' onClick={decreaseArrivedNumber} />
         </div>
-        <div className='number'>{arrivedNumber}</div>
+        <div className='number'>{todayArrivedCount}</div>
         <div className='button-container'>
           <BiPlus className='button' onClick={increaseArrivedNumber} />
         </div>
@@ -44,6 +72,13 @@ function ArrivedNumberButton() {
 function IngredientItem(props) {
   const ingredient = props.ingredient;
   const categoryName = CATEGORY_NAME[ingredient.categoryId - 1];
+  const IsAlcohol = ingredient.categoryId === 2 ? true : false;
+
+  // const [todayArrivedCount, setTodayArrivedCount] = useState(0);
+
+  // useEffect(() => {
+  //   console.log('todayArrivedCount', todayArrivedCount);
+  // }, [todayArrivedCount]);
 
   return (
     <tr>
@@ -51,7 +86,15 @@ function IngredientItem(props) {
       <td>{categoryName}</td>
       <td>{ingredient.prevStock}</td>
       <td>
-        <ArrivedNumberButton ingredientId={ingredient.ingredientId} />
+        {IsAlcohol ? (
+          <ArrivedNumberButton
+            ingredientId={ingredient.ingredientId}
+            // todayArrivedCount={todayArrivedCount}
+            // setTodayArrivedCount={setTodayArrivedCount}
+          />
+        ) : (
+          ingredient.todayArrived
+        )}
       </td>
       <td>{ingredient.todayOut}</td>
       <td>{ingredient.currentStock}</td>
@@ -99,16 +142,6 @@ function IngredientList() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>샴페인</td>
-                <td>술</td>
-                <td>10</td>
-                <td>
-                  <ArrivedNumberButton />
-                </td>
-                <td>30</td>
-                <td>30</td>
-              </tr>
               {ingredientList.map((ingredient) => {
                 return (
                   <IngredientItem
