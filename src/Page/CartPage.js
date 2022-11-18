@@ -130,6 +130,7 @@ function CartPage() {
                       <div className='steak-degree-title'>레어</div>
                     </div>
                   </div>
+                  <div className='style-name'>심플 스타일 (10,000원)</div>
                   <div className='dinner-option'>
                     - 에그스크램블 삭제 (-5,000원)
                   </div>
@@ -139,8 +140,6 @@ function CartPage() {
                   <div className='dinner-option'>
                     + 베이컨 1장 추가 (2,000원)
                   </div>
-                  <div className='style-name'>심플 스타일 (10,000원)</div>
-                  <div className='style-option'>+ 접시 추가 (3,000원)</div>
                 </div>
                 <div className='dinner-number'>
                   <ChangeDinnerNumberButton />
