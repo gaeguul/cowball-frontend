@@ -10,6 +10,9 @@ function Nav() {
       <div className='nav-container-inner'>
         <div className='nav-title'>주문목록</div>
         <div>
+          <NavLink to='/orderlist/hold'>대기</NavLink>
+        </div>
+        <div>
           <NavLink to='/orderlist/waiting'>예약</NavLink>
         </div>
         <div>
