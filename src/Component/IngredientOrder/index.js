@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BiPlus, BiMinus } from 'react-icons/bi';
-// import OrderNumberButton from './OrderNumberButton';
 
 const CATEGORY_NAME = ['식사', '술', '음료', '기타'];
 
@@ -38,21 +37,47 @@ function OrderNumberButton(props) {
 
 function IngredientItem(props) {
   const ingredient = props.ingredient;
+  const setTotalOrderPrice = props.setTotalOrderPrice;
+  const setNewIngredientOrder = props.setNewIngredientOrder;
   const ingredientId = ingredient.ingredientId;
   const categoryName = CATEGORY_NAME[ingredient.categoryId - 1];
 
   const [orderCount, setOrderCount] = useState(0); //OrderNumberButton에 의해 변경됨
   const [totalPrice, setTotalPrice] = useState(0); //해당 ingredient의 orderCount에 따른 총 가격
 
+  const getOrderCount = async () => {
+    try {
+      const url = `ingredients/orders`;
+      const response = await axios.get(url);
+      const tmpItems = response.data.items;
+      const tmpItem = tmpItems.find((item) => {
+        return item.ingredientId === ingredientId;
+      });
+
+      if (tmpItem) {
+        const tmpNumber = tmpItem.orderedNumber;
+        setOrderCount(tmpNumber);
+      } else {
+        setOrderCount(0);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getOrderCount();
+  }, []);
+
   useEffect(() => {
     setTotalPrice(orderCount * ingredient.ingredientPrice);
-    props.setTotalOrderPrice((prev) => prev + ingredient.ingredientPrice);
+    setTotalOrderPrice((prev) => prev + ingredient.ingredientPrice);
 
     const newIngredientOrder = {
       ingredientId: ingredientId,
       amount: orderCount,
     };
-    props.setNewIngredientOrder(newIngredientOrder);
+    setNewIngredientOrder(newIngredientOrder);
   }, [orderCount]);
 
   return (
@@ -89,11 +114,11 @@ function IngredientOrder() {
   };
 
   const makeIngredientOrderList = () => {
-    if (
-      !ingredientOrderList.find(
-        (i) => i.ingredientId == newIngredientOrder.ingredientId,
-      )
-    ) {
+    const IsExit = ingredientOrderList.find(
+      (ingredient) =>
+        ingredient.ingredientId === newIngredientOrder.ingredientId,
+    );
+    if (!IsExit) {
       //리스트에 없는 경우
       const newIngredientOrderList = [
         ...ingredientOrderList,
@@ -102,6 +127,7 @@ function IngredientOrder() {
       setIngredientOrderList(newIngredientOrderList);
       console.log(newIngredientOrderList);
     } else {
+      //리스트에 있는 경우
       const newIngredientOrderList = ingredientOrderList.map((i) =>
         i.ingredientId == newIngredientOrder.ingredientId
           ? { ...i, amount: newIngredientOrder.amount }
@@ -112,9 +138,23 @@ function IngredientOrder() {
     }
   };
 
+  const handleOrderButtonClick = async () => {
+    try {
+      /** ingredientOrderList의 [0], [1]항에 알 수 없는 게 들어가있어서 자름*/
+      const data = ingredientOrderList.slice(2);
+      const url = `ingredients/orders`;
+      const response = await axios.put(url, data);
+      console.log('[handleOrderButtonClick] ', response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getIngredientList();
-    console.log('newIngredientOrder', newIngredientOrder);
+  }, []);
+
+  useEffect(() => {
     makeIngredientOrderList();
   }, [newIngredientOrder]);
 
@@ -159,7 +199,7 @@ function IngredientOrder() {
               <span className='number'>{totalOrderPrice} 원</span>
             </div>
             <div className='order-button-container'>
-              <div className='order-button'>
+              <div className='order-button' onClick={handleOrderButtonClick}>
                 <div className='button-title'>발주하기</div>
               </div>
             </div>

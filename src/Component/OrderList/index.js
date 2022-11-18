@@ -2,22 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-// const ORDER_STATE = {
-//   waiting: 16,
-//   cooking: 33,
-//   in_delivery: 34,
-//   done: 255,
-// };
-
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
 const STATE_NAME = {
+  hold: '대기',
   waiting: '예약',
   cooking: '조리중',
   'in-delivery': '배달중',
   done: '완료',
 };
-
-// const SAMPLE_OrderDinnerOptions = [16, 20, 21];
 
 function OrderInfo(props) {
   return (
