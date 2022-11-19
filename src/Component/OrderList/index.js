@@ -10,6 +10,16 @@ const STATE_NAME = {
   'in-delivery': '배달중',
   done: '완료',
 };
+const STATE_BUTTON_NAME = new Map([
+  [16, '조리시작'],
+  [33, '배달시작'],
+  [34, '배달완료'],
+]);
+const STATE_NEXT = new Map([
+  [16, 'WAITING'],
+  [33, 'IN_DELIVERY'],
+  [34, 'COOKING'],
+]);
 
 function OrderInfo(props) {
   return (
@@ -168,6 +178,9 @@ function MenuInfo(props) {
 function DetailComponent(props) {
   const detailOrderId = props.detailOrderId; //왼쪽 주문목록에서 선택한 디너번호
   const [detailOrderInfo, setDetailOrderInfo] = useState({});
+  const [stateButtonName, setStateButtonName] = useState('');
+  const [isButtonNotExit, setIsButtonNotExit] = useState(true);
+  const [orderStateNumber, setOrderStateNumber] = useState(0);
 
   const [loading, setLoading] = useState(true);
 
@@ -176,9 +189,27 @@ function DetailComponent(props) {
       const url = `orders/${detailOrderId}`;
       const response = await axios.get(url);
       setDetailOrderInfo(response.data);
-      // console.log(response.data);
-
+      const orderState = response.data.orderState;
+      setOrderStateNumber(orderState);
+      // const tmp = orderState === 8 || orderState === 255 ? true : false;
+      setIsButtonNotExit(orderState === 8 || orderState === 255 ? true : false);
+      setStateButtonName(STATE_BUTTON_NAME.get(orderState));
       setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleStateButtonClick = async () => {
+    try {
+      console.log('orderStateNumber', orderStateNumber);
+
+      const url = `orders/${detailOrderId}/state`;
+      const data = {
+        orderState: STATE_NEXT.get(orderStateNumber),
+      };
+      const response = await axios.put(url, data);
+      console.log('[handleStateButtonClick] ', response.data);
     } catch (error) {
       console.log(error);
     }
@@ -197,9 +228,13 @@ function DetailComponent(props) {
           <div className='top'>
             <div className='id-and-button'>
               <span className='order-id'>배달 {detailOrderInfo.orderId}</span>
-              <div className='state-button'>
-                <div className='button-title'>조리시작</div>
-              </div>
+              {isButtonNotExit ? (
+                <></>
+              ) : (
+                <div className='state-button' onClick={handleStateButtonClick}>
+                  <div className='button-title'>{stateButtonName}</div>
+                </div>
+              )}
             </div>
             <div className='rsv-date'>예약 {detailOrderInfo.rsvDate}</div>
             <div className='number-and-price'>
