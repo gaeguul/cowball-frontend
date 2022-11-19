@@ -142,6 +142,7 @@ function IngredientOrder() {
     try {
       /** ingredientOrderList의 [0], [1]항에 알 수 없는 게 들어가있어서 자름*/
       const data = ingredientOrderList.slice(2);
+      console.log('data', data);
       const url = `ingredients/orders`;
       const response = await axios.put(url, data);
       console.log('[handleOrderButtonClick] ', response.data);
