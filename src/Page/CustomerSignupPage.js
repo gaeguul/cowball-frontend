@@ -19,8 +19,7 @@ function CustomerSignupForm() {
 
       console.log(data);
 
-      const url =
-        'https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/users';
+      const url = 'users';
 
       const response = await axios.post(url, data);
       console.log(response.data);
@@ -30,18 +29,15 @@ function CustomerSignupForm() {
   };
 
   const getCheckCustomerIdMessage = (customerId) => {
-    axios.post(
-      `https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/users`,
-      {
-        method: 'post',
-        headers: {
-          'Content-type': 'application/json',
-        },
-        params: {
-          customerId: customerId ?? '',
-        },
+    axios.post(`users`, {
+      method: 'post',
+      headers: {
+        'Content-type': 'application/json',
       },
-    );
+      params: {
+        customerId: customerId ?? '',
+      },
+    });
     return axios;
   };
 

@@ -1,8 +1,10 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import '../scss/CustomerLoginPage.scss';
+
+import { AuthContext } from '../Context/AuthContext';
 
 function CustomerLoginLogo() {
   return (
@@ -19,6 +21,11 @@ function CustomerLoginLogo() {
 }
 
 function CustomerLoginForm() {
+  /**상태관리 */
+  const value = useContext(AuthContext);
+  const setIsCustomerLogin = value.setIsCustomerLogin;
+  const setCustomerToken = value.setCustomerToken;
+
   const {
     register,
     handleSubmit,
@@ -29,11 +36,15 @@ function CustomerLoginForm() {
     try {
       await new Promise((r) => setTimeout(r, 1000));
 
-      const url = `auth/customer`;
+      const url = `auth/users`;
       const response = await axios.post(url, data);
       console.log(response.data['access-token']); //access-token
+
+      setIsCustomerLogin(true);
+      setCustomerToken(response.data['access-token']);
     } catch (error) {
       console.log(error);
+      alert('아이디 또는 비밀번호를 다시 입력해주세요.');
     }
   };
 

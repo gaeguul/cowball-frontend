@@ -43,10 +43,9 @@ function StaffLoginForm() {
 
       setIsStaffLogin(true);
       setStaffToken(response.data['access-token']);
-
-      // window.location.replace('/staff/');
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      alert('아이디 또는 비밀번호를 다시 입력해주세요.');
     }
   };
 
