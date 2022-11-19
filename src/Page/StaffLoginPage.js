@@ -1,8 +1,10 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import '../scss/StaffLoginPage.scss';
+
+import { AuthContext } from '../Context/AuthContext';
 
 function StaffLoginLogo() {
   return (
@@ -19,6 +21,12 @@ function StaffLoginLogo() {
 }
 
 function StaffLoginForm() {
+  /**상태관리 */
+  const value = useContext(AuthContext);
+  const setIsStaffLogin = value.setIsStaffLogin;
+  const setStaffToken = value.setStaffToken;
+
+  /** */
   const {
     register,
     handleSubmit,
@@ -32,6 +40,11 @@ function StaffLoginForm() {
       const url = `auth/staff`;
       const response = await axios.post(url, data);
       console.log(response.data['access-token']); //access-token
+
+      setIsStaffLogin(true);
+      setStaffToken(response.data['access-token']);
+
+      // window.location.replace('/staff/');
     } catch (error) {
       console.log(error);
     }

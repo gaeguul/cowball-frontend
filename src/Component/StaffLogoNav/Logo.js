@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 function Logo() {
   return (
     <div className='logo-container'>
-      <NavLink to='/orderlist'>
+      <NavLink to='/staff/orderlist'>
         <img
           className='MrDaebakLogo'
           alt='MrDaebakLogo'

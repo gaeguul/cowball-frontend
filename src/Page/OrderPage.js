@@ -251,16 +251,8 @@ function ExtraOptionComponent(props) {
   const setMyExtraOptions = props.setMyExtraOptions;
 
   const [newExtraOption, setNewExtraOption] = useState([]);
-  // const [newMapOptions, setNewMapOptions] = useState(new Map());
 
   const [newMap, setNewMap] = useState(new Map());
-  // const tmpMap = new Map();
-  // console.log('options', options);
-
-  /**변경한 옵션의 id와 amount로 배열(Map의 항목) 만드는 함수 */
-  // const makeOption = (key, value) => {
-  //   return [key, value];
-  // };
 
   useEffect(() => {
     const key = newExtraOption[0];
@@ -313,6 +305,7 @@ function OrderPage() {
 
   /**장바구니 담기 버튼에 의해서만 업데이트 된다 */
   const [myDinnerOptions, setMyDinnerOptions] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
     MY_ORDER['dinnerOptionIds'] = myDinnerOptions;
@@ -334,6 +327,8 @@ function OrderPage() {
       const url = `menu/dinners/${dinnerId}`;
       const response = await axios.get(url);
       setDinnerInfo(response.data);
+      setTotalPrice(response.data.dinnerPrice);
+      console.log('totalPrice', totalPrice);
     } catch (error) {
       console.log(error);
     }
@@ -416,6 +411,7 @@ function OrderPage() {
       const url = `cart/${userId}`;
       const response = await axios.post(url, data, options);
       console.log('[handlePutCartButtonClick] ', response.data);
+      window.location.replace('/cart');
     } catch (error) {
       console.log(error);
     }
@@ -440,11 +436,11 @@ function OrderPage() {
   }, [myDinnerNumber]);
 
   useEffect(() => {
-    console.log('myMainOption', myMainOption);
+    // console.log('myMainOption', myMainOption);
   }, [myMainOption]);
 
   useEffect(() => {
-    console.log('myExtraOptions', myExtraOptions);
+    // console.log('myExtraOptions', myExtraOptions);
   }, [myExtraOptions]);
 
   useEffect(() => {
@@ -486,7 +482,7 @@ function OrderPage() {
                 />
               </div>
               <div className='total-price-title title'>총 가격</div>
-              <div className='total-price-number content'>240,000원</div>
+              <div className='total-price-number content'>{totalPrice}원</div>
             </div>
             <div className='put-dinner-cart-button-container'>
               <div

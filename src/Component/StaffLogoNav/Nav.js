@@ -10,33 +10,33 @@ function Nav() {
       <div className='nav-container-inner'>
         <div className='nav-title'>주문목록</div>
         <div>
-          <NavLink to='/orderlist/hold'>대기</NavLink>
+          <NavLink to='/staff/orderlist/hold'>대기</NavLink>
         </div>
         <div>
-          <NavLink to='/orderlist/waiting'>예약</NavLink>
+          <NavLink to='/staff/orderlist/waiting'>예약</NavLink>
         </div>
         <div>
-          <NavLink to='/orderlist/cooking'>조리중</NavLink>
+          <NavLink to='/staff/orderlist/cooking'>조리중</NavLink>
         </div>
         <div>
-          <NavLink to='/orderlist/in-delivery'>배달중</NavLink>
+          <NavLink to='/staff/orderlist/in-delivery'>배달중</NavLink>
         </div>
         <div>
-          <NavLink to='/orderlist/done'>완료</NavLink>
+          <NavLink to='/staff/orderlist/done'>완료</NavLink>
         </div>
         <div className='nav-title nav-manage'>우리가게관리</div>
         <div>
-          <NavLink to='/ingredientlist'>재고현황</NavLink>
+          <NavLink to='/staff/ingredientlist'>재고현황</NavLink>
         </div>
         <div>
-          <NavLink to='/ingredientorder'>발주관리</NavLink>
+          <NavLink to='/staff/ingredientorder'>발주관리</NavLink>
         </div>
         <div>
-          <NavLink to='/customerlist'>고객관리</NavLink>
+          <NavLink to='/staff/customerlist'>고객관리</NavLink>
         </div>
         {isOwner ? (
           <div>
-            <NavLink to='/stafflist'>직원관리</NavLink>
+            <NavLink to='/staff/stafflist'>직원관리</NavLink>
           </div>
         ) : null}
       </div>
