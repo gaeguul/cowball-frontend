@@ -398,9 +398,9 @@ function OrderPage() {
 
     /** [POST] 장바구니에 추가 */
     try {
-      const token =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiVVNFUiIsImlkIjoic3RyaW5nIiwiaWF0IjoxNjY4ODQ1NTExLCJleHAiOjE2Njg4NDU1NzF9.RPYIEL-xbHGwW8z_Q3t_RGF-1Cz7rKz7vgql9OlsxT4';
-      const userId = 'string';
+      const token = localStorage.getItem('customerToken');
+      const userId = localStorage.getItem('customerId');
+
       const options = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -408,10 +408,11 @@ function OrderPage() {
       };
 
       const data = MY_ORDER;
+      console.log('data', data);
       const url = `cart/${userId}`;
       const response = await axios.post(url, data, options);
       console.log('[handlePutCartButtonClick] ', response.data);
-      window.location.replace('/cart');
+      // window.location.replace('/cart');
     } catch (error) {
       console.log(error);
     }

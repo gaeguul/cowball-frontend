@@ -43,7 +43,7 @@
 
     box-sizing: border-box;
     padding: 0px 50px;
-    padding-bottom: 30px;
+    // padding-bottom: 30px;
 
     .right-info-container {
       display: flex;
@@ -51,11 +51,16 @@
       align-items: flex-start;
 
       box-sizing: border-box;
-      height: 170px;
+      min-height: 170px;
+      height: max-content;
       width: 350px;
       padding: 20px 0px;
 
       // padding: 20px 0px 20px 40px;
+
+      .dinner-detail {
+        text-align: left;
+      }
 
       .dinner-price-title {
         justify-self: end;

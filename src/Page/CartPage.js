@@ -19,9 +19,33 @@ import '../scss/CartPage.scss';
 // const customerToken = value.customerToken;
 // const customerId = value.customerId;
 
-function DeleteDinnerButton() {
-  const deleteDinnerButtonClick = () => {
+const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
+const DINNER_NAME = ['발렌타인', '프렌치', '잉글리시', '샴페인 축제'];
+
+const customerId = localStorage.getItem('customerId');
+const customerToken = localStorage.getItem('customerToken');
+
+function DeleteDinnerButton(props) {
+  const orderDinnerId = props.orderDinnerId;
+
+  const deleteDinnerButtonClick = async () => {
+    await new Promise((r) => setTimeout(r, 1000));
+
     console.log('deleteDinnerButtonClick');
+
+    try {
+      const options = {
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+      };
+      const url = `cart/${customerId}/${orderDinnerId}`;
+      const response = await axios.delete(url, options);
+
+      console.log('[DeleteDinnerButton] response.data', response.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className='delete-dinner-button'>
@@ -96,8 +120,6 @@ function DatePickerComponent(props) {
   );
 }
 
-const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
-
 function OptionItem(props) {
   const dinnerId = props.dinnerId;
   const option = props.option;
@@ -155,6 +177,7 @@ function OptionItem(props) {
 function DinnerItem(props) {
   const dinner = props.dinner;
   const options = dinner.orderDinnerOptions;
+  const orderDinnerId = dinner.orderDinnerId;
 
   const [styleInfo, setStyleInfo] = useState({});
 
@@ -175,10 +198,12 @@ function DinnerItem(props) {
 
   return (
     <div className='cart-dinner'>
-      <DeleteDinnerButton />
+      <DeleteDinnerButton orderDinnerId={orderDinnerId} />
       <div className='dinner-and-style-container'>
         <div className='dinner-title'>
-          <div className='dinner-name'>프렌치 디너</div>
+          <div className='dinner-name'>
+            {DINNER_NAME[dinner.dinnerId - 1]} 디너
+          </div>
           <div className='steak-degree-container'>
             <div className='steak-degree-title'>
               {STEAK_DEGREE[dinner.degreeId - 1]}
@@ -235,27 +260,24 @@ function CartPage() {
   const [cartInfo, setCartInfo] = useState({});
   const [dinners, setDinners] = useState([]);
 
-  const sampleUserId = 'string';
-  const sampleToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiVVNFUiIsImlkIjoic3RyaW5nIiwiaWF0IjoxNjY4ODQ1NTExLCJleHAiOjE2Njg4NDU1NzF9.RPYIEL-xbHGwW8z_Q3t_RGF-1Cz7rKz7vgql9OlsxT4';
-
   const getCartInfo = useCallback(async () => {
     try {
-      const url = `cart/${sampleUserId}`;
+      const url = `cart/${customerId}`;
       const headers = {
         headers: {
-          Authorization: `Bearer ${sampleToken}`,
+          Authorization: `Bearer ${customerToken}`,
         },
       };
       const response = await axios.get(url, headers);
-      console.log(response.data);
+      console.log('response.data', response.data);
+      console.log('response.data.orderDinners', response.data.orderDinners);
       setCartInfo(response.data);
       setDinners(response.data.orderDinners);
       // setLoading(false);
     } catch (error) {
       console.log(error);
     }
-  }, [sampleToken, sampleUserId]);
+  }, [customerToken, customerId]);
 
   useEffect(() => {
     getCartInfo();
@@ -274,47 +296,6 @@ function CartPage() {
                   <DinnerItem key={dinner.orderDinnerId} dinner={dinner} />
                 );
               })}
-              {/* <div className='cart-dinner'>
-                <DeleteDinnerButton />
-                <div className='dinner-and-style-container'>
-                  <div className='dinner-title'>
-                    <div className='dinner-name'>프렌치 디너</div>
-                    <div className='steak-degree-container'>
-                      <div className='steak-degree-title'>레어</div>
-                    </div>
-                  </div>
-                  <div className='style-name'>심플 스타일 (10,000원)</div>
-                  <div className='dinner-option'>
-                    - 에그스크램블 삭제 (-5,000원)
-                  </div>
-                  <div className='dinner-option'>
-                    + 레어 스테이크 1인분 추가 (20,000원)
-                  </div>
-                  <div className='dinner-option'>
-                    + 베이컨 1장 추가 (2,000원)
-                  </div>
-                </div>
-                <div className='dinner-number'>
-                  <ChangeDinnerNumberButton />
-                </div>
-                <div className='dinner-price'>40,000원</div>
-              </div>
-              <div className='cart-dinner'>
-                <DeleteDinnerButton />
-                <div className='dinner-and-style-container'>
-                  <div className='dinner-title'>
-                    <div className='dinner-name'>프렌치 디너</div>
-                    <div className='steak-degree-container'>
-                      <div className='steak-degree-title'>미디움</div>
-                    </div>
-                  </div>
-                  <div className='style-name'>그랜드 스타일 (15,000원)</div>
-                </div>
-                <div className='dinner-number'>
-                  <ChangeDinnerNumberButton />
-                </div>
-                <div className='dinner-price'>33,000원</div>
-              </div> */}
               <div className='total-container'>
                 <div className='title'>주문금액</div>
                 <div className='total-price'>{cartInfo.totalPrice}원</div>
@@ -353,7 +334,14 @@ function CartPage() {
                     <div className='card-number-title content-title'>
                       카드번호
                     </div>
-                    <div className='card-number'>1235123512351235</div>
+                    <div className='request-input-container'>
+                      <input
+                        id='card-number'
+                        type='text'
+                        name='card-number'
+                        {...register('card-number')}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className='payment-info-container'>

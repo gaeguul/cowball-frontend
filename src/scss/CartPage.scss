@@ -4,7 +4,8 @@
 @import './component/header';
 
 input#delivery-address,
-input#request {
+input#request,
+input#card-number {
   background-color: #ebebeb;
   border: 0px;
   height: 25px;
