@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../scss/OrderPage.scss';
 
+//const [prePrice, serPrePrice] = useState(0);
 const MY_ORDER = {
   degreeId: 0,
   dinnerId: 0,
@@ -19,17 +20,23 @@ function ChangeDinnerNumberButton(props) {
 
   const myDinnerNumber = props.myDinnerNumber;
   const setMyDinnerNumber = props.setMyDinnerNumber;
+  const setFinalPrice = props.setFinalPrice;
+  const totalPrice = props.totalPrice;
 
   const decreaseDinnerNumber = () => {
     if (myDinnerNumber == 0) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
       setMyDinnerNumber((prev) => prev - 1);
+      setFinalPrice(myDinnerNumber * totalPrice);
+      console.log('myDinnerNumber change: %d * %d', myDinnerNumber, totalPrice);
     }
   };
 
   const increaseDinnerNumber = () => {
     setMyDinnerNumber((prev) => prev + 1);
+    setFinalPrice(myDinnerNumber * totalPrice);
+    console.log('myDinnerNumber change: %d * %d', myDinnerNumber, totalPrice);
   };
 
   return (
@@ -145,10 +152,17 @@ function StyleComponent(props) {
 function DeleteMainOptionComponent(props) {
   const mainOptions = props.mainOptions;
   const setMyMainOption = props.setMyMainOption;
+  const totalPrice = props.totalPrice;
+  const setTotalPrice = props.setTotalPrice;
+  const myDinnerNumber = props.myDinnerNumber;
+  const setFinalPrice = props.setFinalPrice;
 
   const handleMainOptionClick = (event) => {
     console.log('event.target.id', event.target.id);
     setMyMainOption(event.target.id);
+    setTotalPrice((totalPrice) => totalPrice + mainOptions.dinnerOptionPrice);
+    setFinalPrice(myDinnerNumber * totalPrice);
+    //serPrePrice = -{mainOptions.dinnerOptionPrice};
   };
 
   return (
@@ -184,17 +198,28 @@ function DeleteMainOptionComponent(props) {
 function ChangeOptionNumberButton(props) {
   const optionNumber = props.optionNumber;
   const setOptionNumber = props.setOptionNumber;
+  const totalPrice = props.totalPrice;
+  const setTotalPrice = props.setTotalPrice;
+  const myDinnerNumber = props.myDinnerNumber;
+  const setFinalPrice = props.setFinalPrice;
+  const dinnerOptionPrice = props.dinnerOptionPrice;
 
   const decreaseOptionNumber = () => {
     if (optionNumber == 0) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
       setOptionNumber((prev) => prev - 1);
+      setTotalPrice((totalPrice) => totalPrice - dinnerOptionPrice);
+      setFinalPrice(myDinnerNumber * totalPrice);
+      console.log('myDinnerNumber change: %d * %d', myDinnerNumber, totalPrice);
     }
   };
 
   const increaseOptionNumber = () => {
     setOptionNumber((prev) => prev + 1);
+    setTotalPrice((totalPrice) => totalPrice + dinnerOptionPrice);
+    setFinalPrice(myDinnerNumber * totalPrice);
+    console.log('myDinnerNumber change: %d * %d', myDinnerNumber, totalPrice);
   };
 
   return (
@@ -215,6 +240,10 @@ function ChangeOptionNumberButton(props) {
 function ExtraOptionItem(props) {
   const extraOption = props.extraOption;
   const setNewExtraOption = props.setNewExtraOption;
+  const setTotalPrice = props.setTotalPrice;
+  const myDinnerNumber = props.myDinnerNumber;
+  const setFinalPrice = props.setFinalPrice;
+  const totalPrice = props.totalPrice;
 
   const optionId = extraOption.dinnerOptionId;
   const [optionNumber, setOptionNumber] = useState(0);
@@ -239,6 +268,11 @@ function ExtraOptionItem(props) {
         <ChangeOptionNumberButton
           optionNumber={optionNumber}
           setOptionNumber={setOptionNumber}
+          totalPrice={totalPrice}
+          setTotalPrice={setTotalPrice}
+          myDinnerNumber={myDinnerNumber}
+          setFinalPrice={setFinalPrice}
+          dinnerOptionPrice={props.extraOption.dinnerOptionPrice}
         />
       </div>
     </>
@@ -249,6 +283,10 @@ function ExtraOptionComponent(props) {
   const loading = props.loading;
   const extraOptions = props.extraOptions;
   const setMyExtraOptions = props.setMyExtraOptions;
+  const totalPrice = props.totalPrice;
+  const setTotalPrice = props.setTotalPrice;
+  const myDinnerNumber = props.myDinnerNumber;
+  const setFinalPrice = props.setFinalPrice;
 
   const [newExtraOption, setNewExtraOption] = useState([]);
 
@@ -278,6 +316,10 @@ function ExtraOptionComponent(props) {
                     key={extraOption.dinnerOptionId}
                     extraOption={extraOption}
                     setNewExtraOption={setNewExtraOption}
+                    totalPrice={totalPrice}
+                    setTotalPrice={setTotalPrice}
+                    myDinnerNumber={myDinnerNumber}
+                    setFinalPrice={setFinalPrice}
                   />
                 );
               })}
@@ -306,11 +348,7 @@ function OrderPage() {
   /**장바구니 담기 버튼에 의해서만 업데이트 된다 */
   const [myDinnerOptions, setMyDinnerOptions] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-
-  useEffect(() => {
-    MY_ORDER['dinnerOptionIds'] = myDinnerOptions;
-    console.log('MY_ORDER', MY_ORDER);
-  }, [myDinnerOptions]);
+  const [finalPrice, setFinalPrice] = useState(0); // dinner-number * totalPrice = FinalPrice
 
   /**주문할 디너 개수 */
   const [myDinnerNumber, setMyDinnerNumber] = useState(1);
@@ -424,6 +462,11 @@ function OrderPage() {
   }, []);
 
   useEffect(() => {
+    MY_ORDER['dinnerOptionIds'] = myDinnerOptions;
+    console.log('MY_ORDER', MY_ORDER);
+  }, [myDinnerOptions]);
+
+  useEffect(() => {
     MY_ORDER['degreeId'] = mySteakDegree;
   }, [mySteakDegree]);
 
@@ -447,6 +490,11 @@ function OrderPage() {
     getOptions();
   }, [loading]);
 
+  useEffect(() => {
+    setFinalPrice(totalPrice);
+    setMyDinnerNumber(1);
+  }, []);
+
   return (
     <CustomerLayout>
       <Header />
@@ -461,6 +509,10 @@ function OrderPage() {
             <DeleteMainOptionComponent
               mainOptions={mainOptions}
               setMyMainOption={setMyMainOption}
+              totalPrice={totalPrice}
+              setTotalPrice={setTotalPrice}
+              myDinnerNumber={myDinnerNumber}
+              setFinalPrice={setFinalPrice}
             />
             <SteakDegreeComponent setMySteakDegree={setMySteakDegree} />
           </div>
@@ -472,6 +524,10 @@ function OrderPage() {
               loading={loading}
               extraOptions={extraOptions}
               setMyExtraOptions={setMyExtraOptions}
+              totalPrice={totalPrice}
+              setTotalPrice={setTotalPrice}
+              myDinnerNumber={myDinnerNumber}
+              setFinalPrice={setFinalPrice}
             />
             <div className='dinner-number-and-price-container'>
               <div className='dinner-number-title title'>디너 수량</div>
@@ -479,10 +535,12 @@ function OrderPage() {
                 <ChangeDinnerNumberButton
                   myDinnerNumber={myDinnerNumber}
                   setMyDinnerNumber={setMyDinnerNumber}
+                  setFinalPrice={setFinalPrice}
+                  totalPrice={totalPrice}
                 />
               </div>
               <div className='total-price-title title'>총 가격</div>
-              <div className='total-price-number content'>{totalPrice}원</div>
+              <div className='total-price-number content'>{finalPrice}원</div>
             </div>
             <div className='put-dinner-cart-button-container'>
               <div
