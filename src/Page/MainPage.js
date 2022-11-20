@@ -8,8 +8,6 @@ import '../scss/MainPage.scss';
 function DinnerItem(props) {
   const param = props.dinner.dinnerId;
 
-  console.log(props);
-
   return (
     <Link to={`/order/${param}`}>
       <div className='dinner'>

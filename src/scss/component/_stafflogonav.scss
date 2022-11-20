@@ -1,3 +1,10 @@
+.logout-button {
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
 .logo-nav-container {
   .logo-container {
     display: flex;
@@ -49,10 +56,11 @@
     .nav-container-inner {
       display: grid;
       grid-template-columns: max-content;
-      grid-template-rows: repeat(9, max-content);
+      grid-template-rows: repeat(10, max-content);
       gap: 15px;
       padding-top: 20px;
       justify-items: flex-start;
+      height: min-content;
 
       .nav-manage {
         margin-top: 30px;

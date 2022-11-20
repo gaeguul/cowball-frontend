@@ -2,22 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-// const ORDER_STATE = {
-//   waiting: 16,
-//   cooking: 33,
-//   in_delivery: 34,
-//   done: 255,
-// };
-
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
 const STATE_NAME = {
+  hold: '대기',
   waiting: '예약',
   cooking: '조리중',
   'in-delivery': '배달중',
   done: '완료',
 };
-
-// const SAMPLE_OrderDinnerOptions = [16, 20, 21];
+const STATE_BUTTON_NAME = new Map([
+  [16, '조리시작'],
+  [33, '배달시작'],
+  [34, '배달완료'],
+]);
+const STATE_NEXT = new Map([
+  [16, 'WAITING'],
+  [33, 'IN_DELIVERY'],
+  [34, 'COOKING'],
+]);
 
 function OrderInfo(props) {
   return (
@@ -35,17 +37,71 @@ function OrderInfo(props) {
   );
 }
 
-function DinnerOptionItem() {
-  // console.log(props.dinnerOption);
-  // return <div className='dinner-option'>- 에그스크램블 삭제 (-5,000원)</div>;
+function DinnerOptionItem(props) {
+  const dinnerId = props.dinnerId;
+  const orderDinnerOption = props.orderDinnerOption;
+  const orderDinnerOptionId = orderDinnerOption.dinnerOptionId;
+
+  const [dinnerOptionDetail, setDinnerOptionDetail] = useState('');
+  const [dinnerOptionPrice, setDinnerOptionPrice] = useState(0);
+
+  const [isPriceMinus, setIsPriceMinus] = useState(false);
+
+  /**
+   * 해당 값만큼 option 출력해야 함 (return할 때)
+   */
+  const optionAmount = orderDinnerOption.amount;
+  const amountArray = Array(optionAmount).fill(1);
+
+  const getOptionName = async () => {
+    try {
+      const url = `menu/dinners/${dinnerId}/options`;
+      const response = await axios.get(url);
+
+      /**
+       * 출력해야 하는 옵션
+       */
+      const target = response.data.find((option) => {
+        return option.dinnerOptionId === orderDinnerOptionId;
+      });
+
+      setDinnerOptionDetail(target.dinnerOptionDetail);
+      setDinnerOptionPrice(target.dinnerOptionPrice);
+
+      setIsPriceMinus(
+        target.dinnerOptionName === '메인메뉴 삭제' ? true : false,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getOptionName();
+  }, []);
+
+  return (
+    <>
+      {amountArray.map((i, index) => {
+        return (
+          <div key={index} className='dinner-option'>
+            {isPriceMinus ? <>-</> : <>+</>} {dinnerOptionDetail} (
+            {dinnerOptionPrice}
+            원)
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
 function OrderDinnerItem(props) {
-  const orderDinner = props.orderDinner;
+  const orderDinner = props.orderDinner; //하나의 배달 안에서 시킨 각 디너
+  const orderDinnerOptions = orderDinner.orderDinnerOptions; //선택한 디너 옵션
   const [styleInfo, setStyleInfo] = useState({});
-  const [dinnerOptions, setDinnerOptions] = useState([]);
 
   const getStyleInfo = async () => {
+    /**선택한 스타일 한글명과 가격 조회 */
     try {
       const url = `menu/styles/${orderDinner.styleId}`;
       const response = await axios.get(url);
@@ -55,19 +111,8 @@ function OrderDinnerItem(props) {
     }
   };
 
-  const getDinnerOptions = async () => {
-    try {
-      const url = `menu/dinners/${orderDinner.dinnerId}/options`;
-      const response = await axios.get(url);
-      setDinnerOptions(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     getStyleInfo();
-    getDinnerOptions();
   }, []);
 
   return (
@@ -82,33 +127,31 @@ function OrderDinnerItem(props) {
           </div>
         </div>
         <div className='style-name'>
-          {styleInfo.styleDetail} ({styleInfo.stylePrice}원)
+          {styleInfo.styleName} 스타일 (+{styleInfo.stylePrice}원)
         </div>
-        {dinnerOptions.map((dinnerOption) => {
+        {orderDinnerOptions.map((orderDinnerOption) => {
           return (
             <DinnerOptionItem
-              key={dinnerOption.dinnerOptionId}
-              dinnerOption={dinnerOption}
+              key={orderDinnerOption.dinnerOptionId}
+              dinnerId={orderDinner.dinnerId}
+              orderDinnerOption={orderDinnerOption}
             />
           );
         })}
-        <div className='dinner-option'>- 에그스크램블 삭제 (-5,000원)</div>
-        <div className='dinner-option'>
-          + 레어 스테이크 1인분 추가 (20,000원)
-        </div>
-        <div className='dinner-option'>+ 베이컨 1장 추가 (2,000원)</div>
       </div>
       <div className='dinner-number'>1</div>
       <div className='dinner-price'>{orderDinner.totalDinnerPrice}원</div>
     </div>
   );
 }
+
 function MenuInfo(props) {
   const orderDinners = props.orderDinners;
   const totalPrice = props.totalPrice;
   const orderDinnerNumber = props.orderDinnerNumber;
-  console.log(props.orderDinners);
-  console.log(orderDinnerNumber);
+
+  console.log('orderDinners', orderDinners);
+  // console.log(orderDinnerNumber);
 
   return (
     <div className='menu-info'>
@@ -122,37 +165,7 @@ function MenuInfo(props) {
             />
           );
         })}
-        {/* <div className='dinner'>
-          <div className='dinner-and-style-container'>
-            <div className='dinner-title'>
-              <div className='dinner-name'>프렌치 디너</div>
-              <div className='steak-degree-container'>
-                <div className='steak-degree-title'>레어</div>
-              </div>
-            </div>
-            <div className='style-name'>심플 스타일 (10,000원)</div>
-            <div className='dinner-option'>- 에그스크램블 삭제 (-5,000원)</div>
-            <div className='dinner-option'>
-              + 레어 스테이크 1인분 추가 (20,000원)
-            </div>
-            <div className='dinner-option'>+ 베이컨 1장 추가 (2,000원)</div>
-          </div>
-          <div className='dinner-number'>1</div>
-          <div className='dinner-price'>40,000원</div>
-        </div>
-        <div className='dinner'>
-          <div className='dinner-and-style-container'>
-            <div className='dinner-title'>
-              <div className='dinner-name'>프렌치 디너</div>
-              <div className='steak-degree-container'>
-                <div className='steak-degree-title'>미디움</div>
-              </div>
-            </div>
-            <div className='style-name'>그랜드 스타일 (15,000원)</div>
-          </div>
-          <div className='dinner-number'>1</div>
-          <div className='dinner-price'>33,000원</div>
-        </div> */}
+
         <div className='total-container'>
           <div className='total-number'>{orderDinnerNumber}</div>
           <div className='total-price'>{totalPrice}원</div>
@@ -164,8 +177,11 @@ function MenuInfo(props) {
 }
 
 function DetailComponent(props) {
-  const detailOrderId = props.detailOrderId;
+  const detailOrderId = props.detailOrderId; //왼쪽 주문목록에서 선택한 디너번호
   const [detailOrderInfo, setDetailOrderInfo] = useState({});
+  const [stateButtonName, setStateButtonName] = useState('');
+  const [isButtonNotExit, setIsButtonNotExit] = useState(true);
+  const [orderStateNumber, setOrderStateNumber] = useState(0);
 
   const [loading, setLoading] = useState(true);
 
@@ -174,9 +190,27 @@ function DetailComponent(props) {
       const url = `orders/${detailOrderId}`;
       const response = await axios.get(url);
       setDetailOrderInfo(response.data);
-      console.log(response.data);
-
+      const orderState = response.data.orderState;
+      setOrderStateNumber(orderState);
+      // const tmp = orderState === 8 || orderState === 255 ? true : false;
+      setIsButtonNotExit(orderState === 8 || orderState === 255 ? true : false);
+      setStateButtonName(STATE_BUTTON_NAME.get(orderState));
       setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleStateButtonClick = async () => {
+    try {
+      console.log('orderStateNumber', orderStateNumber);
+
+      const url = `orders/${detailOrderId}/state`;
+      const data = {
+        orderState: STATE_NEXT.get(orderStateNumber),
+      };
+      const response = await axios.put(url, data);
+      console.log('[handleStateButtonClick] ', response.data);
     } catch (error) {
       console.log(error);
     }
@@ -195,9 +229,13 @@ function DetailComponent(props) {
           <div className='top'>
             <div className='id-and-button'>
               <span className='order-id'>배달 {detailOrderInfo.orderId}</span>
-              <div className='state-button'>
-                <div className='button-title'>조리시작</div>
-              </div>
+              {isButtonNotExit ? (
+                <></>
+              ) : (
+                <div className='state-button' onClick={handleStateButtonClick}>
+                  <div className='button-title'>{stateButtonName}</div>
+                </div>
+              )}
             </div>
             <div className='rsv-date'>예약 {detailOrderInfo.rsvDate}</div>
             <div className='number-and-price'>
@@ -221,52 +259,6 @@ function DetailComponent(props) {
               totalPrice={detailOrderInfo.totalPrice}
               orderDinnerNumber={detailOrderInfo.orderDinners.length}
             />
-            {/* <div className='menu-info'>
-              <div className='title'>메뉴정보</div>
-              <div className='menu-container'>
-                <div className='dinner'>
-                  <div className='dinner-and-style-container'>
-                    <div className='dinner-title'>
-                      <div className='dinner-name'>프렌치 디너</div>
-                      <div className='steak-degree-container'>
-                        <div className='steak-degree-title'>레어</div>
-                      </div>
-                    </div>
-                    <div className='dinner-option'>
-                      - 에그스크램블 삭제 (-5,000원)
-                    </div>
-                    <div className='dinner-option'>
-                      + 레어 스테이크 1인분 추가 (20,000원)
-                    </div>
-                    <div className='dinner-option'>
-                      + 베이컨 1장 추가 (2,000원)
-                    </div>
-                    <div className='style-name'>심플 스타일 (10,000원)</div>
-                    <div className='style-option'>+ 접시 추가 (3,000원)</div>
-                  </div>
-                  <div className='dinner-number'>1</div>
-                  <div className='dinner-price'>40,000원</div>
-                </div>
-                <div className='dinner'>
-                  <div className='dinner-and-style-container'>
-                    <div className='dinner-title'>
-                      <div className='dinner-name'>프렌치 디너</div>
-                      <div className='steak-degree-container'>
-                        <div className='steak-degree-title'>미디움</div>
-                      </div>
-                    </div>
-                    <div className='style-name'>그랜드 스타일 (15,000원)</div>
-                  </div>
-                  <div className='dinner-number'>1</div>
-                  <div className='dinner-price'>33,000원</div>
-                </div>
-                <div className='total-container'>
-                  <div className='total-number'>2</div>
-                  <div className='total-price'>73,000원</div>
-                </div>
-              </div>
-              <div></div>
-            </div> */}
             <OrderInfo
               deliveryAddress={detailOrderInfo.deliveryAddress}
               phoneNumber={detailOrderInfo.phoneNumber}
@@ -292,12 +284,12 @@ function LeftComponent(props) {
     try {
       const url = `orders`;
       if (state === 'in-delivery') state = 'in_delivery';
-      const params = {
+      const options = {
         params: {
           state: state,
         },
       };
-      const response = await axios.get(url, params);
+      const response = await axios.get(url, options);
       setOrderCount(response.data.count);
       setOrders(response.data.items);
     } catch (error) {

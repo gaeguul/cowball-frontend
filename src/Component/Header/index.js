@@ -1,9 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { AuthContext } from '../../Context/AuthContext';
 
 function Header() {
+  const value = useContext(AuthContext);
+  const setIsCustomerLogin = value.setIsCustomerLogin;
+  // const setCustomerToken = value.setCustomerToken;
+
   const handleLogoutButtonClick = () => {
-    //logout 처리
+    localStorage.clear();
+    setIsCustomerLogin(false);
+    // setCustomerToken(null);
   };
 
   return (

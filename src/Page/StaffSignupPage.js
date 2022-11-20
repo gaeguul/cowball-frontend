@@ -1,31 +1,38 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import '../scss/StaffSignupPage.scss';
 
 function StaffSignupForm() {
+  const [role, setRole] = useState('');
+
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
 
+  const handleRoleClick = (event) => {
+    console.log('event.target.value', event.target.value);
+    setRole(event.target.value);
+  };
+
   const onSubmit = async (data) => {
     try {
+      data.role = role;
+      console.log('data', data);
+
       await new Promise((r) => setTimeout(r, 1000));
-
-      console.log(data);
-
-      const url =
-        'https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/staff';
-
+      const url = `staff`;
       const response = await axios.post(url, data);
       console.log(response.data);
     } catch (error) {
       console.log(error);
+      alert(error.response.data.message);
     }
   };
+
   return (
     <div className='staff-signup-form-container'>
       <form className='staff-signup-form' onSubmit={handleSubmit(onSubmit)}>
@@ -100,13 +107,18 @@ function StaffSignupForm() {
           </small>
         )}
         <p className='role-title'>지원역할</p>
-        <div className='role-container'>
+        <div className='role-container' onChange={handleRoleClick}>
           <label>
-            <input type='radio' name='role' id='delivery' value='delivery' />
+            <input
+              type='radio'
+              name='role'
+              id='delivery'
+              value='PENDING_DELIVERY'
+            />
             배달
           </label>
           <label>
-            <input type='radio' name='role' id='cook' value='cook' />
+            <input type='radio' name='role' id='cook' value='PENDING_COOK' />
             조리
           </label>
         </div>

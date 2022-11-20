@@ -1,8 +1,10 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import '../scss/StaffLoginPage.scss';
+
+import { AuthContext } from '../Context/AuthContext';
 
 function StaffLoginLogo() {
   return (
@@ -19,6 +21,12 @@ function StaffLoginLogo() {
 }
 
 function StaffLoginForm() {
+  /**상태관리 */
+  const value = useContext(AuthContext);
+  const setIsStaffLogin = value.setIsStaffLogin;
+  // const setStaffToken = value.setStaffToken;
+
+  /** */
   const {
     register,
     handleSubmit,
@@ -29,13 +37,18 @@ function StaffLoginForm() {
     try {
       await new Promise((r) => setTimeout(r, 1000));
 
-      const url =
-        'https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/auth/staff';
-
+      const url = `auth/staff`;
       const response = await axios.post(url, data);
-      console.log(response.data.result); //access-token
+      console.log(response.data['access-token']); //access-token
+
+      localStorage.setItem('staffId', response.data['staffId']);
+      localStorage.setItem('staffToken', response.data['access-token']);
+
+      setIsStaffLogin(true);
+      // setStaffToken(response.data['access-token']);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      alert('아이디 또는 비밀번호를 다시 입력해주세요.');
     }
   };
 
