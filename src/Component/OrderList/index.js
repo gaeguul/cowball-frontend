@@ -86,6 +86,7 @@ function DinnerOptionItem(props) {
         return (
           <div key={index} className='dinner-option'>
             {isPriceMinus ? <>-</> : <>+</>} {dinnerOptionDetail} (
+            {isPriceMinus ? null : <>+</>}
             {dinnerOptionPrice}
             원)
           </div>

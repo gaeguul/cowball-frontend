@@ -328,7 +328,6 @@ function OrderPage() {
       const response = await axios.get(url);
       setDinnerInfo(response.data);
       setTotalPrice(response.data.dinnerPrice);
-      console.log('totalPrice', totalPrice);
     } catch (error) {
       console.log(error);
     }
@@ -415,6 +414,8 @@ function OrderPage() {
       // window.location.replace('/cart');
     } catch (error) {
       console.log(error);
+      console.log('MY_ORDER', MY_ORDER);
+      alert('스타일과 스테이크 굽기 단계를 선택해주세요.');
     }
   };
 

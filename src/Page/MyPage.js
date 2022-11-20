@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { React } from 'react';
-import { NavLink } from 'react-router-dom';
+// import axios from 'axios';
+// import { NavLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
@@ -12,25 +12,22 @@ function MyPage() {
     register,
     handleSubmit,
     formState: { isSubmitting, isDirty, errors },
-  } = useForm({
-    defaultValues: {
-      name: 'hi',
-    },
-  });
+  } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      await new Promise((r) => setTimeout(r, 1000));
+  const onSubmit = async () => {};
 
-      const url =
-        'https://stoplight.io/mocks/hoqn/cowball-mrdaebak/106750649/auth/customer';
+  // const onSubmit = async (data) => {
+  //   try {
+  //     await new Promise((r) => setTimeout(r, 1000));
 
-      const response = await axios.post(url, data);
-      console.log(response.data.result); //access-token
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     const url = `auth/customer`;
+
+  //     const response = await axios.post(url, data);
+  //     console.log(response.data.result); //access-token
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <CustomerLayout>
@@ -40,72 +37,142 @@ function MyPage() {
           <div className='top-title'>
             <span className='title-text'>마이페이지</span>
           </div>
-          <form className='mypage-info-form' onSubmit={handleSubmit(onSubmit)}>
-            <div className='info-title'>아이디</div>
-            <div className='info-content'>sogong1234</div>
-            <div className='info-title'>비밀번호</div>
-            <div className='info-content'>*****</div>
-            <div className='info-title'>이름</div>
-            <input
-              id='name'
-              type='text'
-              name='name'
-              defaultValue='이소공'
-              aria-invalid={
-                !isDirty ? undefined : errors.name ? 'true' : 'false'
-              }
-              {...register('customerId', {
-                required: '이름을 입력해주세요.',
-              })}
-            />
-            <div className='info-title'>전화번호</div>
-            <input
-              id='phoneNumber'
-              type='number'
-              name='phoneNumber'
-              defaultValue='01012345678'
-              aria-invalid={
-                !isDirty ? undefined : errors.phoneNumber ? 'true' : 'false'
-              }
-              {...register('phoneNumber', {
-                required: '전화번호를 입력해주세요.',
-              })}
-            />
-            <div className='info-title'>주소</div>
-            <input
-              id='address'
-              type='text'
-              name='address'
-              defaultValue='휘경동'
-              aria-invalid={
-                !isDirty ? undefined : errors.address ? 'true' : 'false'
-              }
-              {...register('customerId', {
-                required: '주소를 입력해주세요.',
-              })}
-            />
-            <div className='info-title'>카드번호</div>
-            <input
-              id='cardNumber'
-              type='number'
-              name='cardNumber'
-              defaultValue='123412341234'
-              aria-invalid={
-                !isDirty ? undefined : errors.cardNumber ? 'true' : 'false'
-              }
-              {...register('cardNumber', {
-                required: '카드번호를 입력해주세요.',
-              })}
-            />
+          <form className='form-container' onSubmit={handleSubmit(onSubmit)}>
+            <div className='input-container'>
+              <label className='title' htmlFor='userId'>
+                아이디
+              </label>
+              <input
+                id='userId'
+                type='text'
+                name='userId'
+                placeholder='원래아이디'
+                aria-invalid={
+                  !isDirty ? undefined : errors.userId ? 'true' : 'false'
+                }
+                {...register('userId', {
+                  required: '아이디를 입력해주세요.',
+                })}
+              />
+              {errors.userId && (
+                <small role='alert' className='input-alert'>
+                  {errors.userId.message}
+                </small>
+              )}
+              <label className='title' htmlFor='password'>
+                비밀번호
+              </label>
+              <input
+                id='password'
+                type='text'
+                name='password'
+                placeholder='원래아이디'
+                aria-invalid={
+                  !isDirty ? undefined : errors.password ? 'true' : 'false'
+                }
+                {...register('password', {
+                  required: '비밀번호를 입력해주세요.',
+                })}
+              />
+              {errors.password && (
+                <small role='alert' className='input-alert'>
+                  {errors.password.message}
+                </small>
+              )}
+              <label className='title' htmlFor='name'>
+                이름
+              </label>
+              <input
+                id='name'
+                type='text'
+                name='name'
+                placeholder='원래아이디'
+                aria-invalid={
+                  !isDirty ? undefined : errors.name ? 'true' : 'false'
+                }
+                {...register('name', {
+                  required: '이름을 입력해주세요.',
+                })}
+              />
+              {errors.name && (
+                <small role='alert' className='input-alert'>
+                  {errors.name.message}
+                </small>
+              )}
+              <label className='title' htmlFor='phoneNumber'>
+                전화번호
+              </label>
+              <input
+                id='phoneNumber'
+                type='number'
+                name='phoneNumber'
+                placeholder='원래아이디'
+                aria-invalid={
+                  !isDirty ? undefined : errors.phoneNumber ? 'true' : 'false'
+                }
+                {...register('phoneNumber', {
+                  required: '전화번호를 입력해주세요.',
+                })}
+              />
+              {errors.phoneNumber && (
+                <small role='alert' className='input-alert'>
+                  {errors.phoneNumber.message}
+                </small>
+              )}
+              <label className='title' htmlFor='address'>
+                주소
+              </label>
+              <input
+                id='address'
+                type='text'
+                name='address'
+                placeholder='원래아이디'
+                aria-invalid={
+                  !isDirty ? undefined : errors.address ? 'true' : 'false'
+                }
+                {...register('address', {
+                  required: '주소를 입력해주세요.',
+                })}
+              />
+              {errors.address && (
+                <small role='alert' className='input-alert'>
+                  {errors.address.message}
+                </small>
+              )}
+              <label className='title' htmlFor='cardNumber'>
+                카드번호
+              </label>
+              <input
+                id='cardNumber'
+                type='number'
+                name='cardNumber'
+                placeholder='원래아이디'
+                aria-invalid={
+                  !isDirty ? undefined : errors.cardNumber ? 'true' : 'false'
+                }
+                {...register('cardNumber', {
+                  required: '카드번호를 입력해주세요.',
+                })}
+              />
+              {errors.cardNumber && (
+                <small role='alert' className='input-alert'>
+                  {errors.cardNumber.message}
+                </small>
+              )}
+            </div>
+            <div className='bottom-container'>
+              <button
+                className='edit-button'
+                type='submit'
+                disabled={isSubmitting}
+              >
+                <span>수정</span>
+              </button>
+              <button className='exit-button'>
+                <span>회원탈퇴</span>
+              </button>
+            </div>
           </form>
-          <div className='customer-modify-button'>
-            <button type='submit' disabled={isSubmitting}>
-              수정
-            </button>
-          </div>
-          <div className='buttom-nav-container'>
-            <NavLink to='/exit'>회원 탈퇴</NavLink>
-          </div>
         </div>
       </div>
     </CustomerLayout>

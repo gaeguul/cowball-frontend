@@ -24,7 +24,6 @@ function StaffLoginForm() {
   /**상태관리 */
   const value = useContext(AuthContext);
   const setIsStaffLogin = value.setIsStaffLogin;
-  // const setStaffToken = value.setStaffToken;
 
   /** */
   const {
@@ -45,9 +44,8 @@ function StaffLoginForm() {
       localStorage.setItem('staffToken', response.data['access-token']);
 
       setIsStaffLogin(true);
-      // setStaffToken(response.data['access-token']);
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       alert('아이디 또는 비밀번호를 다시 입력해주세요.');
     }
   };

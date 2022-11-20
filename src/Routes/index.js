@@ -108,7 +108,6 @@ function Router() {
             element={<Navigate replace to='/staff/orderlist/waiting' />}
           />
         </Route>
-
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

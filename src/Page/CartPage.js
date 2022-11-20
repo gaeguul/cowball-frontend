@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { useForm } from 'react-hook-form';
@@ -43,6 +44,7 @@ function DeleteDinnerButton(props) {
       const response = await axios.delete(url, options);
 
       console.log('[DeleteDinnerButton] response.data', response.data);
+      alert('해당 디너가 삭제되었습니다.');
     } catch (error) {
       console.log(error);
     }
@@ -54,20 +56,26 @@ function DeleteDinnerButton(props) {
   );
 }
 
-function ChangeDinnerNumberButton() {
-  const [dinnerNumber, setDinnerNumber] = useState(0);
+function ChangeDinnerNumberButton(props) {
+  // const [dinnerNumber, setDinnerNumber] = useState(0);
+  const dinnerNumber = props.dinnerNumber;
+  const [newDinnerNumber, setNewDinnerNumber] = useState(dinnerNumber);
 
   const decreaseDinnerNumber = () => {
-    if (dinnerNumber == 0) {
+    if (newDinnerNumber == 0) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
-      setDinnerNumber(dinnerNumber - 1);
+      setNewDinnerNumber((prev) => prev + 1);
     }
   };
 
   const increaseDinnerNumber = () => {
-    setDinnerNumber(dinnerNumber + 1);
+    setNewDinnerNumber((prev) => prev + 1);
   };
+
+  // useEffect(() => {
+
+  // })
 
   return (
     <div className='dinner-number-button-container'>
@@ -75,7 +83,7 @@ function ChangeDinnerNumberButton() {
         <div className='button-container'>
           <BiMinus className='button' onClick={decreaseDinnerNumber} />
         </div>
-        <div className='number'>{dinnerNumber}</div>
+        <div className='number'>{newDinnerNumber}</div>
         <div className='button-container'>
           <BiPlus className='button' onClick={increaseDinnerNumber} />
         </div>
@@ -113,7 +121,7 @@ function DatePickerComponent(props) {
     <DatePicker
       selected={date}
       onChange={(date) => setDate(date)}
-      dateFormat='yyyy.MM.dd (eee) h:mm aa'
+      dateFormat='yyyy.MM.dd (h:mm aa)'
       showTimeSelect
       includeTimes={includeTimes}
     />
@@ -165,6 +173,7 @@ function OptionItem(props) {
         return (
           <div key={index} className='dinner-option'>
             {isPriceMinus ? <>-</> : <>+</>} {dinnerOptionDetail} (
+            {isPriceMinus ? null : <>+</>}
             {dinnerOptionPrice}
             원)
           </div>
@@ -222,14 +231,9 @@ function DinnerItem(props) {
             />
           );
         })}
-        {/* <div className='dinner-option'>- 에그스크램블 삭제 (-5,000원)</div>
-        <div className='dinner-option'>
-          + 레어 스테이크 1인분 추가 (20,000원)
-        </div>
-        <div className='dinner-option'>+ 베이컨 1장 추가 (2,000원)</div> */}
       </div>
       <div className='dinner-number'>
-        <ChangeDinnerNumberButton />
+        <ChangeDinnerNumberButton dinnerNumber={dinner.dinnerAmount} />
       </div>
       <div className='dinner-price'>{dinner.totalDinnerPrice}원</div>
     </div>
@@ -237,11 +241,46 @@ function DinnerItem(props) {
 }
 
 function CartPage() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm();
+
+  const makeNewOrder = async () => {
+    try {
+      const url = `orders`;
+      const options = {
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+        data: { userId: `${customerId}` },
+      };
+
+      console.log(options);
+      const response = await axios.post(url, options);
+      console.log('[makeNewOrder]', response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const changeDeliveryInfo = async (newDeliveryData) => {
+    try {
+      console.log('newDeliveryData', newDeliveryData);
+      const url = `cart/${customerId}`;
+      const options = {
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+      };
+      const response = await axios.patch(url, newDeliveryData, options);
+      console.log('[changeDeliveryInfo]', response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onSubmit = async (data) => {
     await new Promise((r) => setTimeout(r, 1000));
@@ -250,15 +289,22 @@ function CartPage() {
       rsvDate: rsvDate,
       deliveryAddress: data['delivery-address'],
       request: data['request'],
-      cardNumber: '1235123512351235',
+      cardNumber: data['card-number'],
       phoneNumber: '01012345678',
     };
-    console.log('newDeliveryData', newDeliveryData);
+
+    /**1. 장바구니 정보 수정 */
+    await changeDeliveryInfo(newDeliveryData);
+
+    /**2. 주문하기 */
+    await makeNewOrder(); //에러남!!!
+    navigate('/ordercomplete');
   };
 
   const [rsvDate, setRsvDate] = useState('');
   const [cartInfo, setCartInfo] = useState({});
   const [dinners, setDinners] = useState([]);
+  const [grade, setGrade] = useState(0);
 
   const getCartInfo = useCallback(async () => {
     try {
@@ -270,7 +316,7 @@ function CartPage() {
       };
       const response = await axios.get(url, headers);
       console.log('response.data', response.data);
-      console.log('response.data.orderDinners', response.data.orderDinners);
+      console.log('response.data.orderDinners', response.data?.orderDinners);
       setCartInfo(response.data);
       setDinners(response.data.orderDinners);
       // setLoading(false);
@@ -282,6 +328,25 @@ function CartPage() {
   useEffect(() => {
     getCartInfo();
   }, [getCartInfo]);
+
+  useEffect(() => {
+    const getUserGrade = async () => {
+      try {
+        const options = {
+          headers: {
+            Authorization: `Bearer ${customerToken}`,
+          },
+        };
+
+        const url = `users/${customerId}`;
+        const response = await axios.get(url, options);
+        setGrade(response.data.grade);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserGrade();
+  }, []);
 
   return (
     <CustomerLayout>
@@ -350,15 +415,24 @@ function CartPage() {
                     <div className='total-price-title content-title'>
                       주문금액
                     </div>
-                    <div className='total-price-number'>80,000원</div>
-                    <div className='discount-price-title content-title'>
-                      단골할인금액
+                    <div className='total-price-number'>
+                      {cartInfo.totalPrice}원
                     </div>
-                    <div className='discount-price-number'>- 5,000원</div>
+                    {grade === 0 ? null : (
+                      <>
+                        <div className='discount-price-title content-title'>
+                          단골할인금액
+                        </div>
+                        <div className='discount-price-number'>- 5,000원</div>
+                      </>
+                    )}
+
                     <div className='payment-price-title  content-title'>
                       총 결제금액
                     </div>
-                    <div className='payment-price-number '>75,000원</div>
+                    <div className='payment-price-number '>
+                      {cartInfo.paymentPrice}원
+                    </div>
                   </div>
                 </div>
               </div>
@@ -367,7 +441,10 @@ function CartPage() {
                 className='pay-button'
                 disabled={isSubmitting}
               >
-                <span className='payment-price-number'>75,000</span>원 결제하기
+                <span className='payment-price-number'>
+                  {cartInfo.paymentPrice}
+                </span>
+                원 결제하기
               </button>
             </form>
           </div>
