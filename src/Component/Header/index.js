@@ -5,11 +5,12 @@ import { AuthContext } from '../../Context/AuthContext';
 function Header() {
   const value = useContext(AuthContext);
   const setIsCustomerLogin = value.setIsCustomerLogin;
-  const setCustomerToken = value.setCustomerToken;
+  // const setCustomerToken = value.setCustomerToken;
 
   const handleLogoutButtonClick = () => {
+    localStorage.clear();
     setIsCustomerLogin(false);
-    setCustomerToken(null);
+    // setCustomerToken(null);
   };
 
   return (

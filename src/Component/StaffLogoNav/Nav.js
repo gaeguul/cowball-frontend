@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { AuthContext } from '../../Context/AuthContext';
 
 function Nav() {
+  const value = useContext(AuthContext);
+  const setIsStaffLogin = value.setIsStaffLogin;
+
   const isOwner = true; //주인이라면 true, 일반직원이라면 false
   //isOwner가 true이면 '직원관리' 페이지 노출됨
-
+  const handleLogoutButtonClick = () => {
+    //logout 처리
+    localStorage.clear();
+    setIsStaffLogin(false);
+  };
   return (
     <div className='nav-container'>
       <div className='nav-container-inner'>
@@ -39,6 +47,13 @@ function Nav() {
             <NavLink to='/staff/stafflist'>직원관리</NavLink>
           </div>
         ) : null}
+        <div className='nav-title nav-manage'>계정</div>
+        <div
+          className='logout-button user-button'
+          onClick={handleLogoutButtonClick}
+        >
+          로그아웃
+        </div>
       </div>
     </div>
   );

@@ -101,7 +101,7 @@ function OrderDinnerItem(props) {
   const [styleInfo, setStyleInfo] = useState({});
 
   const getStyleInfo = async () => {
-    /**선택한 스타일 한글명 조회 */
+    /**선택한 스타일 한글명과 가격 조회 */
     try {
       const url = `menu/styles/${orderDinner.styleId}`;
       const response = await axios.get(url);
@@ -144,6 +144,7 @@ function OrderDinnerItem(props) {
     </div>
   );
 }
+
 function MenuInfo(props) {
   const orderDinners = props.orderDinners;
   const totalPrice = props.totalPrice;

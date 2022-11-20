@@ -24,7 +24,8 @@ function CustomerLoginForm() {
   /**상태관리 */
   const value = useContext(AuthContext);
   const setIsCustomerLogin = value.setIsCustomerLogin;
-  const setCustomerToken = value.setCustomerToken;
+  // const setCustomerToken = value.setCustomerToken;
+  // const setCustomerId = value.setCustomerId;
 
   const {
     register,
@@ -36,12 +37,22 @@ function CustomerLoginForm() {
     try {
       await new Promise((r) => setTimeout(r, 1000));
 
+      console.log(data);
+
       const url = `auth/users`;
       const response = await axios.post(url, data);
+
       console.log(response.data['access-token']); //access-token
 
+      localStorage.setItem('customerId', response.data['userId']);
+      localStorage.setItem('customerToken', response.data['access-token']);
+
       setIsCustomerLogin(true);
-      setCustomerToken(response.data['access-token']);
+
+      // setIsCustomerLogin(true);
+
+      // setCustomerId(response.data['userId']);
+      // setCustomerToken(response.data['access-token']);
     } catch (error) {
       console.log(error);
       alert('아이디 또는 비밀번호를 다시 입력해주세요.');
@@ -52,20 +63,18 @@ function CustomerLoginForm() {
     <div className='customer-login-form-container'>
       <form className='customer-login-form' onSubmit={handleSubmit(onSubmit)}>
         <input
-          id='customerId'
+          id='userId'
           type='text'
-          name='customerId'
+          name='userId'
           placeholder='아이디'
-          aria-invalid={
-            !isDirty ? undefined : errors.customerId ? 'true' : 'false'
-          }
-          {...register('customerId', {
+          aria-invalid={!isDirty ? undefined : errors.userId ? 'true' : 'false'}
+          {...register('userId', {
             required: '아이디를 입력해주세요.',
           })}
         />
-        {errors.customerId && (
+        {errors.userId && (
           <small role='alert' className='input-alert'>
-            {errors.customerId.message}
+            {errors.userId.message}
           </small>
         )}
         <input

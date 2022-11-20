@@ -19,6 +19,7 @@ function CustomerSignupForm() {
 
       console.log(response.data);
       alert('회원가입이 완료되었습니다.');
+
       window.location.replace('/');
     } catch (error) {
       console.log(error);
