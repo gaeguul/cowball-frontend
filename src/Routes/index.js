@@ -72,8 +72,6 @@ function Router() {
         {/**고객 로그인 해야만 접근 가능 */}
         <Route element={<PrivateRoute customerAuth={true} staffAuth={false} />}>
           <Route path='/' element={<MainPage />} />
-
-          <Route path='/exit' element={<CustomerExitPage />} />
           <Route path='/order/:dinnerId' element={<OrderPage />} />
           <Route path='/cart' element={<CartPage />} />
           <Route path='/ordercomplete' element={<OrderCompletePage />} />
@@ -81,6 +79,7 @@ function Router() {
           <Route path='/mypage' element={<MyPage />} />
           <Route path='/mypage/changepw' element={<ChangePasswordPage />} />
           <Route path='/mypage/changemyinfo' element={<ChangeMyInfoPage />} />
+          <Route path='/exit' element={<CustomerExitPage />} />
         </Route>
 
         {/**직원 로그인 해야만 접근 가능 */}
