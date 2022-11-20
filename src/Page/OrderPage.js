@@ -109,8 +109,10 @@ function SteakDegreeComponent(props) {
 function StyleComponent(props) {
   const styleOptions = props.styleOptions;
   const setMyStyleId = props.setMyStyleId;
+  const setStylePrice = props.setStylePrice;
   const handleStyleButtonClick = (event) => {
     setMyStyleId(parseInt(event.target.id));
+    setStylePrice(parseInt(event.target.value));
   };
   return (
     <div className='select-style-container'>
@@ -130,7 +132,7 @@ function StyleComponent(props) {
                   type='radio'
                   name='style'
                   id={option.styleId}
-                  value={option.styleId}
+                  value={option.stylePrice}
                 />
                 {option.styleName} 스타일
                 <span className='option-price'>(+{option.stylePrice}원)</span>
@@ -146,17 +148,12 @@ function StyleComponent(props) {
 function DeleteMainOptionComponent(props) {
   const mainOptions = props.mainOptions;
   const setMyMainOption = props.setMyMainOption;
-  const totalPrice = props.totalPrice;
-  const setTotalPrice = props.setTotalPrice;
-  const myDinnerNumber = props.myDinnerNumber;
-  const setFinalPrice = props.setFinalPrice;
+  const setdeletePrice = props.setdeletePrice;
 
   const handleMainOptionClick = (event) => {
-    console.log('event.target.id', event.target.id);
+    //console.log('event.target.id', event.target.id);
     setMyMainOption(event.target.id);
-    setTotalPrice((totalPrice) => totalPrice + mainOptions.dinnerOptionPrice);
-    setFinalPrice(myDinnerNumber * totalPrice);
-    //serPrePrice = -{mainOptions.dinnerOptionPrice};
+    setdeletePrice(parseInt(event.target.value));
   };
 
   return (
@@ -175,7 +172,7 @@ function DeleteMainOptionComponent(props) {
                 type='radio'
                 name='delete-menu'
                 id={mainOption.dinnerOptionId}
-                value={mainOption.dinnerOptionId}
+                value={mainOption.dinnerOptionPrice}
               />
               {mainOption.dinnerOptionDetail}
               <span className='option-price'>
@@ -322,8 +319,10 @@ function OrderPage() {
 
   /**장바구니 담기 버튼에 의해서만 업데이트 된다 */
   const [myDinnerOptions, setMyDinnerOptions] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [finalPrice, setFinalPrice] = useState(0); // dinner-number * totalPrice = FinalPrice
+  const [stylePrice, setStylePrice] = useState(0);
+  const [deletePrice, setdeletePrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0); // totalPrice = 디너 가격 + 옵션s 가격
+  const [finalPrice, setFinalPrice] = useState(0); // FinalPrice = dinner-number * (totalPrice + stylePrice - deletePrice)
 
   /**주문할 디너 개수 */
   const [myDinnerNumber, setMyDinnerNumber] = useState(1);
@@ -341,7 +340,7 @@ function OrderPage() {
       const response = await axios.get(url);
       setDinnerInfo(response.data);
       setTotalPrice(response.data.dinnerPrice);
-      console.log('totalPrice', totalPrice);
+      //console.log('totalPrice', totalPrice);
     } catch (error) {
       console.log(error);
     }
@@ -466,15 +465,16 @@ function OrderPage() {
   }, [loading]);
 
   useEffect(() => {
-    setFinalPrice(totalPrice);
-    setMyDinnerNumber(1);
-  }, []);
-
-  useEffect(() => {
-    console.log('myDinnerNumber change : %d * %d', myDinnerNumber, totalPrice);
+    console.log(
+      '%d * ( %d + %d %d)',
+      myDinnerNumber,
+      totalPrice,
+      stylePrice,
+      deletePrice,
+    );
     setTotalPrice(totalPrice);
-    setFinalPrice(myDinnerNumber * totalPrice);
-  }, [totalPrice, myDinnerNumber]);
+    setFinalPrice(myDinnerNumber * (totalPrice + stylePrice + deletePrice));
+  }, [totalPrice, myDinnerNumber, stylePrice, deletePrice]);
 
   return (
     <CustomerLayout>
@@ -486,14 +486,12 @@ function OrderPage() {
             <StyleComponent
               styleOptions={styleOptions}
               setMyStyleId={setMyStyleId}
+              setStylePrice={setStylePrice}
             />
             <DeleteMainOptionComponent
               mainOptions={mainOptions}
               setMyMainOption={setMyMainOption}
-              totalPrice={totalPrice}
-              setTotalPrice={setTotalPrice}
-              myDinnerNumber={myDinnerNumber}
-              setFinalPrice={setFinalPrice}
+              setdeletePrice={setdeletePrice}
             />
             <SteakDegreeComponent setMySteakDegree={setMySteakDegree} />
           </div>
