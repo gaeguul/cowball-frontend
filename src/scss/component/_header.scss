@@ -20,6 +20,14 @@
       // justify-content: space-evenly;
       align-items: center;
       // width: 360px;
+
+      .mike-button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        cursor: pointer;
+      }
     }
 
     a {

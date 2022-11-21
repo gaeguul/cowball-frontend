@@ -1,11 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
+import { HiMicrophone } from 'react-icons/hi';
+import ReactModal from 'react-modal';
 
 function Header() {
   const value = useContext(AuthContext);
   const setIsCustomerLogin = value.setIsCustomerLogin;
+  const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
+
   // const setCustomerToken = value.setCustomerToken;
+
+  const handleMikeButtonClick = () => {
+    console.log(`handleMikeButtonClick`);
+    setIsVoiceModalOpen(true);
+  };
 
   const handleLogoutButtonClick = () => {
     localStorage.clear();
@@ -15,6 +24,10 @@ function Header() {
 
   return (
     <div className='header-container'>
+      {isVoiceModalOpen ? (
+        <ReactModal isOpen={isVoiceModalOpen}></ReactModal>
+      ) : null}
+
       <div className='header-inner'>
         <div className='logo-container'>
           <NavLink to='/'>
@@ -25,10 +38,13 @@ function Header() {
             />
           </NavLink>
         </div>
-        <div
-          className='user-menu-container
-          '
-        >
+        <div className='user-menu-container'>
+          <div
+            className='mike-button-container'
+            onClick={handleMikeButtonClick}
+          >
+            <HiMicrophone clssName='mike-button' />
+          </div>
           <div className='user-button'>
             <NavLink to='/cart'>Cart</NavLink>
           </div>

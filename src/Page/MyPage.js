@@ -1,11 +1,17 @@
-import { React } from 'react';
-// import axios from 'axios';
-// import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 
 import '../scss/MyPage.scss';
+import { useCallback } from 'react';
+
+// import axios from 'axios';
+// import { NavLink } from 'react-router-dom';
+
+const customerId = localStorage.getItem('customerId');
+const customerToken = localStorage.getItem('customerToken');
 
 function MyPage() {
   const {
@@ -15,6 +21,33 @@ function MyPage() {
   } = useForm();
 
   const onSubmit = async () => {};
+
+  const [userId, setUserID] = useState('');
+  // const [phoneNumber, setPhoneNumber] = useState('');
+  // const [userId, setUserID] = useState('');
+  // const [userId, setUserID] = useState('');
+  // const [userId, setUserID] = useState('');
+
+  const getMyInfo = useCallback(async () => {
+    try {
+      const url = `users/${customerId}`;
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+      };
+      const response = await axios.get(url, headers);
+      console.log('response.data', response.data);
+
+      setUserID(response.data.userId);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [customerToken]);
+
+  useEffect(() => {
+    getMyInfo();
+  }, [getMyInfo]);
 
   // const onSubmit = async (data) => {
   //   try {
@@ -32,7 +65,7 @@ function MyPage() {
   return (
     <CustomerLayout>
       <Header />
-      <div className='center-container'>
+      <div className='mypage-center-container'>
         <div className='mypage-container'>
           <div className='top-title'>
             <span className='title-text'>마이페이지</span>
@@ -46,7 +79,8 @@ function MyPage() {
                 id='userId'
                 type='text'
                 name='userId'
-                placeholder='원래아이디'
+                placeholder={userId}
+                defaultValue={userId}
                 aria-invalid={
                   !isDirty ? undefined : errors.userId ? 'true' : 'false'
                 }

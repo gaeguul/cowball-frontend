@@ -3,10 +3,10 @@
 @import './component/customerlayout';
 @import './component/header';
 
-.center-container {
+.mypage-center-container {
   display: flex;
   justify-content: center;
-  padding-top: 100px;
+  padding-top: 50px;
 
   .mypage-container {
     box-sizing: border-box;
