@@ -145,9 +145,7 @@ function OptionItem(props) {
       const url = `menu/dinners/${dinnerId}/options`;
       const response = await axios.get(url);
 
-      /**
-       * 출력해야 하는 옵션
-       */
+      /**출력해야 하는 옵션 */
       const target = response.data.find((option) => {
         return option.dinnerOptionId === optionId;
       });
@@ -277,6 +275,8 @@ function CartPage() {
       };
       const response = await axios.patch(url, newDeliveryData, options);
       console.log('[changeDeliveryInfo]', response.data);
+      alert('디너 주문이 완료되었습니다.');
+      navigate('/ordercomplete');
     } catch (error) {
       console.log(error);
     }
@@ -297,8 +297,7 @@ function CartPage() {
     await changeDeliveryInfo(newDeliveryData);
 
     /**2. 주문하기 */
-    await makeNewOrder(); //에러남!!!
-    navigate('/ordercomplete');
+    makeNewOrder(); //에러남!!!
   };
 
   const [rsvDate, setRsvDate] = useState('');

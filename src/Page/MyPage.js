@@ -1,11 +1,15 @@
-import { React } from 'react';
-// import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 // import { NavLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 
 import '../scss/MyPage.scss';
+import { NavLink } from 'react-router-dom';
+
+const customerId = localStorage.getItem('customerId');
+const customerToken = localStorage.getItem('customerToken');
 
 function MyPage() {
   const {
@@ -14,20 +18,58 @@ function MyPage() {
     formState: { isSubmitting, isDirty, errors },
   } = useForm();
 
-  const onSubmit = async () => {};
+  const [userId, setUserId] = useState(null);
+  const [address, setAddress] = useState(null);
+  const [cardNumber, setCardNumber] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [name, setName] = useState(null);
 
-  // const onSubmit = async (data) => {
-  //   try {
-  //     await new Promise((r) => setTimeout(r, 1000));
+  const getMyInfo = async () => {
+    try {
+      const url = `users/${customerId}`;
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+      };
 
-  //     const url = `auth/customer`;
+      const response = await axios.get(url, headers);
+      console.log('customerId', customerId);
+      console.log('response.data', response.data);
 
-  //     const response = await axios.post(url, data);
-  //     console.log(response.data.result); //access-token
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+      setUserId(response.data.userId);
+      setName(response.data.userName);
+      setAddress(response.data.address);
+      setPhoneNumber(response.data.phoneNumber);
+      setCardNumber(response.data.cardNumber);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getMyInfo();
+  }, []);
+
+  const onSubmit = async (data) => {
+    try {
+      await new Promise((r) => setTimeout(r, 1000));
+
+      console.log('submit data', data);
+      const options = {
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+      };
+
+      const url = `users/${customerId}`;
+      const response = await axios.patch(url, data, options);
+      console.log(response.data);
+      alert('회원정보 수정이 완료되었습니다.');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <CustomerLayout>
@@ -43,42 +85,41 @@ function MyPage() {
                 아이디
               </label>
               <input
+                disabled={true}
                 id='userId'
                 type='text'
                 name='userId'
-                placeholder='원래아이디'
+                placeholder={userId}
+                defaultValue={userId}
                 aria-invalid={
                   !isDirty ? undefined : errors.userId ? 'true' : 'false'
                 }
-                {...register('userId', {
-                  required: '아이디를 입력해주세요.',
-                })}
               />
-              {errors.userId && (
-                <small role='alert' className='input-alert'>
-                  {errors.userId.message}
-                </small>
-              )}
-              <label className='title' htmlFor='password'>
+              {/* <label className='title' htmlFor='password'>
                 비밀번호
-              </label>
-              <input
+              </label> */}
+              {/* <input
+                disabled={true}
                 id='password'
                 type='text'
                 name='password'
-                placeholder='원래아이디'
+                placeholder='비공개'
+                // defaultValue='비공개'
                 aria-invalid={
                   !isDirty ? undefined : errors.password ? 'true' : 'false'
                 }
+                
                 {...register('password', {
-                  required: '비밀번호를 입력해주세요.',
+                  // required: '비밀번호를 입력해주세요.',
                 })}
-              />
-              {errors.password && (
+                
+              /> */}
+              {/* {errors.password && (
                 <small role='alert' className='input-alert'>
                   {errors.password.message}
                 </small>
-              )}
+              )} */}
+
               <label className='title' htmlFor='name'>
                 이름
               </label>
@@ -86,7 +127,8 @@ function MyPage() {
                 id='name'
                 type='text'
                 name='name'
-                placeholder='원래아이디'
+                placeholder={name}
+                defaultValue={name}
                 aria-invalid={
                   !isDirty ? undefined : errors.name ? 'true' : 'false'
                 }
@@ -104,9 +146,10 @@ function MyPage() {
               </label>
               <input
                 id='phoneNumber'
-                type='number'
+                type='text'
                 name='phoneNumber'
-                placeholder='원래아이디'
+                placeholder={phoneNumber}
+                defaultValue={phoneNumber}
                 aria-invalid={
                   !isDirty ? undefined : errors.phoneNumber ? 'true' : 'false'
                 }
@@ -126,7 +169,8 @@ function MyPage() {
                 id='address'
                 type='text'
                 name='address'
-                placeholder='원래아이디'
+                placeholder={address}
+                defaultValue={address}
                 aria-invalid={
                   !isDirty ? undefined : errors.address ? 'true' : 'false'
                 }
@@ -144,9 +188,10 @@ function MyPage() {
               </label>
               <input
                 id='cardNumber'
-                type='number'
+                type='text'
                 name='cardNumber'
-                placeholder='원래아이디'
+                placeholder={cardNumber}
+                defaultValue={cardNumber}
                 aria-invalid={
                   !isDirty ? undefined : errors.cardNumber ? 'true' : 'false'
                 }
@@ -168,9 +213,10 @@ function MyPage() {
               >
                 <span>수정</span>
               </button>
-              <button className='exit-button'>
+
+              <NavLink to='/exit' className='exit-button'>
                 <span>회원탈퇴</span>
-              </button>
+              </NavLink>
             </div>
           </form>
         </div>

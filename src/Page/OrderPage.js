@@ -411,7 +411,8 @@ function OrderPage() {
       const url = `cart/${userId}`;
       const response = await axios.post(url, data, options);
       console.log('[handlePutCartButtonClick] ', response.data);
-      // window.location.replace('/cart');
+      alert('디너가 장바구니에 담겼습니다. 장바구니를 확인하세요.');
+      window.location.replace('/cart');
     } catch (error) {
       console.log(error);
       console.log('MY_ORDER', MY_ORDER);

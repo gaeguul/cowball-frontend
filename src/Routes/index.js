@@ -39,7 +39,7 @@ function PrivateRoute({ staffAuth, customerAuth }) {
 
   if (!staffAuth && !customerAuth) {
     //로그인, 회원가입 페이지
-    console.log('인증 필요없는 페이지');
+    // console.log('인증 필요없는 페이지');
     return isStaffLogin ? (
       <Navigate replace to='/staff' />
     ) : isCustomerLogin ? (
@@ -49,11 +49,11 @@ function PrivateRoute({ staffAuth, customerAuth }) {
     );
   } else if (staffAuth) {
     //직원페이지
-    console.log('직원 인증 필요한 페이지');
+    // console.log('직원 인증 필요한 페이지');
     return !isStaffLogin ? <Navigate replace to='/stafflogin' /> : <Outlet />;
   } else {
     //고객페이지
-    console.log('고객 인증 필요한 페이지');
+    // console.log('고객 인증 필요한 페이지');
     return !isCustomerLogin ? <Navigate replace to='/login' /> : <Outlet />;
   }
 }
@@ -86,7 +86,6 @@ function Router() {
         </Route>
 
         {/**직원 로그인 해야만 접근 가능 */}
-
         <Route element={<PrivateRoute staffAuth={true} />}>
           <Route
             path='/staff/orderlist'
@@ -108,6 +107,7 @@ function Router() {
             element={<Navigate replace to='/staff/orderlist/waiting' />}
           />
         </Route>
+
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
