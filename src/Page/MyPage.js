@@ -8,10 +8,10 @@ import Header from '../Component/Header';
 import '../scss/MyPage.scss';
 import { NavLink } from 'react-router-dom';
 
-const customerId = localStorage.getItem('customerId');
-const customerToken = localStorage.getItem('customerToken');
-
 function MyPage() {
+  const customerId = localStorage.getItem('customerId');
+  const customerToken = localStorage.getItem('customerToken');
+
   const {
     register,
     handleSubmit,
@@ -64,8 +64,9 @@ function MyPage() {
 
       const url = `users/${customerId}`;
       const response = await axios.patch(url, data, options);
-      console.log(response.data);
+      console.log('response.data', response.data);
       alert('회원정보 수정이 완료되었습니다.');
+      // window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -95,52 +96,25 @@ function MyPage() {
                   !isDirty ? undefined : errors.userId ? 'true' : 'false'
                 }
               />
-              {/* <label className='title' htmlFor='password'>
-                비밀번호
-              </label> */}
-              {/* <input
-                disabled={true}
-                id='password'
-                type='text'
-                name='password'
-                placeholder='비공개'
-                // defaultValue='비공개'
-                aria-invalid={
-                  !isDirty ? undefined : errors.password ? 'true' : 'false'
-                }
-                
-                {...register('password', {
-                  // required: '비밀번호를 입력해주세요.',
-                })}
-                
-              /> */}
-              {/* {errors.password && (
-                <small role='alert' className='input-alert'>
-                  {errors.password.message}
-                </small>
-              )} */}
-
-              <label className='title' htmlFor='name'>
+              <label className='title' htmlFor='userName'>
                 이름
               </label>
               <input
-                id='name'
+                id='userName'
                 type='text'
-                name='name'
+                name='userName'
                 placeholder={name}
                 defaultValue={name}
                 aria-invalid={
-                  !isDirty ? undefined : errors.name ? 'true' : 'false'
+                  !isDirty ? undefined : errors.userName ? 'true' : 'false'
                 }
-                {...register('name', {
-                  required: '이름을 입력해주세요.',
-                })}
+                {...register('userName')}
               />
-              {errors.name && (
+              {/* {errors.name && (
                 <small role='alert' className='input-alert'>
                   {errors.name.message}
                 </small>
-              )}
+              )} */}
               <label className='title' htmlFor='phoneNumber'>
                 전화번호
               </label>
@@ -153,15 +127,13 @@ function MyPage() {
                 aria-invalid={
                   !isDirty ? undefined : errors.phoneNumber ? 'true' : 'false'
                 }
-                {...register('phoneNumber', {
-                  required: '전화번호를 입력해주세요.',
-                })}
+                {...register('phoneNumber')}
               />
-              {errors.phoneNumber && (
+              {/* {errors.phoneNumber && (
                 <small role='alert' className='input-alert'>
                   {errors.phoneNumber.message}
                 </small>
-              )}
+              )} */}
               <label className='title' htmlFor='address'>
                 주소
               </label>
@@ -174,15 +146,13 @@ function MyPage() {
                 aria-invalid={
                   !isDirty ? undefined : errors.address ? 'true' : 'false'
                 }
-                {...register('address', {
-                  required: '주소를 입력해주세요.',
-                })}
+                {...register('address')}
               />
-              {errors.address && (
+              {/* {errors.address && (
                 <small role='alert' className='input-alert'>
                   {errors.address.message}
                 </small>
-              )}
+              )} */}
               <label className='title' htmlFor='cardNumber'>
                 카드번호
               </label>
@@ -195,15 +165,13 @@ function MyPage() {
                 aria-invalid={
                   !isDirty ? undefined : errors.cardNumber ? 'true' : 'false'
                 }
-                {...register('cardNumber', {
-                  required: '카드번호를 입력해주세요.',
-                })}
+                {...register('cardNumber')}
               />
-              {errors.cardNumber && (
+              {/* {errors.cardNumber && (
                 <small role='alert' className='input-alert'>
                   {errors.cardNumber.message}
                 </small>
-              )}
+              )} */}
             </div>
             <div className='bottom-container'>
               <button
@@ -213,7 +181,6 @@ function MyPage() {
               >
                 <span>수정</span>
               </button>
-
               <NavLink to='/exit' className='exit-button'>
                 <span>회원탈퇴</span>
               </NavLink>

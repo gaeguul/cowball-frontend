@@ -1,9 +1,19 @@
 import React from 'react';
+// import { useEffect } from 'react';
 import StaffLayout from '../Component/StaffLayout';
 import StaffLogoNav from '../Component/StaffLogoNav';
 import '../scss/CustomerListPage.scss';
 
 function CustomerList() {
+  // const getCustomers = async () => {
+  //   try {
+  //   } catch (error) {}
+  // };
+
+  // useEffect(() => {
+  //   getCustomers();
+  // }, []);
+
   return (
     <div className='nexttonav'>
       <div className='customerlist-container'>

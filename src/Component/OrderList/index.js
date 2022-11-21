@@ -16,9 +16,9 @@ const STATE_BUTTON_NAME = new Map([
   [34, '배달완료'],
 ]);
 const STATE_NEXT = new Map([
-  [16, 'WAITING'],
+  [16, 'COOKING'],
   [33, 'IN_DELIVERY'],
-  [34, 'COOKING'],
+  [34, 'DONE'],
 ]);
 
 function OrderInfo(props) {
@@ -212,6 +212,9 @@ function DetailComponent(props) {
       };
       const response = await axios.put(url, data);
       console.log('[handleStateButtonClick] ', response.data);
+
+      window.location.reload();
+      // getOrders();
     } catch (error) {
       console.log(error);
     }
@@ -291,6 +294,7 @@ function LeftComponent(props) {
         },
       };
       const response = await axios.get(url, options);
+      console.log('response.data', response.data);
       setOrderCount(response.data.count);
       setOrders(response.data.items);
     } catch (error) {
