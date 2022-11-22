@@ -464,11 +464,32 @@ function OrderPage() {
 
   useEffect(() => {
     console.log('myExtraOptions', myExtraOptions);
-    const tmpOptions = [myMainOption, ...myExtraOptions];
-    tmpOptions.splice(1, 2); //배열에 이상한 값 ({}, {}) 들어가있음
-    console.log('tmpOptions', tmpOptions);
-    setMyOptions(tmpOptions);
-    MY_ORDER['dinnerOptionIds'] = tmpOptions;
+    console.log('myMainOption.id', !myMainOption.id);
+    // const tmpOptions = [myMainOption, ...myExtraOptions];
+
+    if (!myMainOption.id) {
+      const tmpOptions = [...myExtraOptions];
+      tmpOptions.splice(0, 2);
+      setMyOptions(tmpOptions);
+      console.log(tmpOptions);
+      setMyOptions(tmpOptions);
+      MY_ORDER['dinnerOptionIds'] = tmpOptions;
+    } else {
+      const tmpOptions = [myMainOption, ...myExtraOptions];
+      tmpOptions.splice(1, 2);
+      setMyOptions(tmpOptions);
+      console.log(tmpOptions);
+      setMyOptions(tmpOptions);
+      MY_ORDER['dinnerOptionIds'] = tmpOptions;
+    }
+    // console.log('before', tmpOptions);
+
+    // if (!myMainOption.id) {
+    //   tmpOptions.splice(1, 2);
+    // } else {
+    //   tmpOptions.splice(0, 3);
+    // }
+    // console.log('after', tmpOptions);
   }, [myMainOption, myExtraOptions]);
 
   useEffect(() => {
