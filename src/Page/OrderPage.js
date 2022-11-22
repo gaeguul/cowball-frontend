@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../scss/OrderPage.scss';
 
+//const [prePrice, serPrePrice] = useState(0);
 const MY_ORDER = {
   degreeId: 0,
   dinnerId: 0,
@@ -143,6 +144,7 @@ function StyleComponent(props) {
 
   const handleStyleButtonClick = (event) => {
     setMyStyleId(parseInt(event.target.id));
+    setStylePrice(parseInt(event.target.value));
   };
 
   useEffect(() => {
@@ -183,6 +185,7 @@ function StyleComponent(props) {
 function DeleteMainOptionComponent(props) {
   const dinnerId = props.dinnerId;
   const setMyMainOption = props.setMyMainOption;
+  // const setdeletePrice = props.setdeletePrice;
 
   const [mainOptions, setMainOptions] = useState([]);
 
@@ -231,7 +234,7 @@ function DeleteMainOptionComponent(props) {
                 type='radio'
                 name='delete-menu'
                 id={mainOption.dinnerOptionId}
-                value={mainOption.dinnerOptionId}
+                value={mainOption.dinnerOptionPrice}
               />
               {mainOption.dinnerOptionDetail}
               <span className='option-price'>
@@ -248,17 +251,21 @@ function DeleteMainOptionComponent(props) {
 function ChangeOptionNumberButton(props) {
   const optionNumber = props.optionNumber;
   const setOptionNumber = props.setOptionNumber;
+  const setTotalPrice = props.setTotalPrice;
+  const dinnerOptionPrice = props.dinnerOptionPrice;
 
   const decreaseOptionNumber = () => {
     if (optionNumber == 0) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
       setOptionNumber((prev) => prev - 1);
+      setTotalPrice((totalPrice) => totalPrice - dinnerOptionPrice);
     }
   };
 
   const increaseOptionNumber = () => {
     setOptionNumber((prev) => prev + 1);
+    setTotalPrice((totalPrice) => totalPrice + dinnerOptionPrice);
   };
 
   return (
@@ -280,6 +287,7 @@ function ExtraOptionItem(props) {
   const extraOption = props.extraOption;
   const dinnerOptionId = extraOption.dinnerOptionId;
   const setNewExtraOption = props.setNewExtraOption;
+  const setTotalPrice = props.setTotalPrice;
 
   const [optionNumber, setOptionNumber] = useState(0);
 
@@ -302,6 +310,8 @@ function ExtraOptionItem(props) {
         <ChangeOptionNumberButton
           optionNumber={optionNumber}
           setOptionNumber={setOptionNumber}
+          setTotalPrice={setTotalPrice}
+          dinnerOptionPrice={props.extraOption.dinnerOptionPrice}
         />
       </div>
     </>
@@ -312,6 +322,7 @@ function ExtraOptionComponent(props) {
   const dinnerId = props.dinnerId;
   const myExtraOptions = props.myExtraOptions;
   const setMyExtraOptions = props.setMyExtraOptions;
+  const setTotalPrice = props.setTotalPrice;
 
   const [loading, setLoading] = useState(true);
   const [extraOptions, setExtraOptions] = useState([]);
@@ -375,6 +386,7 @@ function ExtraOptionComponent(props) {
                     key={extraOption.dinnerOptionId}
                     extraOption={extraOption}
                     setNewExtraOption={setNewExtraOption}
+                    setTotalPrice={setTotalPrice}
                   />
                 );
               })}
@@ -434,6 +446,11 @@ function OrderPage() {
   }, []);
 
   useEffect(() => {
+    MY_ORDER['dinnerOptionIds'] = myDinnerOptions;
+    console.log('MY_ORDER', MY_ORDER);
+  }, [myDinnerOptions]);
+
+  useEffect(() => {
     MY_ORDER['degreeId'] = mySteakDegree;
   }, [mySteakDegree]);
 
@@ -454,6 +471,18 @@ function OrderPage() {
     MY_ORDER['dinnerOptionIds'] = tmpOptions;
   }, [myMainOption, myExtraOptions]);
 
+  useEffect(() => {
+    console.log(
+      '%d * ( %d + %d %d)',
+      myDinnerNumber,
+      totalPrice,
+      stylePrice,
+      deletePrice,
+    );
+    setTotalPrice(totalPrice);
+    setFinalPrice(myDinnerNumber * (totalPrice + stylePrice + deletePrice));
+  }, [totalPrice, myDinnerNumber, stylePrice, deletePrice]);
+
   return (
     <CustomerLayout>
       <Header />
@@ -466,6 +495,7 @@ function OrderPage() {
             <DeleteMainOptionComponent
               dinnerId={dinnerId}
               setMyMainOption={setMyMainOption}
+              setdeletePrice={setdeletePrice}
             />
           </div>
           <div className='bottom-right-container'>
@@ -476,6 +506,7 @@ function OrderPage() {
               dinnerId={dinnerId}
               myExtraOptions={myExtraOptions}
               setMyExtraOptions={setMyExtraOptions}
+              setTotalPrice={setTotalPrice}
             />
             <div className='dinner-number-and-price-container'>
               <div className='dinner-number-title title'>디너 수량</div>
@@ -486,7 +517,7 @@ function OrderPage() {
                 />
               </div>
               <div className='total-price-title title'>총 가격</div>
-              <div className='total-price-number content'>{totalPrice}원</div>
+              <div className='total-price-number content'>{finalPrice}원</div>
             </div>
             <div className='put-dinner-cart-button-container'>
               <div
