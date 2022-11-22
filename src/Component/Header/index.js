@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
 import { HiMicrophone } from 'react-icons/hi';
@@ -18,18 +18,21 @@ function Header() {
     },
   });
   const showModal = () => {
-    stop;
-    console.log('listening', listening);
+    // stop;
+    // console.log('listening', listening);
     setModalOpen(true);
     setMsg('');
   };
   const closeModal = () => {
-    stop;
-    console.log('listening', listening);
+    // stop;
+    // console.log('listening', listening);
     setModalOpen(false);
   };
 
   const [msg, setMsg] = useState('');
+  const [dinnerId, setDinnerId] = useState(0);
+  const [styleId, setStyleId] = useState(0);
+  const [degreeId, setDegreeId] = useState(0);
 
   // const setCustomerToken = value.setCustomerToken;
 
@@ -50,6 +53,32 @@ function Header() {
   //   console.log(msg);
   // };
 
+  useEffect(() => {
+    console.log('sg', msg);
+    if (dinnerId == 0) {
+      if (msg.includes('발렌타인')) setDinnerId(1);
+      else if (msg.includes('프렌치')) setDinnerId(2);
+      else if (msg.includes('잉글리시')) setDinnerId(3);
+      else if (msg.includes('샴페인 축제')) setDinnerId(4);
+    }
+    if (styleId == 0) {
+      if (msg.includes('심플')) setStyleId(1);
+      else if (msg.includes('그랜드')) setStyleId(2);
+      else if (msg.includes('디럭스')) setStyleId(3);
+    }
+    if (msg.includes('레어')) setDegreeId(1);
+    else if (msg.includes('미디움 레어')) setDegreeId(2);
+    else if (msg.includes('미디움 웰')) setDegreeId(4);
+    else if (msg.includes('미디움')) setDegreeId(3);
+    else if (msg.includes('웰던')) setDegreeId(5);
+    console.log(dinnerId, styleId, degreeId);
+  }, [msg]);
+
+  const setReset = () => {
+    setDinnerId(0);
+    setStyleId(0);
+    setDegreeId(0);
+  };
   return (
     <div className='header-container'>
       {/* {isVoiceModalOpen ? <Modal isOpen={isVoiceModalOpen}></Modal> : null} */}
@@ -96,6 +125,7 @@ function Header() {
                       className='voice-button'
                       onMouseDown={listen}
                       onMouseUp={stop}
+                      onClick={setReset}
                     >
                       🎤
                     </button>
@@ -115,6 +145,7 @@ function Header() {
                   </div>
                 </div>
               </div>
+
               <div className='bottom-container'>
                 <button className='cancel-button' onClick={closeModal}>
                   <span>닫기</span>
