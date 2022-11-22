@@ -127,6 +127,7 @@ function SteakDegreeComponent(props) {
 function StyleComponent(props) {
   // const styleOptions = props.styleOptions;
   const setMyStyleId = props.setMyStyleId;
+  const setStylePrice = props.setStylePrice;
 
   const [styles, setStyles] = useState([]);
 
@@ -169,7 +170,7 @@ function StyleComponent(props) {
                   type='radio'
                   name='style'
                   id={style.styleId}
-                  value={style.styleId}
+                  value={style.stylePrice}
                 />
                 {style.styleName} 스타일
                 <span className='option-price'>(+{style.stylePrice}원)</span>
@@ -185,7 +186,7 @@ function StyleComponent(props) {
 function DeleteMainOptionComponent(props) {
   const dinnerId = props.dinnerId;
   const setMyMainOption = props.setMyMainOption;
-  // const setdeletePrice = props.setdeletePrice;
+  const setDeletePrice = props.setDeletePrice;
 
   const [mainOptions, setMainOptions] = useState([]);
 
@@ -215,6 +216,7 @@ function DeleteMainOptionComponent(props) {
       amount: 1,
     };
     setMyMainOption(tmpOption);
+    setDeletePrice(parseInt(event.target.value));
   };
 
   return (
@@ -407,7 +409,10 @@ function OrderPage() {
   const [myOptions, setMyOptions] = useState([]);
 
   /**장바구니 담기 버튼에 의해서만 업데이트 된다 */
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [stylePrice, setStylePrice] = useState(0);
+  const [deletePrice, setDeletePrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0); // totalPrice = 디너 가격 + 옵션s 가격
+  const [finalPrice, setFinalPrice] = useState(0); // FinalPrice = dinner-number * (totalPrice + stylePrice - deletePrice)
 
   /**주문할 디너 개수 */
   const [myDinnerNumber, setMyDinnerNumber] = useState(1);
@@ -444,11 +449,6 @@ function OrderPage() {
   useEffect(() => {
     MY_ORDER['dinnerId'] = parseInt(dinnerId);
   }, []);
-
-  useEffect(() => {
-    MY_ORDER['dinnerOptionIds'] = myDinnerOptions;
-    console.log('MY_ORDER', MY_ORDER);
-  }, [myDinnerOptions]);
 
   useEffect(() => {
     MY_ORDER['degreeId'] = mySteakDegree;
@@ -490,12 +490,15 @@ function OrderPage() {
         <TopInfoComponent dinnerId={dinnerId} setTotalPrice={setTotalPrice} />
         <div className='bottom-info-container'>
           <div className='bottom-left-container'>
-            <StyleComponent setMyStyleId={setMyStyleId} />
+            <StyleComponent
+              setMyStyleId={setMyStyleId}
+              setStylePrice={setStylePrice}
+            />
             <SteakDegreeComponent setMySteakDegree={setMySteakDegree} />
             <DeleteMainOptionComponent
               dinnerId={dinnerId}
               setMyMainOption={setMyMainOption}
-              setdeletePrice={setdeletePrice}
+              setDeletePrice={setDeletePrice}
             />
           </div>
           <div className='bottom-right-container'>
