@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import '../../scss/component/_modal.scss';
 
 function Modal({ setModalOpen }) {
   const closeModal = () => {
     setModalOpen(false);
   };
+  const modalEl = useRef();
+
   return (
-    <div className='modal-container'>
+    <div className='modal-container' ref={modalEl}>
       <div className='modal'>
         <div className='button-container'>
           <button className='modal-button' onClick={closeModal}>
