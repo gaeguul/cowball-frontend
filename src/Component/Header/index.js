@@ -253,7 +253,8 @@ function Header() {
                   * 스테이크 굽기는 초기화 하지 않고 재입력 가능합니다.
                 </div>
                 <div className='introduce-text'>
-                  * 옵션 제거, 추가 없이 기본 구성 1세트가 장바구니에 담깁니다.
+                  * 옵션 제거, 추가 없이 기본 구성 한 세트가 장바구니에
+                  담깁니다.
                 </div>
               </div>
               <div className='bottom-container'>
