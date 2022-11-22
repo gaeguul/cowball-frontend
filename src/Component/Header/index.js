@@ -14,7 +14,7 @@ function Header() {
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: (result) => {
       // 음성인식 결과가 value 상태값으로 할당됩니다.
-      setMsg(result);
+      setMsg('" ' + result + ' "');
     },
   });
   const showModal = () => {
@@ -30,7 +30,7 @@ function Header() {
     setReset();
   };
 
-  const [msg, setMsg] = useState('');
+  const [msg, setMsg] = useState('" (아직 입력되지 않았어요) "');
   const [dinnerId, setDinnerId] = useState(0);
   const [dinnerName, setDinnerName] = useState('');
   const [styleId, setStyleId] = useState(0);
@@ -171,28 +171,50 @@ function Header() {
                         듣고 있어요
                       </small>
                     )}
-                    <div className='show-text-container'>
-                      <div
-                        className='show-text'
-                        onChange={(event) => setMsg(event.target.value)}
-                      >
-                        {msg}
-                      </div>
-                    </div>
+                  </div>
+                </div>
+                <div className='show-text-container'>
+                  <div
+                    className='show-text'
+                    onChange={(event) => setMsg(event.target.value)}
+                  >
+                    {msg}
                   </div>
                 </div>
                 <div className='order-container'>
                   <div className='order-form'>
-                    <label className='title'>디너 종류</label>
+                    <div className='title-form'>
+                      <label className='title'>디너 종류</label>
+                      <lable className='explain'>
+                        ( 발렌타인, 프렌치, 잉글리시, 샴페인 축제 )
+                      </lable>
+                    </div>
                     <label className='contents'>{dinnerName}</label>
-                    <label className='title'>스타일 종류</label>
+                    <div className='title-form'>
+                      <label className='title'>스타일 종류</label>
+                      <lable className='explain'>
+                        ( 심플, 그랜드, 디럭스 )
+                      </lable>
+                    </div>
                     <label className='contents'>{styleName}</label>
-                    <label className='title'>스테이크 굽기</label>
+                    <div className='title-form'>
+                      <label className='title'>디너 종류</label>
+                      <lable className='explain'>
+                        ( 레어, 미디움 레어, 미디움, 미디움 웰, 웰던 )
+                      </lable>
+                    </div>
                     <label className='contents'>{degreeName}</label>
                   </div>
                 </div>
               </div>
-
+              <div className='show-text-container'>
+                <div className='introduce-text'>
+                  * 스테이크 굽기는 초기화 하지 않고 재입력 가능합니다.
+                </div>
+                <div className='introduce-text'>
+                  * 옵션 제거, 추가 없이 기본으로 장바구니에 담깁니다.
+                </div>
+              </div>
               <div className='bottom-container'>
                 <button className='cancel-button' onClick={closeModal}>
                   <span>닫기</span>

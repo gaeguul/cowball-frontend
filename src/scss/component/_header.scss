@@ -104,19 +104,27 @@
                   background-color: #ffcd43;
                 }
               }
-              .show-text-container{
-                // width: 500px;
-                // height: 100px;
-                // display : flex;
-                // justify-content: center;
-                // align-items: center;
-                .show-text{
-                color: #000000;
-                font-size: 16px;
-                padding-top: 10px;
-                }
-              }
               
+              
+            }
+          }
+          .show-text-container{
+            // width: 500px;
+            // height: 100px;
+            // display : flex;
+            // justify-content: center;
+            // align-items: center;
+            padding: 1px;
+            .show-text{
+            color: #000000;
+            font-size: 15px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            }
+            .introduce-text{
+              color: #000000;
+              font-size: 14px;
+              padding-top: 5px;
             }
           }
           .order-container {
@@ -125,14 +133,28 @@
               display: grid;
               grid-template-columns: max-content 1fr;
               gap: 0px 30px;
-              width: 300px;
-              .title {
-                text-align: left;
-                line-height: 30px;
-                font-weight: 700;
-
+              width: 390px;
+              .title-form {
+                display: flex;
+                flex-direction: column;
+                .title {
+                  text-align: left;
+                  line-height: 50px;
+                  font-weight: 700;
+                }
+                .explain {
+                  text-align: left;
+                  line-height: 10px;
+                  font-size: 14px;
+                  font-weight: 500;
+  
+                }
               }
+              
               .contents {
+                display: flex;
+                justify-content: center;
+                align-items: center;
                 text-align: left;
                 line-height: 30px;
               }
@@ -140,7 +162,20 @@
             
             
           }
-        }         
+        }
+        .show-text-container{
+          // width: 500px;
+          // height: 100px;
+          // display : flex;
+          // justify-content: center;
+          // align-items: center;
+          padding-top: 10px;
+          .introduce-text{
+            color: #000000;
+            font-size: 14px;
+            padding-top: 5px;
+          }
+        }        
         .bottom-container {
           display: flex;
           flex-direction: row;
