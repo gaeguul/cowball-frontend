@@ -11,21 +11,25 @@ function Header() {
   const value = useContext(AuthContext);
   const setIsCustomerLogin = value.setIsCustomerLogin;
   const [modalOpen, setModalOpen] = useState(false);
-  const showModal = () => {
-    setModalOpen(true);
-    setMsg('');
-  };
-  const closeModal = () => {
-    setModalOpen(false);
-  };
-
-  const [msg, setMsg] = useState('');
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: (result) => {
       // 음성인식 결과가 value 상태값으로 할당됩니다.
       setMsg(result);
     },
   });
+  const showModal = () => {
+    stop;
+    console.log('listening', listening);
+    setModalOpen(true);
+    setMsg('');
+  };
+  const closeModal = () => {
+    stop;
+    console.log('listening', listening);
+    setModalOpen(false);
+  };
+
+  const [msg, setMsg] = useState('');
 
   // const setCustomerToken = value.setCustomerToken;
 
@@ -39,6 +43,12 @@ function Header() {
     setIsCustomerLogin(false);
     // setCustomerToken(null);
   };
+
+  // const handleMsg = () => {
+  //   stop;
+  //   console.log('listening', listening);
+  //   console.log(msg);
+  // };
 
   return (
     <div className='header-container'>
@@ -68,17 +78,41 @@ function Header() {
               <div className='top-title'>
                 <span className='title-text'>음성 주문</span>
               </div>
-              <div className='voice-container'>
-                <div className='voice-button'>
-                  <button onMouseDown={listen} onMouseUp={stop}>
-                    🎤
-                  </button>
-                  <div>{msg}</div>
-                  {listening && (
-                    <small role='alert' className='listening-alert'>
-                      듣고 있어요
-                    </small>
-                  )}
+              <div className='voice-outer-container'>
+                <div className='voice-inner-container'>
+                  <div className='text-container'>
+                    <div className='introduce-text'>
+                      ① 디너 이름 ② 스타일 ③ 스테이크 굽기를
+                    </div>
+                    <div className='introduce-text'>
+                      오른쪽 버튼을 누른 상태로 말씀해주세요
+                    </div>
+                    <div className='introduce-text-last'>
+                      ex) 발렌타인 / 심플 / 미디움레어
+                    </div>
+                  </div>
+                  <div className='voice-button-container'>
+                    <button
+                      className='voice-button'
+                      onMouseDown={listen}
+                      onMouseUp={stop}
+                    >
+                      🎤
+                    </button>
+                    {listening && (
+                      <small role='alert' className='listening-alert'>
+                        듣고 있어요
+                      </small>
+                    )}
+                    <div className='show-text-container'>
+                      <div
+                        className='show-text'
+                        onChange={(event) => setMsg(event.target.value)}
+                      >
+                        {msg}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div className='bottom-container'>

@@ -26,11 +26,12 @@
         justify-content: center;
         align-items: center;
         font-size: 22px;
-        cursor: pointer;
+        //cursor: pointer;
       }
       .modal-container {
         box-sizing: border-box;
         padding: 20px;
+        width: 500px;
         .top-title {
           display: flex;
           justify-content: center;
@@ -39,60 +40,120 @@
           font-size: 1.5em;
           font-weight: 600;
     
-          padding-bottom: 40px;
+          padding-bottom: 20px;
         }
-      }
-      .voice-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 17px;
-        cursor: pointer;
-        .voice-button {
-          padding: 10px;
+        .voice-outer-container {
+          padding: 5px;
+          width: 450px;
+          .voice-inner-container {
+            padding:5px;
+            display: grid;
+            grid-template-columns: minmax(max-content, 1fr) 130px;
+            grid-template-rows: max-content;
+            // gap: 10px;
+            height: 100px;
+
+            position: relative;
+            .text-container{
+              display: flex;
+              flex-direction: column;
+              // gap: 10px;
+              .introduce-text{
+                color: #000000;
+                font-size: 16px;
+                padding-top: 5px;
+                font-weight: 600;
+              }
+              .introduce-text-last{
+                color: #787878;
+                font-size: 16px;
+                padding-top: 10px;
+              }
+            }
+
+            .voice-button-container {
+              padding: 10px; 
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              .listening-alert {
+                color: rgb(208, 2, 2);
+                margin-bottom: 5px;
+                font-size: 15px;
+              }
+              .voice-button {
+                font-weight: 600;
+                font-size: 1.1em;
+                border-radius: 15px;
+                padding: 7px 20px;
+                width: 70px;
+                height: 50px;
+                border: 2px solid #252525;
+                box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
+                border-radius: 30px;
+                background-color: #ffcd43d8;
+                &:hover {
+                  cursor: pointer;
+                  box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.348);
+                  color: rgb(0, 0, 0);
+                  background-color: #ffcd43;
+                }
+              }
+              .show-text-container{
+                // width: 500px;
+                // height: 100px;
+                // display : flex;
+                // justify-content: center;
+                // align-items: center;
+                .show-text{
+                color: #000000;
+                font-size: 16px;
+                padding-top: 10px;
+                }
+              }
+              
+            }
+          }
+        }         
+        .bottom-container {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-around;
+          padding-top: 20px 0px;
+          //width: 300px;
           
-        }
-        .listening-alert {
-          color: rgb(208, 2, 2);
-          margin-bottom: 5px;
-          font-size: 15px;
-        }
-      }
-      .bottom-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        padding-top: 20px 0px;
-        width: 300px;
-        
-        button {
-          font-weight: 600;
-          font-size: 1.1em;
-          border-radius: 15px;
-          padding: 7px 20px;
-          width: 120px;
-          border: 2px solid #252525;
-          box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
-          border-radius: 30px;
-          &:hover {
-            cursor: pointer;
-            box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.348);
-            color: rgb(0, 0, 0);
+          
+          button {
+            font-weight: 600;
+            font-size: 1.1em;
+            border-radius: 15px;
+            padding: 7px 20px;
+            width: 120px;
+            border: 2px solid #252525;
+            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
+            border-radius: 30px;
+            &:hover {
+              cursor: pointer;
+              box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.348);
+              color: rgb(0, 0, 0);
+            }
           }
-        }
-        .order-button {
-          background-color: #ffcd43d8;
-          &:hover {
-            background-color: #ffcd43;
+          .order-button {
+            background-color: #ffcd43d8;
+            &:hover {
+              background-color: #ffcd43;
+            }
           }
-        }
-        .cancel-button {
-          background-color: #e8e8e8bb;
-          &:hover {
-            background-color: #e8e8e8;
+          .cancel-button {
+            background-color: #e8e8e8bb;
+            &:hover {
+              background-color: #e8e8e8;
+            }
           }
         }
       }
+      
+      
     }
 
     a {
