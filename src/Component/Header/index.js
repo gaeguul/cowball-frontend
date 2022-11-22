@@ -27,12 +27,16 @@ function Header() {
     // stop;
     // console.log('listening', listening);
     setModalOpen(false);
+    setReset();
   };
 
   const [msg, setMsg] = useState('');
   const [dinnerId, setDinnerId] = useState(0);
+  const [dinnerName, setDinnerName] = useState('');
   const [styleId, setStyleId] = useState(0);
+  const [styleName, setStyleName] = useState('');
   const [degreeId, setDegreeId] = useState(0);
+  const [degreeName, setDegreeName] = useState('');
 
   // const setCustomerToken = value.setCustomerToken;
 
@@ -66,13 +70,46 @@ function Header() {
       else if (msg.includes('그랜드')) setStyleId(2);
       else if (msg.includes('디럭스')) setStyleId(3);
     }
-    if (msg.includes('레어')) setDegreeId(1);
-    else if (msg.includes('미디움 레어')) setDegreeId(2);
+    if (msg.includes('미디움 레어')) setDegreeId(2);
+    else if (msg.includes('레어')) setDegreeId(1);
     else if (msg.includes('미디움 웰')) setDegreeId(4);
     else if (msg.includes('미디움')) setDegreeId(3);
     else if (msg.includes('웰던')) setDegreeId(5);
     console.log(dinnerId, styleId, degreeId);
   }, [msg]);
+
+  useEffect(() => {
+    const name = [
+      '(입력되지 않음)',
+      '발렌타인 디너',
+      '프렌치 디너',
+      '잉글리시 디너',
+      '샴페인 축제 디너',
+    ];
+    setDinnerName(name[dinnerId]);
+  }, [dinnerId]);
+
+  useEffect(() => {
+    const name = [
+      '(입력되지 않음)',
+      '심플 스타일',
+      '그랜드 스타일',
+      '디럭스 스타일',
+    ];
+    setStyleName(name[styleId]);
+  }, [styleId]);
+
+  useEffect(() => {
+    const name = [
+      '(입력되지 않음)',
+      '레어',
+      '미디움 레어',
+      '미디움',
+      '미디움 웰',
+      '웰던',
+    ];
+    setDegreeName(name[degreeId]);
+  }, [degreeId]);
 
   const setReset = () => {
     setDinnerId(0);
@@ -125,7 +162,7 @@ function Header() {
                       className='voice-button'
                       onMouseDown={listen}
                       onMouseUp={stop}
-                      onClick={setReset}
+                      // onClick={setReset}
                     >
                       🎤
                     </button>
@@ -144,11 +181,24 @@ function Header() {
                     </div>
                   </div>
                 </div>
+                <div className='order-container'>
+                  <div className='order-form'>
+                    <label className='title'>디너 종류</label>
+                    <label className='contents'>{dinnerName}</label>
+                    <label className='title'>스타일 종류</label>
+                    <label className='contents'>{styleName}</label>
+                    <label className='title'>스테이크 굽기</label>
+                    <label className='contents'>{degreeName}</label>
+                  </div>
+                </div>
               </div>
 
               <div className='bottom-container'>
                 <button className='cancel-button' onClick={closeModal}>
                   <span>닫기</span>
+                </button>
+                <button className='cancel-button' onClick={setReset}>
+                  <span>초기화</span>
                 </button>
                 <button className='order-button'>
                   <span>주문</span>

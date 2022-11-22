@@ -30,29 +30,34 @@
       }
       .modal-container {
         box-sizing: border-box;
-        padding: 20px;
+        padding-top: 40px;
+        padding-bottom: 25px;
         width: 500px;
         .top-title {
           display: flex;
           justify-content: center;
           align-items: center;
     
-          font-size: 1.5em;
-          font-weight: 600;
+          font-size: 1.8em;
+          font-weight: 700;
     
           padding-bottom: 20px;
         }
         .voice-outer-container {
+          flex-direction: column;
+          align-items: stretch;
           padding: 5px;
-          width: 450px;
+          width: 470px;
+          display: flex;
+
           .voice-inner-container {
             padding:5px;
             display: grid;
-            grid-template-columns: minmax(max-content, 1fr) 130px;
+            grid-template-columns: minmax(max-content, 1fr) 100px;
             grid-template-rows: max-content;
-            // gap: 10px;
+            gap: 20px;
             height: 100px;
-
+            width: full;
             position: relative;
             .text-container{
               display: flex;
@@ -114,12 +119,36 @@
               
             }
           }
+          .order-container {
+            padding: 10px;
+            .order-form {
+              display: grid;
+              grid-template-columns: max-content 1fr;
+              gap: 0px 30px;
+              width: 300px;
+              .title {
+                text-align: left;
+                line-height: 30px;
+                font-weight: 700;
+
+              }
+              .contents {
+                text-align: left;
+                line-height: 30px;
+              }
+            }
+            
+            
+          }
         }         
         .bottom-container {
           display: flex;
           flex-direction: row;
           justify-content: space-around;
-          padding-top: 20px 0px;
+          padding-top: 30px;
+          padding-left: 30px;
+          padding-right: 30px;
+          padding-bottom: 20px;
           //width: 300px;
           
           
@@ -127,7 +156,7 @@
             font-weight: 600;
             font-size: 1.1em;
             border-radius: 15px;
-            padding: 7px 20px;
+            padding: 7px 15px;
             width: 120px;
             border: 2px solid #252525;
             box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
