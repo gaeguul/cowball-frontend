@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
-//import { HiMicrophone } from 'react-icons/hi';
+import { HiMicrophone } from 'react-icons/hi';
 //import ReactModal from 'react-modal';
-import Modal from './modal';
+import Modal from 'react-awesome-modal';
+import '../../scss/component/_modal.scss';
 
 function Header() {
   const value = useContext(AuthContext);
@@ -12,6 +13,10 @@ function Header() {
   const showModal = () => {
     setModalOpen(true);
   };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
   // const setCustomerToken = value.setCustomerToken;
 
   // const handleMikeButtonClick = () => {
@@ -40,13 +45,29 @@ function Header() {
           </NavLink>
         </div>
         <div className='user-menu-container'>
-          <div className='mike-button-container'>
-            <button onClick={showModal}>
-              {/* <HiMicrophone clssName='mike-button' /> */}
-              모달 띄우기
-            </button>
-            {modalOpen && <Modal setModalOpen={setModalOpen} />}
+          <div className='mike-button-container' onClick={showModal}>
+            <HiMicrophone clssName='mike-button' />
           </div>
+          {modalOpen && <Modal setModalOpen={showModal} />}
+          <Modal
+            visible={modalOpen}
+            effect='fadeInDown'
+            onClickAway={closeModal}
+          >
+            <div className='modal-container'>
+              <div className='top-title'>
+                <span className='title-text'>음성 주문</span>
+              </div>
+              <div className='bottom-container'>
+                <button className='cancel-button' onClick={closeModal}>
+                  <span>닫기</span>
+                </button>
+                <button className='order-button'>
+                  <span>주문</span>
+                </button>
+              </div>
+            </div>
+          </Modal>
           <div className='user-button'>
             <NavLink to='/cart'>Cart</NavLink>
           </div>

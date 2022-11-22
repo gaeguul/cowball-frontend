@@ -20,13 +20,61 @@
       // justify-content: space-evenly;
       align-items: center;
       // width: 360px;
-
+      .modal-container {
+        box-sizing: border-box;
+        padding: 20px;
+        .top-title {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+    
+          font-size: 1.5em;
+          font-weight: 600;
+    
+          padding-bottom: 40px;
+        }
+      }
       .mike-button-container {
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: 22px;
         cursor: pointer;
+      }
+      .bottom-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+
+        padding: 20px 0px;
+
+        button {
+          font-weight: 600;
+          font-size: 1.1em;
+          border-radius: 15px;
+          padding: 7px 20px;
+          width: 150px;
+          border: 2px solid #252525;
+          box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
+          border-radius: 30px;
+          &:hover {
+            cursor: pointer;
+            box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.348);
+            color: rgb(0, 0, 0);
+          }
+        }
+        .order-button {
+          background-color: #ffcd43d8;
+          &:hover {
+            background-color: #ffcd43;
+          }
+        }
+        .cancel-button {
+          background-color: #e8e8e8bb;
+          &:hover {
+            background-color: #e8e8e8;
+          }
+        }
       }
     }
 
