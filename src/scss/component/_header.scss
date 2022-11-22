@@ -34,26 +34,35 @@
           padding-bottom: 40px;
         }
       }
-      .mike-button-container {
+      .voice-container {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 22px;
+        font-size: 17px;
         cursor: pointer;
+        .voice-button {
+          padding: 10px;
+          
+        }
+        .listening-alert {
+          color: rgb(208, 2, 2);
+          margin-bottom: 5px;
+          font-size: 15px;
+        }
       }
       .bottom-container {
         display: flex;
         flex-direction: row;
         justify-content: space-around;
-
-        padding: 20px 0px;
-
+        padding-top: 20px 0px;
+        width: 300px;
+        
         button {
           font-weight: 600;
           font-size: 1.1em;
           border-radius: 15px;
           padding: 7px 20px;
-          width: 150px;
+          width: 120px;
           border: 2px solid #252525;
           box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
           border-radius: 30px;

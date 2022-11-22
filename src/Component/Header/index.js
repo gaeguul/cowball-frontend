@@ -5,6 +5,7 @@ import { HiMicrophone } from 'react-icons/hi';
 //import ReactModal from 'react-modal';
 import Modal from 'react-awesome-modal';
 import '../../scss/component/_modal.scss';
+import { useSpeechRecognition } from 'react-speech-kit';
 
 function Header() {
   const value = useContext(AuthContext);
@@ -12,10 +13,19 @@ function Header() {
   const [modalOpen, setModalOpen] = useState(false);
   const showModal = () => {
     setModalOpen(true);
+    setMsg('');
   };
   const closeModal = () => {
     setModalOpen(false);
   };
+
+  const [msg, setMsg] = useState('');
+  const { listen, listening, stop } = useSpeechRecognition({
+    onResult: (result) => {
+      // 음성인식 결과가 value 상태값으로 할당됩니다.
+      setMsg(result);
+    },
+  });
 
   // const setCustomerToken = value.setCustomerToken;
 
@@ -57,6 +67,19 @@ function Header() {
             <div className='modal-container'>
               <div className='top-title'>
                 <span className='title-text'>음성 주문</span>
+              </div>
+              <div className='voice-container'>
+                <div className='voice-button'>
+                  <button onMouseDown={listen} onMouseUp={stop}>
+                    🎤
+                  </button>
+                  <div>{msg}</div>
+                  {listening && (
+                    <small role='alert' className='listening-alert'>
+                      듣고 있어요
+                    </small>
+                  )}
+                </div>
               </div>
               <div className='bottom-container'>
                 <button className='cancel-button' onClick={closeModal}>
