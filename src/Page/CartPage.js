@@ -12,13 +12,8 @@ import DatePicker from 'react-datepicker';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
 import 'react-datepicker/dist/react-datepicker.css';
-// import { AuthContext } from '../Context/AuthContext';
 
 import '../scss/CartPage.scss';
-
-// const value = useContext(AuthContext);
-// const customerToken = value.customerToken;
-// const customerId = value.customerId;
 
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
 const DINNER_NAME = ['발렌타인', '프렌치', '잉글리시', '샴페인 축제'];
@@ -45,6 +40,8 @@ function DeleteDinnerButton(props) {
 
       console.log('[DeleteDinnerButton] response.data', response.data);
       alert('해당 디너가 삭제되었습니다.');
+
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -57,7 +54,6 @@ function DeleteDinnerButton(props) {
 }
 
 function ChangeDinnerNumberButton(props) {
-  // const [dinnerNumber, setDinnerNumber] = useState(0);
   const dinnerNumber = props.dinnerNumber;
   const [newDinnerNumber, setNewDinnerNumber] = useState(dinnerNumber);
 
@@ -65,17 +61,13 @@ function ChangeDinnerNumberButton(props) {
     if (newDinnerNumber == 0) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
-      setNewDinnerNumber((prev) => prev + 1);
+      setNewDinnerNumber((prev) => prev - 1);
     }
   };
 
   const increaseDinnerNumber = () => {
     setNewDinnerNumber((prev) => prev + 1);
   };
-
-  // useEffect(() => {
-
-  // })
 
   return (
     <div className='dinner-number-button-container'>
@@ -247,58 +239,63 @@ function CartPage() {
     formState: { isSubmitting },
   } = useForm();
 
-  const makeNewOrder = async () => {
+  const makeNewOrder = async (newDeliveryData) => {
     try {
-      const url = `orders`;
-      const options = {
-        headers: {
-          Authorization: `Bearer ${customerToken}`,
-        },
-        data: { userId: `${customerId}` },
-      };
+      /**1. 장바구니 배달정보 수정 */
 
-      console.log(options);
-      const response = await axios.post(url, options);
-      console.log('[makeNewOrder]', response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const changeDeliveryInfo = async (newDeliveryData) => {
-    try {
       console.log('newDeliveryData', newDeliveryData);
-      const url = `cart/${customerId}`;
-      const options = {
-        headers: {
-          Authorization: `Bearer ${customerToken}`,
+
+      const changeInfoResponse = await axios.patch(
+        `cart/${customerId}`,
+        newDeliveryData,
+        {
+          headers: {
+            Authorization: `Bearer ${customerToken}`,
+          },
         },
-      };
-      const response = await axios.patch(url, newDeliveryData, options);
-      console.log('[changeDeliveryInfo]', response.data);
-      alert('디너 주문이 완료되었습니다.');
+      );
+
+      console.log('[changeDeliveryInfo]', changeInfoResponse.data);
+
+      // await new Promise((r) => setTimeout(r, 1000));
+
+      /**2. 주문하기 */
+      const orderResponse = await axios.post(
+        `orders`,
+        { userId: `${customerId}` },
+        {
+          headers: {
+            Authorization: `Bearer ${customerToken}`,
+          },
+        },
+      );
+      console.log('[makeNewOrder]', orderResponse.data);
+
+      alert('주문이 완료되었습니다.');
+
       navigate('/ordercomplete');
     } catch (error) {
       console.log(error);
+      alert(error.response.data.message);
     }
   };
 
   const onSubmit = async (data) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    // console.log(JSON.stringify(data));
-    const newDeliveryData = {
-      rsvDate: rsvDate,
-      deliveryAddress: data['delivery-address'],
-      request: data['request'],
-      cardNumber: data['card-number'],
-      phoneNumber: '01012345678',
-    };
+    try {
+      await new Promise((r) => setTimeout(r, 1000));
 
-    /**1. 장바구니 정보 수정 */
-    await changeDeliveryInfo(newDeliveryData);
+      const newDeliveryData = {
+        rsvDate: rsvDate,
+        deliveryAddress: data['delivery-address'],
+        request: data['request'],
+        cardNumber: data['card-number'],
+        phoneNumber: '01012345678',
+      };
 
-    /**2. 주문하기 */
-    makeNewOrder(); //에러남!!!
+      makeNewOrder(newDeliveryData);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const [rsvDate, setRsvDate] = useState('');
@@ -423,7 +420,9 @@ function CartPage() {
                         <div className='discount-price-title content-title'>
                           단골할인금액
                         </div>
-                        <div className='discount-price-number'>- 5,000원</div>
+                        <div className='discount-price-number'>
+                          - {cartInfo.totalPrice - cartInfo.paymentPrice}원
+                        </div>
                       </>
                     )}
 

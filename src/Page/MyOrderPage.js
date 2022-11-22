@@ -1,15 +1,81 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 import '../scss/MyOrderPage.scss';
 
+// const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
+// const DINNER_NAME = ['발렌타인', '프렌치', '잉글리시', '샴페인 축제'];
+
+const customerId = localStorage.getItem('customerId');
+const customerToken = localStorage.getItem('customerToken');
+
+function MyOrderItem(props) {
+  const myOrder = props.myOrder;
+  console.log('myOrder', myOrder);
+  const orderId = myOrder.orderId;
+
+  const [orderDetail, setOrderDetail] = useState({});
+
+  /** orderId로 주문 내 항목 조회하기 */
+  const getOrderDetail = async () => {
+    try {
+      const url = `orders/${orderId}`;
+      const response = await axios.get(url);
+      setOrderDetail(response.data);
+      console.log(response.data);
+      console.log(orderDetail);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getOrderDetail();
+  }, []);
+
+  return <></>;
+}
+
 function MyOrderComponent() {
+  const [myOrders, setMyOrders] = useState([]);
+
+  const getMyOrders = async () => {
+    try {
+      const url = `orders`;
+      const options = {
+        params: { user_id: `${customerId}` },
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+      };
+      const response = await axios.get(url, options);
+      setMyOrders(response.data.items);
+      // console.log('response.data', response.data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getMyOrders();
+  }, []);
+
   return (
     <div className='myorder-layout-container'>
       <div className='myorder-component-container'>
         <div className='main-title'>주문내역</div>
         <div className='myorder-list-container'>
-          <div className='single-order-container'>
+          {myOrders.map((myOrder) => {
+            return (
+              <MyOrderItem
+                key={myOrder.orderId}
+                myOrder={myOrder}
+                orderId={myOrder.orderID}
+              />
+            );
+          })}
+          {/* <div className='single-order-container'>
             <div className='left-container'>
               <div className='left-top-title'>
                 <span>11월 27일 주문</span>
@@ -192,7 +258,7 @@ function MyOrderComponent() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

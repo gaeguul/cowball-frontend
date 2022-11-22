@@ -86,7 +86,7 @@ function Router() {
         </Route>
 
         {/**직원 로그인 해야만 접근 가능 */}
-        <Route element={<PrivateRoute staffAuth={true} />}>
+        <Route element={<PrivateRoute customerAuth={false} staffAuth={true} />}>
           <Route
             path='/staff/orderlist'
             element={<Navigate replace to='/staff/orderlist/waiting' />}

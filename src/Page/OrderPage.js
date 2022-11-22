@@ -284,7 +284,7 @@ function ExtraOptionItem(props) {
   const [optionNumber, setOptionNumber] = useState(0);
 
   useEffect(() => {
-    console.log('dinnerOptionId', dinnerOptionId, 'optionNumber', optionNumber);
+    // console.log('dinnerOptionId', dinnerOptionId, 'optionNumber', optionNumber);
     const tmpObject = {
       id: dinnerOptionId,
       amount: optionNumber,
