@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
-import { HiMicrophone } from 'react-icons/hi';
+//import { HiMicrophone } from 'react-icons/hi';
 //import ReactModal from 'react-modal';
 import Modal from './modal';
 
@@ -9,8 +9,8 @@ function Header() {
   const value = useContext(AuthContext);
   const setIsCustomerLogin = value.setIsCustomerLogin;
   const [modalOpen, setModalOpen] = useState(false);
-  const modalClose = () => {
-    setModalOpen(!modalOpen);
+  const showModal = () => {
+    setModalOpen(true);
   };
   // const setCustomerToken = value.setCustomerToken;
 
@@ -40,9 +40,12 @@ function Header() {
           </NavLink>
         </div>
         <div className='user-menu-container'>
-          <div className='mike-button-container' onClick={modalClose}>
-            {modalOpen && <Modal modalClose={modalClose}></Modal>}
-            <HiMicrophone clssName='mike-button' />
+          <div className='mike-button-container'>
+            <button onClick={showModal}>
+              {/* <HiMicrophone clssName='mike-button' /> */}
+              모달 띄우기
+            </button>
+            {modalOpen && <Modal setModalOpen={setModalOpen} />}
           </div>
           <div className='user-button'>
             <NavLink to='/cart'>Cart</NavLink>

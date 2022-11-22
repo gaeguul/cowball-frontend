@@ -1,18 +1,21 @@
 import React from 'react';
 import '../../scss/component/_modal.scss';
 
-const Modal = ({ modalClose }) => {
+function Modal({ setModalOpen }) {
+  const closeModal = () => {
+    setModalOpen(false);
+  };
   return (
-    <div className='modal-container' onClick={modalClose}>
+    <div className='modal-container'>
       <div className='modal'>
         <div className='button-container'>
-          <button className='modal-button' onClick={modalClose}>
+          <button className='modal-button' onClick={closeModal}>
             닫기
           </button>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default Modal;
