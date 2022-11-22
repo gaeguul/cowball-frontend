@@ -124,6 +124,7 @@ function DatePickerComponent(props) {
       dateFormat='yyyy.MM.dd (h:mm aa)'
       showTimeSelect
       includeTimes={includeTimes}
+      minDate={new Date()}
     />
   );
 }
