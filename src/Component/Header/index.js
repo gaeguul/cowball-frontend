@@ -5,7 +5,9 @@ import { HiMicrophone } from 'react-icons/hi';
 //import ReactModal from 'react-modal';
 import Modal from 'react-awesome-modal';
 import '../../scss/component/_modal.scss';
+import '../../Page/OrderPage.js';
 import { useSpeechRecognition } from 'react-speech-kit';
+import axios from 'axios';
 
 function Header() {
   const value = useContext(AuthContext);
@@ -116,6 +118,45 @@ function Header() {
     setStyleId(0);
     setDegreeId(0);
   };
+
+  const goToCart = async () => {
+    if (dinnerId == 0 || styleId == 0 || degreeId == 0)
+      alert('선택 사항을 모두 선택해주세요.');
+    else if (dinnerId == 4 && styleId == 1)
+      alert(
+        '샴페인 축제 디너는 그랜드 또는 딜럭스 스타일로만 주문이 가능합니다.',
+      );
+    else {
+      try {
+        const token = localStorage.getItem('customerToken');
+        const userId = localStorage.getItem('customerId');
+
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const data = {
+          degreeId: degreeId,
+          dinnerId: dinnerId,
+          styleId: styleId,
+          dinnerOptionIds: [],
+          dinnerAmount: 1,
+        };
+
+        console.log('data', data);
+        const url = `cart/${userId}`;
+        const response = await axios.post(url, data, options);
+        console.log('[handlePutCartButtonClick] ', response.data);
+        alert('장바구니에 담겼습니다 !');
+        setModalOpen(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <div className='header-container'>
       {/* {isVoiceModalOpen ? <Modal isOpen={isVoiceModalOpen}></Modal> : null} */}
@@ -212,7 +253,7 @@ function Header() {
                   * 스테이크 굽기는 초기화 하지 않고 재입력 가능합니다.
                 </div>
                 <div className='introduce-text'>
-                  * 옵션 제거, 추가 없이 기본으로 장바구니에 담깁니다.
+                  * 옵션 제거, 추가 없이 기본 구성 1세트가 장바구니에 담깁니다.
                 </div>
               </div>
               <div className='bottom-container'>
@@ -222,7 +263,7 @@ function Header() {
                 <button className='cancel-button' onClick={setReset}>
                   <span>초기화</span>
                 </button>
-                <button className='order-button'>
+                <button className='order-button' onClick={goToCart}>
                   <span>주문</span>
                 </button>
               </div>
