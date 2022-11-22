@@ -98,6 +98,7 @@ function DinnerOptionItem(props) {
 
 function OrderDinnerItem(props) {
   const orderDinner = props.orderDinner; //하나의 배달 안에서 시킨 각 디너
+  const orderDinnerAmount = orderDinner.orderDinnerAmount;
   const orderDinnerOptions = orderDinner.orderDinnerOptions; //선택한 디너 옵션
   const [styleInfo, setStyleInfo] = useState({});
 
@@ -140,7 +141,7 @@ function OrderDinnerItem(props) {
           );
         })}
       </div>
-      <div className='dinner-number'>1</div>
+      <div className='dinner-number'>{orderDinnerAmount}</div>
       <div className='dinner-price'>{orderDinner.totalDinnerPrice}원</div>
     </div>
   );
