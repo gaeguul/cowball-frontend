@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// import { NavLink } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
@@ -75,7 +74,7 @@ function MyPage() {
   return (
     <CustomerLayout>
       <Header />
-      <div className='center-container'>
+      <div className='mypage-center-container'>
         <div className='mypage-container'>
           <div className='top-title'>
             <span className='title-text'>마이페이지</span>
