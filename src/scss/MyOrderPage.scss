@@ -11,7 +11,7 @@
   width: 50px;
   height: 26px;
 
-  background: #d9d9d9;
+  background: #e8e8e8;
   border-radius: 15px;
 
   font-weight: 600;
@@ -20,8 +20,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
-  cursor: pointer;
+  &:hover {
+    background: #dbdbdb;
+    cursor: pointer;
+  }
 }
 
 .myorder-layout-container {

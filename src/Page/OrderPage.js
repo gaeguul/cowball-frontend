@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../scss/OrderPage.scss';
 
-//const [prePrice, serPrePrice] = useState(0);
 const MY_ORDER = {
   degreeId: 0,
   dinnerId: 0,
@@ -465,7 +464,6 @@ function OrderPage() {
   useEffect(() => {
     console.log('myExtraOptions', myExtraOptions);
     console.log('myMainOption.id', !myMainOption.id);
-    // const tmpOptions = [myMainOption, ...myExtraOptions];
 
     if (!myMainOption.id) {
       const tmpOptions = [...myExtraOptions];
@@ -482,14 +480,6 @@ function OrderPage() {
       setMyOptions(tmpOptions);
       MY_ORDER['dinnerOptionIds'] = tmpOptions;
     }
-    // console.log('before', tmpOptions);
-
-    // if (!myMainOption.id) {
-    //   tmpOptions.splice(1, 2);
-    // } else {
-    //   tmpOptions.splice(0, 3);
-    // }
-    // console.log('after', tmpOptions);
   }, [myMainOption, myExtraOptions]);
 
   useEffect(() => {

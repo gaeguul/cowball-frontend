@@ -152,11 +152,18 @@ function OptionItem(props) {
   );
 }
 
-function ChangeDinnerDetail() {
+function ChangeDinnerDetail(props) {
   const navigate = useNavigate();
+  const orderDinnerId = props.orderDinnerId;
+  const dinner = props.dinner;
 
   const handleChangeDinnerDetailButton = () => {
-    navigate('/edit');
+    navigate('/edit', {
+      state: {
+        orderDinnerId: orderDinnerId,
+        dinner: dinner,
+      },
+    });
   };
 
   return (
@@ -177,7 +184,7 @@ function DinnerItem(props) {
   const dinnerOptions = props.dinnerOptions;
   const dinnerId = dinner.dinnerId;
   const degreeId = dinner.degreeId;
-  // const orderDinnerId = dinner.orderDinnerId;
+  const orderDinnerId = dinner.orderDinnerId;
   // console.log('dinner', dinner);
 
   const [styleInfo, setStyleInfo] = useState({});
@@ -199,7 +206,7 @@ function DinnerItem(props) {
 
   return (
     <div className='myorder-dinner'>
-      <ChangeDinnerDetail />
+      <ChangeDinnerDetail orderDinnerId={orderDinnerId} dinner={dinner} />
       <div className='dinner-and-style-container'>
         <div className='dinner-title'>
           <div className='dinner-name'>{DINNER_NAME[dinnerId - 1]} 디너</div>
