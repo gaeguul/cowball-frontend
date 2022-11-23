@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../scss/OrderPage.scss';
 
@@ -414,6 +414,7 @@ function OrderPage() {
   const [totalPrice, setTotalPrice] = useState(0); // totalPrice = 디너 가격 + 옵션s 가격
   const [finalPrice, setFinalPrice] = useState(0); // FinalPrice = dinner-number * (totalPrice + stylePrice - deletePrice)
 
+  const navigate = useNavigate();
   /**주문할 디너 개수 */
   const [myDinnerNumber, setMyDinnerNumber] = useState(1);
 
@@ -423,22 +424,27 @@ function OrderPage() {
 
     /** [POST] 장바구니에 추가 */
     try {
-      const token = localStorage.getItem('customerToken');
-      const userId = localStorage.getItem('customerId');
+      if (mySteakDegree == 0 || myStyleId == 0) {
+        alert('스타일과 스테이크 굽기 단계를 설정해주세요.');
+      } else {
+        const token = localStorage.getItem('customerToken');
+        const userId = localStorage.getItem('customerId');
 
-      const options = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
 
-      const data = MY_ORDER;
-      const url = `cart/${userId}`;
-      const response = await axios.post(url, data, options);
-      console.log('MY_ORDER', data);
-      console.log('[handlePutCartButtonClick] ', response.data);
-      alert('디너가 장바구니에 담겼습니다. 장바구니를 확인하세요.');
-      // window.location.replace('/cart');
+        const data = MY_ORDER;
+        const url = `cart/${userId}`;
+        const response = await axios.post(url, data, options);
+        console.log('MY_ORDER', data);
+        console.log('[handlePutCartButtonClick] ', response.data);
+        alert('디너가 장바구니에 담겼습니다. 장바구니를 확인하세요.');
+        // window.location.replace('/cart');
+        navigate('/cart');
+      }
     } catch (error) {
       console.log(error);
       console.log('MY_ORDER', MY_ORDER);
