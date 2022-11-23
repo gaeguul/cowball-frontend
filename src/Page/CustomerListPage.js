@@ -1,18 +1,62 @@
-import React from 'react';
-// import { useEffect } from 'react';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
 import StaffLayout from '../Component/StaffLayout';
 import StaffLogoNav from '../Component/StaffLogoNav';
 import '../scss/CustomerListPage.scss';
+import axios from 'axios';
+// import { parseWithOptions } from 'date-fns/fp';
+
+// const staffId = localStorage.getItem('staffId');
+const staffToken = localStorage.getItem('staffToken');
 
 function CustomerList() {
-  // const getCustomers = async () => {
-  //   try {
-  //   } catch (error) {}
-  // };
+  const [users, setUsers] = useState([]);
 
-  // useEffect(() => {
-  //   getCustomers();
-  // }, []);
+  const getCustomers = async () => {
+    try {
+      const url = `users`;
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${staffToken}`,
+        },
+      };
+      const response = await axios.get(url, headers);
+      console.log('response.data2', response.data.items);
+      setUsers(response.data.itmes);
+      console.log('오잉', users);
+    } catch (error) {
+      console.log('why...', error);
+    }
+  };
+
+  function UserLine(props) {
+    const key = props.key;
+    const user = props.user;
+    return (
+      <tr>
+        <td>{user.userName}</td>
+        <td>{key}</td>
+        <td>
+          <div className='grade-container'>
+            {user.grade == 0 ? (
+              <div className='default-grade'>일반</div>
+            ) : (
+              <div className='vip-grade'>단골</div>
+            )}
+          </div>
+        </td>
+        <td>{user.orderCount}</td>
+        <td>{user.JoinDate}</td>
+        <td>{user.phoneNumber}</td>
+      </tr>
+    );
+  }
+
+  useEffect(() => {
+    getCustomers();
+    // console.log('here?');
+    // console.log('오잉', users);
+  }, []);
 
   return (
     <div className='nexttonav'>
@@ -36,102 +80,10 @@ function CustomerList() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>김소공</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='vip-grade'>단골</div>
-                  </div>
-                </td>
-                <td>100</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>김소공</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='vip-grade'>단골</div>
-                  </div>
-                </td>
-                <td>100</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>김소공</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='vip-grade'>단골</div>
-                  </div>
-                </td>
-                <td>100</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
+              {users &&
+                users.map((user) => {
+                  return <UserLine key={user.userId} user={user} />;
+                })}
             </tbody>
           </table>
         </div>
