@@ -273,7 +273,13 @@ function CartPage() {
 
       alert('주문이 완료되었습니다.');
 
-      navigate('/ordercomplete');
+      navigate('/ordercomplete', {
+        state: {
+          orderId: `${orderResponse.data.orderId}`,
+          paymentPrice: `${orderResponse.data.paymentPrice}`,
+          rsvDate: `${orderResponse.data.rsvDate}`,
+        },
+      });
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -337,12 +343,15 @@ function CartPage() {
 
         const url = `users/${customerId}`;
         const response = await axios.get(url, options);
+        console.log(response.data);
         setGrade(response.data.grade);
       } catch (error) {
         console.log(error);
       }
     };
     getUserGrade();
+
+    console.log('grade', grade);
   }, []);
 
   return (
@@ -415,16 +424,17 @@ function CartPage() {
                     <div className='total-price-number'>
                       {cartInfo.totalPrice}원
                     </div>
-                    {grade === 0 ? null : (
-                      <>
-                        <div className='discount-price-title content-title'>
-                          단골할인금액
-                        </div>
-                        <div className='discount-price-number'>
-                          - {cartInfo.totalPrice - cartInfo.paymentPrice}원
-                        </div>
-                      </>
-                    )}
+                    {cartInfo.totalPrice != 0 &&
+                      (grade === 0 ? null : (
+                        <>
+                          <div className='discount-price-title content-title'>
+                            단골할인금액
+                          </div>
+                          <div className='discount-price-number'>
+                            - {cartInfo.totalPrice - cartInfo.paymentPrice}원
+                          </div>
+                        </>
+                      ))}
 
                     <div className='payment-price-title  content-title'>
                       총 결제금액

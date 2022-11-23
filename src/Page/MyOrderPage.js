@@ -18,12 +18,22 @@ const customerId = localStorage.getItem('customerId');
 const customerToken = localStorage.getItem('customerToken');
 
 function DevlieryInfoComponent(props) {
+  const orderId = props.orderId;
   const myOrder = props.myOrder;
-  // const orderId = props.orderId;
 
   const handlePutCartButtonClick = async () => {
     try {
-      console.log('handlePutCartButtonClick');
+      console.log('handlePutCartButtonClick orderId', orderId);
+      const url = `orders/${orderId}/copy`;
+      const data = { userId: `${customerId}` };
+      const options = {
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+      };
+      const response = await axios.post(url, data, options);
+      alert('해당 주문이 장바구니에 추가되었습니다.');
+      console.log('response.statusText', response.statusText);
     } catch (error) {
       console.log(error);
     }
