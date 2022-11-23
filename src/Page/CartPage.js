@@ -56,11 +56,13 @@ function DeleteDinnerButton(props) {
 function ChangeDinnerNumberButton(props) {
   const dinnerNumber = props.dinnerNumber;
   const orderDinnerId = props.orderDinnerId;
+  const getCartInfo = props.getCartInfo;
   const [newDinnerNumber, setNewDinnerNumber] = useState(dinnerNumber);
 
   useEffect(() => {
     console.log('newDinnerNumber', newDinnerNumber);
     makeNewNumber(newDinnerNumber);
+    getCartInfo();
   }, [newDinnerNumber]);
 
   const makeNewNumber = async (newDinnerNumber) => {
@@ -210,6 +212,7 @@ function DinnerItem(props) {
   const dinner = props.dinner;
   const options = dinner.orderDinnerOptions;
   const orderDinnerId = dinner.orderDinnerId;
+  const getCartInfo = props.getCartInfo;
 
   const [styleInfo, setStyleInfo] = useState({});
 
@@ -259,6 +262,7 @@ function DinnerItem(props) {
         <ChangeDinnerNumberButton
           orderDinnerId={orderDinnerId}
           dinnerNumber={dinner.dinnerAmount}
+          getCartInfo={getCartInfo}
         />
       </div>
       <div className='dinner-price'>{dinner.totalDinnerPrice}원</div>
@@ -368,6 +372,10 @@ function CartPage() {
   }, [getCartInfo]);
 
   useEffect(() => {
+    console.log('cartInfo', cartInfo);
+  }, [cartInfo]);
+
+  useEffect(() => {
     // const getUserGrade = async () => {
     //   try {
     //     const options = {
@@ -397,7 +405,11 @@ function CartPage() {
             <div className='menu-container'>
               {dinners.map((dinner) => {
                 return (
-                  <DinnerItem key={dinner.orderDinnerId} dinner={dinner} />
+                  <DinnerItem
+                    key={dinner.orderDinnerId}
+                    dinner={dinner}
+                    getCartInfo={getCartInfo}
+                  />
                 );
               })}
               <div className='total-container'>

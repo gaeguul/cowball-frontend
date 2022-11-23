@@ -59,9 +59,9 @@ input#card-number {
 
         .cart-dinner {
           display: grid;
-          grid-template-columns: minmax(max-content, 1fr) 100px 80px;
+          grid-template-columns: 255px 100px 80px;
           grid-template-rows: max-content;
-          gap: 30px;
+          gap: 20px;
 
           position: relative;
 
@@ -70,12 +70,14 @@ input#card-number {
             justify-content: flex-end;
             font-weight: 600;
             font-size: 1.1em;
+            width: 100px;
           }
 
           .dinner-and-style-container {
             display: grid;
             grid-template-columns: auto;
             gap: 10px;
+            width: 250px;
 
             > * {
               display: flex;
