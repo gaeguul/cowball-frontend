@@ -423,22 +423,26 @@ function OrderPage() {
 
     /** [POST] 장바구니에 추가 */
     try {
-      const token = localStorage.getItem('customerToken');
-      const userId = localStorage.getItem('customerId');
+      if (mySteakDegree == 0 || myStyleId == 0) {
+        alert('스타일과 스테이크 굽기 단계를 설정해주세요.');
+      } else {
+        const token = localStorage.getItem('customerToken');
+        const userId = localStorage.getItem('customerId');
 
-      const options = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
 
-      const data = MY_ORDER;
-      const url = `cart/${userId}`;
-      const response = await axios.post(url, data, options);
-      console.log('MY_ORDER', data);
-      console.log('[handlePutCartButtonClick] ', response.data);
-      alert('디너가 장바구니에 담겼습니다. 장바구니를 확인하세요.');
-      // window.location.replace('/cart');
+        const data = MY_ORDER;
+        const url = `cart/${userId}`;
+        const response = await axios.post(url, data, options);
+        console.log('MY_ORDER', data);
+        console.log('[handlePutCartButtonClick] ', response.data);
+        alert('디너가 장바구니에 담겼습니다. 장바구니를 확인하세요.');
+        window.location.replace('/cart');
+      }
     } catch (error) {
       console.log(error);
       console.log('MY_ORDER', MY_ORDER);
