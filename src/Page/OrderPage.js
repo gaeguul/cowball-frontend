@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../scss/OrderPage.scss';
 
@@ -414,6 +414,7 @@ function OrderPage() {
   const [totalPrice, setTotalPrice] = useState(0); // totalPrice = 디너 가격 + 옵션s 가격
   const [finalPrice, setFinalPrice] = useState(0); // FinalPrice = dinner-number * (totalPrice + stylePrice - deletePrice)
 
+  const navigate = useNavigate();
   /**주문할 디너 개수 */
   const [myDinnerNumber, setMyDinnerNumber] = useState(1);
 
@@ -441,7 +442,8 @@ function OrderPage() {
         console.log('MY_ORDER', data);
         console.log('[handlePutCartButtonClick] ', response.data);
         alert('디너가 장바구니에 담겼습니다. 장바구니를 확인하세요.');
-        window.location.replace('/cart');
+        // window.location.replace('/cart');
+        navigate('/cart');
       }
     } catch (error) {
       console.log(error);
