@@ -60,7 +60,7 @@ function Header() {
   // };
 
   useEffect(() => {
-    console.log('sg', msg);
+    // console.log('sg', msg);
     if (dinnerId == 0) {
       if (msg.includes('발렌타인')) setDinnerId(1);
       else if (msg.includes('프렌치')) setDinnerId(2);
@@ -77,7 +77,7 @@ function Header() {
     else if (msg.includes('미디움 웰')) setDegreeId(4);
     else if (msg.includes('미디움')) setDegreeId(3);
     else if (msg.includes('웰던')) setDegreeId(5);
-    console.log(dinnerId, styleId, degreeId);
+    // console.log(dinnerId, styleId, degreeId);
   }, [msg]);
 
   useEffect(() => {
