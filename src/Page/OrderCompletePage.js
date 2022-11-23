@@ -1,11 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Header from '../Component/Header';
 import CustomerLayout from '../Component/CustomerLayout';
 import { BsCheckCircle } from 'react-icons/bs';
 import '../scss/OrderCompletePage.scss';
 
 function OrderCompletePage() {
+  const location = useLocation();
+  const orderId = location.state.orderId;
+  const paymentPrice = location.state.paymentPrice;
+  const rsvDate = location.state.rsvDate;
+  console.log('orderId', orderId);
+  console.log('paymentPrice', paymentPrice);
+  console.log('rsvDate', rsvDate);
   return (
     <CustomerLayout>
       <Header />
@@ -17,11 +24,11 @@ function OrderCompletePage() {
           </div>
           <div className='order-info-container'>
             <div className='info-title'>주문번호</div>
-            <div className='info-content'>202210101234</div>
+            <div className='info-content'>{orderId}</div>
             <div className='info-title'>총 결제금액</div>
-            <div className='info-content'>75,000원</div>
+            <div className='info-content'>{paymentPrice}원</div>
             <div className='info-title'>예약일시</div>
-            <div className='info-content'>2022.10.31 (월) 19:00</div>
+            <div className='info-content'>{rsvDate}</div>
           </div>
           <div className='goto-main-button-container'>
             <Link to='/'>
