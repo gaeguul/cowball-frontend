@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
@@ -150,6 +152,23 @@ function OptionItem(props) {
   );
 }
 
+function ChangeDinnerDetail() {
+  const navigate = useNavigate();
+
+  const handleChangeDinnerDetailButton = () => {
+    navigate('/edit');
+  };
+
+  return (
+    <div
+      className='change-dinner-detail-button'
+      onClick={handleChangeDinnerDetailButton}
+    >
+      <span>수정</span>
+    </div>
+  );
+}
+
 function DinnerItem(props) {
   const dinner = props.dinner;
   const dinnerAmount = dinner.dinnerAmount;
@@ -158,6 +177,8 @@ function DinnerItem(props) {
   const dinnerOptions = props.dinnerOptions;
   const dinnerId = dinner.dinnerId;
   const degreeId = dinner.degreeId;
+  // const orderDinnerId = dinner.orderDinnerId;
+  // console.log('dinner', dinner);
 
   const [styleInfo, setStyleInfo] = useState({});
 
@@ -178,6 +199,7 @@ function DinnerItem(props) {
 
   return (
     <div className='myorder-dinner'>
+      <ChangeDinnerDetail />
       <div className='dinner-and-style-container'>
         <div className='dinner-title'>
           <div className='dinner-name'>{DINNER_NAME[dinnerId - 1]} 디너</div>
@@ -199,11 +221,6 @@ function DinnerItem(props) {
             />
           );
         })}
-        {/* <div className='dinner-option'>- 에그스크램블 삭제 (-5,000원)</div>
-        <div className='dinner-option'>
-          + 레어 스테이크 1인분 추가 (20,000원)
-        </div>
-        <div className='dinner-option'>+ 베이컨 1장 추가 (2,000원)</div> */}
       </div>
       <div className='dinner-number'>{dinnerAmount}</div>
       <div className='dinner-price'>{totalDinnerPrice}원</div>
@@ -286,11 +303,12 @@ function MyOrderItem(props) {
 
 function MyOrderComponent() {
   const [myOrders, setMyOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getMyOrders = async () => {
     try {
       const url = `orders`;
-      const options = {
+      let options = {
         params: { user_id: `${customerId}` },
         headers: {
           Authorization: `Bearer ${customerToken}`,
@@ -298,6 +316,23 @@ function MyOrderComponent() {
       };
       const response = await axios.get(url, options);
       setMyOrders(response.data.items);
+      console.log('[getMyOrders]', response.data);
+
+      /**주문내역이 10개 이상이면 페이지가 넘어가도록 함 */
+      const maxPage = response.data.pageMax;
+      let tmpOrders = [];
+      for (let currentPage = 1; currentPage <= maxPage; currentPage++) {
+        options.params.page = currentPage;
+        const response = await axios.get(url, options);
+        // list = [...list, ...response.data.items];
+        const newItems = await response.data.items;
+        tmpOrders = [...tmpOrders, ...newItems];
+      }
+
+      // console.log('tmpOrders', tmpOrders);
+      setMyOrders(tmpOrders);
+
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -312,15 +347,16 @@ function MyOrderComponent() {
       <div className='myorder-component-container'>
         <div className='main-title'>주문내역</div>
         <div className='myorder-list-container'>
-          {myOrders.map((myOrder) => {
-            return (
-              <MyOrderItem
-                key={myOrder.orderId}
-                myOrder={myOrder}
-                orderId={myOrder.orderId}
-              />
-            );
-          })}
+          {!loading &&
+            myOrders.map((myOrder) => {
+              return (
+                <MyOrderItem
+                  key={myOrder.orderId}
+                  myOrder={myOrder}
+                  orderId={myOrder.orderId}
+                />
+              );
+            })}
         </div>
       </div>
     </div>

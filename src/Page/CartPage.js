@@ -307,7 +307,7 @@ function CartPage() {
   const [rsvDate, setRsvDate] = useState('');
   const [cartInfo, setCartInfo] = useState({});
   const [dinners, setDinners] = useState([]);
-  const [grade, setGrade] = useState(0);
+  // const [grade, setGrade] = useState(0);
 
   const getCartInfo = useCallback(async () => {
     try {
@@ -333,25 +333,23 @@ function CartPage() {
   }, [getCartInfo]);
 
   useEffect(() => {
-    const getUserGrade = async () => {
-      try {
-        const options = {
-          headers: {
-            Authorization: `Bearer ${customerToken}`,
-          },
-        };
-
-        const url = `users/${customerId}`;
-        const response = await axios.get(url, options);
-        console.log(response.data);
-        setGrade(response.data.grade);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUserGrade();
-
-    console.log('grade', grade);
+    // const getUserGrade = async () => {
+    //   try {
+    //     const options = {
+    //       headers: {
+    //         Authorization: `Bearer ${customerToken}`,
+    //       },
+    //     };
+    //     const url = `users/${customerId}`;
+    //     const response = await axios.get(url, options);
+    //     console.log(response.data);
+    //     setGrade(response.data.grade);
+    //     console.log('grade', response.data.grade);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+    // getUserGrade();
   }, []);
 
   return (
@@ -424,17 +422,17 @@ function CartPage() {
                     <div className='total-price-number'>
                       {cartInfo.totalPrice}원
                     </div>
-                    {cartInfo.totalPrice != 0 &&
-                      (grade === 0 ? null : (
-                        <>
-                          <div className='discount-price-title content-title'>
-                            단골할인금액
-                          </div>
-                          <div className='discount-price-number'>
-                            - {cartInfo.totalPrice - cartInfo.paymentPrice}원
-                          </div>
-                        </>
-                      ))}
+                    {cartInfo.totalPrice - cartInfo.paymentPrice ===
+                    0 ? null : (
+                      <>
+                        <div className='discount-price-title content-title'>
+                          단골할인금액
+                        </div>
+                        <div className='discount-price-number'>
+                          - {cartInfo.totalPrice - cartInfo.paymentPrice}원
+                        </div>
+                      </>
+                    )}
 
                     <div className='payment-price-title  content-title'>
                       총 결제금액

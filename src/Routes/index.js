@@ -12,6 +12,7 @@ import {
   CartPage,
   OrderCompletePage,
   MyOrderPage,
+  EditDinnerPage,
   MyPage,
   ChangePasswordPage,
   ChangeMyInfoPage,
@@ -79,6 +80,7 @@ function Router() {
           <Route path='/cart' element={<CartPage />} />
           <Route path='/ordercomplete' element={<OrderCompletePage />} />
           <Route path='/myorder' element={<MyOrderPage />} />
+          <Route path='/edit' element={<EditDinnerPage />} />
           <Route path='/mypage' element={<MyPage />} />
           <Route path='/mypage/changepw' element={<ChangePasswordPage />} />
           <Route path='/mypage/changemyinfo' element={<ChangeMyInfoPage />} />
