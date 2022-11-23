@@ -316,26 +316,32 @@ function ChangeOptionNumberButton(props) {
     </div>
   );
 }
-
+/** 이제 여기가 추가 구성품들 예쁘게 나열될 곳: 한 줄 !!! */
 function ExtraOptionItem(props) {
-  const extraOption = props.extraOption;
-  const dinnerOptionId = extraOption.dinnerOptionId;
-  const setNewExtraOption = props.setNewExtraOption;
+  const extraOption = props.extraOption; // 그 배열 자체
+  const dinnerOptionId = extraOption.dinnerOptionId; // 배열 id!
+  // const setNewExtraOption = props.setNewExtraOption;
   const setTotalPrice = props.setTotalPrice;
+  const myOptions = props.myOptions;
   // const myOptionNumber = props.myOptionNumber;
 
   // console.log('myOptionNumber', myOptionNumber);
+  console.log(
+    'check',
+    myOptions.map((myOption) => {
+      myOption.dinnerOptionId == dinnerOptionId ? myOption.amount : 0;
+    }),
+  );
+  // const [optionNumber, setOptionNumber] = useState(0);
 
-  const [optionNumber, setOptionNumber] = useState(0);
-
-  useEffect(() => {
-    // console.log('dinnerOptionId', dinnerOptionId, 'optionNumber', optionNumber);
-    const tmpObject = {
-      id: dinnerOptionId,
-      amount: optionNumber,
-    };
-    setNewExtraOption(tmpObject);
-  }, [optionNumber]);
+  // useEffect(() => {
+  //   // console.log('dinnerOptionId', dinnerOptionId, 'optionNumber', optionNumber);
+  //   const tmpObject = {
+  //     id: dinnerOptionId,
+  //     amount: optionNumber,
+  //   };
+  //   setNewExtraOption(tmpObject);
+  // }, [optionNumber]);
 
   return (
     <>
@@ -345,8 +351,8 @@ function ExtraOptionItem(props) {
       </div>
       <div className='dinner-option-button'>
         <ChangeOptionNumberButton
-          optionNumber={optionNumber}
-          setOptionNumber={setOptionNumber}
+          // optionNumber={optionNumber}
+          // setOptionNumber={}
           setTotalPrice={setTotalPrice}
           dinnerOptionPrice={props.extraOption.dinnerOptionPrice}
         />
@@ -360,7 +366,7 @@ function ExtraOptionComponent(props) {
   const myExtraOptions = props.myExtraOptions;
   const setMyExtraOptions = props.setMyExtraOptions;
   const setTotalPrice = props.setTotalPrice;
-  // const myOptions = props.myOptions;
+  const myOptions = props.myOptions;
 
   const [loading, setLoading] = useState(true);
   const [extraOptions, setExtraOptions] = useState([]);
@@ -368,24 +374,27 @@ function ExtraOptionComponent(props) {
 
   /** 선택한 디너 옵션 정보 호출 */
   const getExtraOptions = async () => {
+    /** 일단 이 try 함수 안에서 해당 디너의 옵션들을 모두 불러온다 */
     try {
       const url = `menu/dinners/${dinnerId}/options`;
       const response = await axios.get(url);
-      const options = await response.data;
+      const options = await response.data; // 그걸 options에 저장!
       const extraOptionList = options.filter(
         (option) => option.dinnerOptionName === '추가 구성품',
-      );
+      ); // 그 options에서도 추가 구성품만 extraOptionList에 저장될 수 있도록
 
+      // console.log('extraOptionList', extraOptionList); // 잘 가져와진다.
       setExtraOptions(extraOptionList);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
-  };
+  }; // 결론: extraOptions에 추가 구성품 배열들 예쁘게 가져와짐
 
   useEffect(() => {
     getExtraOptions();
-  }, []);
+    console.log('myOptions', myOptions);
+  }, []); // 딱 시작할 때 가져올 수 있도록
 
   useEffect(() => {
     console.log('newExtraOption', newExtraOption);
@@ -420,11 +429,12 @@ function ExtraOptionComponent(props) {
             {extraOptions &&
               extraOptions.map((extraOption) => {
                 return (
-                  <ExtraOptionItem
-                    key={extraOption.dinnerOptionId}
-                    extraOption={extraOption}
-                    setNewExtraOption={setNewExtraOption}
+                  <ExtraOptionItem // 그 option들 딱 배열될 수 있도록
+                    key={extraOption.dinnerOptionId} // 배열 id랑
+                    extraOption={extraOption} // 그 배열 자체랑
+                    setNewExtraOption={setNewExtraOption} // 얜 뭐지
                     setTotalPrice={setTotalPrice}
+                    myOptions={myOptions}
                   />
                 );
               })}
