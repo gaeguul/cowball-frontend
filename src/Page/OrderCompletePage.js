@@ -4,15 +4,18 @@ import Header from '../Component/Header';
 import CustomerLayout from '../Component/CustomerLayout';
 import { BsCheckCircle } from 'react-icons/bs';
 import '../scss/OrderCompletePage.scss';
+import { format, parseISO } from 'date-fns';
 
 function OrderCompletePage() {
   const location = useLocation();
   const orderId = location.state.orderId;
   const paymentPrice = location.state.paymentPrice;
-  const rsvDate = location.state.rsvDate;
+  const rsvDate = format(parseISO(location.state.rsvDate), 'yyyy.MM.dd (H:mm)');
+
   console.log('orderId', orderId);
   console.log('paymentPrice', paymentPrice);
   console.log('rsvDate', rsvDate);
+
   return (
     <CustomerLayout>
       <Header />

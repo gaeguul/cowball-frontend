@@ -11,6 +11,8 @@ import { RiCloseCircleFill } from 'react-icons/ri';
 import DatePicker from 'react-datepicker';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
+import format from 'date-fns/format';
+
 import 'react-datepicker/dist/react-datepicker.css';
 
 import '../scss/CartPage.scss';
@@ -107,13 +109,14 @@ function DatePickerComponent(props) {
 
   useEffect(() => {
     props.setRsvDate(date);
+    console.log(format(date, 'yyyy.MM.dd'));
   }, [date]);
 
   return (
     <DatePicker
       selected={date}
       onChange={(date) => setDate(date)}
-      dateFormat='yyyy.MM.dd (h:mm aa)'
+      dateFormat='yyyy.MM.dd (H:mm)'
       showTimeSelect
       includeTimes={includeTimes}
       minDate={new Date()}
