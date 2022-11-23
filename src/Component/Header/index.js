@@ -173,7 +173,7 @@ function Header() {
         </div>
         <div className='user-menu-container'>
           <div className='mike-button-container' onClick={showModal}>
-            <HiMicrophone clssName='mike-button' />
+            <HiMicrophone className='mike-button' />
           </div>
           {modalOpen && <Modal setModalOpen={showModal} />}
           <Modal
