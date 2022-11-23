@@ -16,11 +16,11 @@ function MyPage() {
   const [phoneNumber, setPhoneNumber] = useState(null);
   const [name, setName] = useState(null);
 
-  const data = {
+  let data = {
     address: address,
     cardNumber: cardNumber,
     phoneNumber: phoneNumber,
-    name: name,
+    userName: name,
   };
 
   const getMyInfo = async () => {
