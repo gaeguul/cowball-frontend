@@ -1,3 +1,5 @@
+// prettier-ignore
+
 import React, { useState, useEffect } from 'react';
 import { BiEdit } from 'react-icons/bi';
 

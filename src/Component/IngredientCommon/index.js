@@ -1,3 +1,5 @@
+// prettier-ignore
+
 import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 

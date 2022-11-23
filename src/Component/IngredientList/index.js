@@ -1,3 +1,5 @@
+// prettier-ignore
+
 import React, { useState } from 'react';
 
 import IngredientListTable from './IngredientListTable';

@@ -1,7 +1,8 @@
+// prettier-ignore
 /* eslint-disable */
 
 import React, { useEffect, useState } from 'react';
-import { addDays, differenceInDays, format, subDays } from 'date-fns';
+import { addDays, format, subDays } from 'date-fns';
 
 import {
   API,
