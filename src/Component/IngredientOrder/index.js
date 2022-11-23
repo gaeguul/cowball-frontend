@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 import { API, LoadingPlaceholder } from '../IngredientCommon';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
 const YOIL = [
   '일요일',
@@ -12,22 +14,30 @@ const YOIL = [
   '금요일',
   '토요일',
 ];
-const deliveryYoil = [1, 4]; //월 목
+
+function usePrevState(state) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = state;
+  });
+  return ref.current;
+}
 
 function OrderNumberButton({ orderCount, onValueChange }) {
   const [value, setValue] = useState(orderCount);
+  const prevValue = usePrevState(value);
 
   const decreaseOrderNumber = () => {
     if (value === 0) console.log('더 이상 줄일 수 없습니다');
-    else setValue(value - 1);
+    else setValue((prev) => prev - 1);
   };
 
   const increaseOrderNumber = () => {
-    setValue(value + 1);
+    setValue((prev) => prev + 1);
   };
 
   useEffect(() => {
-    onValueChange(value);
+    onValueChange(value, prevValue);
   }, [value]);
 
   return (
@@ -59,9 +69,9 @@ function IngredientItem({ ingredient, amount, category, onAmountChange }) {
     setTotalPrice(amount * ingredient.ingredientPrice);
   }, []);
 
-  const onValueChange = (value) => {
-    setTotalPrice(value * ingredient.ingredientPrice);
-    onAmountChange(value, totalPrice);
+  const onValueChange = (newValue, oldValue) => {
+    setTotalPrice(newValue * ingredient.ingredientPrice);
+    onAmountChange(newValue, oldValue);
   };
 
   return (
@@ -128,23 +138,27 @@ function IngredientOrder() {
       })
       .catch((e) => console.log(e));
 
+  const [deliveredDays, setDeliveredDays] = useState([]);
+  const [orderDate, setOrderDate] = useState();
+
   useEffect(() => {
     Promise.all([
+      axios
+        .get(`ingredients/orders/delivered-day`)
+        .then((res) => res.data)
+        .then(setDeliveredDays),
       API.getIngredientCategories().then(setIngredientCategories),
       API.getIngredientList()
         .then(setIngredientList)
         .finally(() => setLoading(false)),
-      API.getTodayIngredientSchedule()
-        .then((items) =>
-          items.map((item) => {
-            return {
-              ingredientId: item.ingredientId,
-              orderAmount: item.orderAmount,
-            };
-          }),
-        )
-        .then(setIngredientOrders),
-    ]).finally(() => setLoading(false));
+      API.getIngredientOrders().then((data) => {
+        setOrderDate(new Date(data.date));
+        setIngredientOrders(data.items);
+        console.log('Orders Data', data);
+      }),
+    ])
+      .finally(() => setLoading(false))
+      .finally(() => console.log('orders', ingredientOrders));
   }, []);
 
   useEffect(() => {
@@ -160,11 +174,22 @@ function IngredientOrder() {
         <div className='title-container'>
           <div className='title-main'>발주관리</div>
           <div className='title-detail'>
-            발주를 신청하면 {deliveryYoil.map((yoil) => YOIL[yoil]).join(', ')}
+            발주를 신청하면{' '}
+            {deliveredDays
+              .map((bo, i) => (bo ? YOIL[i] : null))
+              .filter((day) => day !== null)
+              .join(', ')}
             에 입고됩니다.
+            <br />
+            (당일 제외)
           </div>
         </div>
         <div className='content-container'>
+          <div className='delivered-date-info'>
+            아래의 목록은{' '}
+            <strong>{format(orderDate, 'PPP (E)', { locale: ko })}</strong>에
+            도착할 주문에 대한 명세입니다.
+          </div>
           <div className='table-container'>
             <table>
               <thead>
@@ -183,12 +208,15 @@ function IngredientOrder() {
                   );
                   const orderAmount = ingOrder ? ingOrder.orderAmount : 0;
 
-                  const onAmountChange = (value, prevPrice) => {
-                    const newPrice = value * ingredient.ingredientPrice;
-                    const diff = newPrice - prevPrice;
-                    setTotalOrderPrice(totalOrderPrice + diff);
+                  const onAmountChange = (newValue, oldValue) => {
+                    const diff = newValue - oldValue;
+                    if (diff === 0) return;
 
-                    putRequest(ingredient.ingredientId, value);
+                    setTotalOrderPrice(
+                      totalOrderPrice + diff * ingredient.ingredientPrice,
+                    );
+
+                    putRequest(ingredient.ingredientId, newValue);
                   };
 
                   return (
