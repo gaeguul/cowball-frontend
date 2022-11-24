@@ -23,9 +23,7 @@ const DINNER_NAME = ['발렌타인', '프렌치', '잉글리시', '샴페인 축
 const customerId = localStorage.getItem('customerId');
 const customerToken = localStorage.getItem('customerToken');
 
-function DeleteDinnerButton(props) {
-  const orderDinnerId = props.orderDinnerId;
-
+function DeleteDinnerButton({ orderDinnerId }) {
   const deleteDinnerButtonClick = async () => {
     await new Promise((r) => setTimeout(r, 1000));
 
@@ -51,37 +49,6 @@ function DeleteDinnerButton(props) {
   return (
     <div className='delete-dinner-button'>
       <RiCloseCircleFill className='button' onClick={deleteDinnerButtonClick} />
-    </div>
-  );
-}
-
-function ChangeDinnerNumberButton(props) {
-  const dinnerNumber = props.dinnerNumber;
-  const [newDinnerNumber, setNewDinnerNumber] = useState(dinnerNumber);
-
-  const decreaseDinnerNumber = () => {
-    if (newDinnerNumber == 0) {
-      console.log('더 이상 줄일 수 없습니다');
-    } else {
-      setNewDinnerNumber((prev) => prev - 1);
-    }
-  };
-
-  const increaseDinnerNumber = () => {
-    setNewDinnerNumber((prev) => prev + 1);
-  };
-
-  return (
-    <div className='dinner-number-button-container'>
-      <div className='dinner-number-button'>
-        <div className='button-container'>
-          <BiMinus className='button' onClick={decreaseDinnerNumber} />
-        </div>
-        <div className='number'>{newDinnerNumber}</div>
-        <div className='button-container'>
-          <BiPlus className='button' onClick={increaseDinnerNumber} />
-        </div>
-      </div>
     </div>
   );
 }
@@ -121,6 +88,66 @@ function DatePickerComponent(props) {
       includeTimes={includeTimes}
       minDate={new Date()}
     />
+  );
+}
+
+function ChangeDinnerNumberButton({
+  dinnerNumber,
+  orderDinnerId,
+  setTotalDinnerPrice,
+  getCartInfo,
+}) {
+  const [newDinnerNumber, setNewDinnerNumber] = useState(dinnerNumber);
+
+  const decreaseDinnerNumber = () => {
+    if (newDinnerNumber == 0) {
+      console.log('더 이상 줄일 수 없습니다');
+    } else {
+      setNewDinnerNumber((prev) => prev - 1);
+    }
+  };
+
+  const increaseDinnerNumber = () => {
+    setNewDinnerNumber((prev) => prev + 1);
+  };
+
+  /**newDinnerNumber가 변함에 따라 api PATCH */
+  useEffect(() => {
+    const patchDinnerNumber = async () => {
+      try {
+        const data = { dinnerAmount: newDinnerNumber };
+        const options = {
+          headers: {
+            Authorization: `Bearer ${customerToken}`,
+          },
+        };
+        const response = await axios.patch(
+          `cart/${customerId}/${orderDinnerId}`,
+          data,
+          options,
+        );
+        console.log('디너수량변경 응답', response.data);
+        setTotalDinnerPrice(response.data.totalDinnerPrice);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    patchDinnerNumber();
+    getCartInfo();
+  }, [newDinnerNumber]);
+
+  return (
+    <div className='dinner-number-button-container'>
+      <div className='dinner-number-button'>
+        <div className='button-container'>
+          <BiMinus className='button' onClick={decreaseDinnerNumber} />
+        </div>
+        <div className='number'>{newDinnerNumber}</div>
+        <div className='button-container'>
+          <BiPlus className='button' onClick={increaseDinnerNumber} />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -181,8 +208,12 @@ function DinnerItem(props) {
   const dinner = props.dinner;
   const options = dinner.orderDinnerOptions;
   const orderDinnerId = dinner.orderDinnerId;
+  const getCartInfo = props.getCartInfo;
 
   const [styleInfo, setStyleInfo] = useState({});
+  const [totalDinnerPrice, setTotalDinnerPrice] = useState(
+    dinner.totalDinnerPrice,
+  );
 
   const getStyleInfo = useCallback(async () => {
     /**선택한 스타일 한글명과 가격 조회 */
@@ -198,6 +229,10 @@ function DinnerItem(props) {
   useEffect(() => {
     getStyleInfo();
   }, [getStyleInfo]);
+
+  useEffect(() => {
+    console.log('totalDinnerPrice 업데이트 ', totalDinnerPrice);
+  }, [totalDinnerPrice]);
 
   return (
     <div className='cart-dinner'>
@@ -227,9 +262,14 @@ function DinnerItem(props) {
         })}
       </div>
       <div className='dinner-number'>
-        <ChangeDinnerNumberButton dinnerNumber={dinner.dinnerAmount} />
+        <ChangeDinnerNumberButton
+          dinnerNumber={dinner.dinnerAmount}
+          orderDinnerId={orderDinnerId}
+          setTotalDinnerPrice={setTotalDinnerPrice}
+          getCartInfo={getCartInfo}
+        />
       </div>
-      <div className='dinner-price'>{dinner.totalDinnerPrice}원</div>
+      <div className='dinner-price'>{totalDinnerPrice}원</div>
     </div>
   );
 }
@@ -335,37 +375,21 @@ function CartPage() {
     getCartInfo();
   }, [getCartInfo]);
 
-  useEffect(() => {
-    // const getUserGrade = async () => {
-    //   try {
-    //     const options = {
-    //       headers: {
-    //         Authorization: `Bearer ${customerToken}`,
-    //       },
-    //     };
-    //     const url = `users/${customerId}`;
-    //     const response = await axios.get(url, options);
-    //     console.log(response.data);
-    //     setGrade(response.data.grade);
-    //     console.log('grade', response.data.grade);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-    // getUserGrade();
-  }, []);
-
   return (
     <CustomerLayout>
       <Header />
       <div className='main-container'>
         <div className='cart-container'>
           <div className='main-title'>장바구니</div>
-          <div className='dinner-cart-list-container'>
+          <diformv className='dinner-cart-list-container'>
             <div className='menu-container'>
               {dinners.map((dinner) => {
                 return (
-                  <DinnerItem key={dinner.orderDinnerId} dinner={dinner} />
+                  <DinnerItem
+                    key={dinner.orderDinnerId}
+                    dinner={dinner}
+                    getCartInfo={getCartInfo}
+                  />
                 );
               })}
               <div className='total-container'>
@@ -425,17 +449,18 @@ function CartPage() {
                     <div className='total-price-number'>
                       {cartInfo.totalPrice}원
                     </div>
-                    {cartInfo.totalPrice - cartInfo.paymentPrice ===
-                    0 ? null : (
-                      <>
-                        <div className='discount-price-title content-title'>
-                          단골할인금액
-                        </div>
-                        <div className='discount-price-number'>
-                          - {cartInfo.totalPrice - cartInfo.paymentPrice}원
-                        </div>
-                      </>
-                    )}
+                    {cartInfo.totalPrice &&
+                      (cartInfo.totalPrice - cartInfo.paymentPrice ===
+                      0 ? null : (
+                        <>
+                          <div className='discount-price-title content-title'>
+                            단골할인금액
+                          </div>
+                          <div className='discount-price-number'>
+                            - {cartInfo.totalPrice - cartInfo.paymentPrice}원
+                          </div>
+                        </>
+                      ))}
 
                     <div className='payment-price-title  content-title'>
                       총 결제금액
@@ -457,7 +482,7 @@ function CartPage() {
                 원 결제하기
               </button>
             </form>
-          </div>
+          </diformv>
         </div>
       </div>
     </CustomerLayout>
