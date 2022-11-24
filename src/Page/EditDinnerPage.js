@@ -287,6 +287,8 @@ function ChangeOptionNumberButton(props) {
   const setOptionNumber = props.setOptionNumber;
   const setTotalPrice = props.setTotalPrice;
   const dinnerOptionPrice = props.dinnerOptionPrice;
+  const myOptions = props.myOptions;
+  const dinnerOptionId = props.dinnerOptionId;
 
   const decreaseOptionNumber = () => {
     if (optionNumber == 0) {
@@ -302,6 +304,14 @@ function ChangeOptionNumberButton(props) {
     setTotalPrice((totalPrice) => totalPrice + dinnerOptionPrice);
   };
 
+  useEffect(() => {
+    // console.log('dinnerOptionId 이 줄 옵션아이디', dinnerOptionId);
+    // console.log('비교할 거다 얘네랑', myOptions);
+    const option = myOptions.find((o) => o.dinnerOptionId === dinnerOptionId);
+    if (option) setOptionNumber(option.amount);
+    else setOptionNumber(0);
+  }, []);
+
   return (
     <div className='option-number-button-container'>
       <div className='option-number-button'>
@@ -316,26 +326,27 @@ function ChangeOptionNumberButton(props) {
     </div>
   );
 }
-
+/** 옵션 한 줄! */
 function ExtraOptionItem(props) {
   const extraOption = props.extraOption;
   const dinnerOptionId = extraOption.dinnerOptionId;
-  const setNewExtraOption = props.setNewExtraOption;
+  // const setNewExtraOption = props.setNewExtraOption;
   const setTotalPrice = props.setTotalPrice;
+  const myOptions = props.myOptions;
   // const myOptionNumber = props.myOptionNumber;
 
   // console.log('myOptionNumber', myOptionNumber);
 
   const [optionNumber, setOptionNumber] = useState(0);
 
-  useEffect(() => {
-    // console.log('dinnerOptionId', dinnerOptionId, 'optionNumber', optionNumber);
-    const tmpObject = {
-      id: dinnerOptionId,
-      amount: optionNumber,
-    };
-    setNewExtraOption(tmpObject);
-  }, [optionNumber]);
+  // useEffect(() => {
+  //   // console.log('dinnerOptionId', dinnerOptionId, 'optionNumber', optionNumber);
+  //   const tmpObject = {
+  //     id: dinnerOptionId,
+  //     amount: optionNumber,
+  //   };
+  //   setNewExtraOption(tmpObject);
+  // }, [optionNumber]);
 
   return (
     <>
@@ -349,6 +360,8 @@ function ExtraOptionItem(props) {
           setOptionNumber={setOptionNumber}
           setTotalPrice={setTotalPrice}
           dinnerOptionPrice={props.extraOption.dinnerOptionPrice}
+          dinnerOptionId={dinnerOptionId}
+          myOptions={myOptions}
         />
       </div>
     </>
@@ -360,7 +373,7 @@ function ExtraOptionComponent(props) {
   const myExtraOptions = props.myExtraOptions;
   const setMyExtraOptions = props.setMyExtraOptions;
   const setTotalPrice = props.setTotalPrice;
-  // const myOptions = props.myOptions;
+  const myOptions = props.myOptions;
 
   const [loading, setLoading] = useState(true);
   const [extraOptions, setExtraOptions] = useState([]);
@@ -425,6 +438,7 @@ function ExtraOptionComponent(props) {
                     extraOption={extraOption}
                     setNewExtraOption={setNewExtraOption}
                     setTotalPrice={setTotalPrice}
+                    myOptions={myOptions}
                   />
                 );
               })}
