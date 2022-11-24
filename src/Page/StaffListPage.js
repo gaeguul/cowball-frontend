@@ -6,18 +6,17 @@ import StaffLayout from '../Component/StaffLayout';
 import StaffLogoNav from '../Component/StaffLogoNav';
 import '../scss/StaffListPage.scss';
 
-// const staffId = localStorage.getItem('staffId');
 const staffToken = localStorage.getItem('staffToken');
 
-const STAFF_ROLE_NAME = new Map([
-  [1, '조리(미승인)'],
-  [2, '배달(미승인)'],
-  [17, '조리직원'],
-  [18, '배달직원'],
-  [32, '사장님'],
-]);
-
 function checkStaffRole(value) {
+  const STAFF_ROLE_NAME = new Map([
+    [1, '조리(미승인)'],
+    [2, '배달(미승인)'],
+    [17, '조리직원'],
+    [18, '배달직원'],
+    [32, '사장님'],
+  ]);
+
   return STAFF_ROLE_NAME.get(value);
 }
 
