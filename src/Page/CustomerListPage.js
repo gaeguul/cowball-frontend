@@ -31,7 +31,6 @@ function CustomerList() {
         headers: {
           Authorization: `Bearer ${staffToken}`,
         },
-        // params: { order_by: 'orderCount' },
       };
 
       do {
@@ -41,6 +40,7 @@ function CustomerList() {
           .then((it) => {
             if (pageMax === undefined) pageMax = it.pageMax;
             result.push(...it.items);
+            console.log(it.items);
           })
           .catch((e) => console.log(e));
       } while (++page <= pageMax);
