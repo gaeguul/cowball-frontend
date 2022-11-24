@@ -23,7 +23,7 @@ const customerToken = localStorage.getItem('customerToken');
 function DevlieryInfoComponent(props) {
   const orderId = props.orderId;
   const myOrder = props.myOrder;
-  const rsvDate = format(parseISO(myOrder.rsvDate), 'yyyy.MM.dd (H:mm)');
+  const rsvDate = format(parseISO(myOrder.rsvDate), 'yyyy.MM.dd (HH:mm)');
 
   const handlePutCartButtonClick = async () => {
     try {

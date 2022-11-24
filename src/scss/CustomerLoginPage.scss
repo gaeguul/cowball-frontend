@@ -8,6 +8,11 @@
   width: $w;
 }
 
+input {
+  font-size: 16px;
+  font-weight: 500;
+}
+
 .customer-login-container {
   display: flex;
 
@@ -107,7 +112,6 @@
     display: flex;
     justify-content: space-around;
     padding: 10px 0px;
-
 
     a {
       text-decoration: none;

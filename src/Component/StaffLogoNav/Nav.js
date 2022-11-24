@@ -1,18 +1,40 @@
-import React, { useContext } from 'react';
+import axios from 'axios';
+import React, { useState, useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
+
+const staffToken = localStorage.getItem('staffToken');
+const staffId = localStorage.getItem('staffId');
 
 function Nav() {
   const value = useContext(AuthContext);
   const setIsStaffLogin = value.setIsStaffLogin;
 
-  const isOwner = true; //주인이라면 true, 일반직원이라면 false
-  //isOwner가 true이면 '직원관리' 페이지 노출됨
   const handleLogoutButtonClick = () => {
     //logout 처리
     localStorage.clear();
     setIsStaffLogin(false);
   };
+
+  const [isOwner, setIsOwner] = useState(false); //isOwner가 true이면 '직원관리' 페이지 노출됨
+
+  useEffect(() => {
+    const getIsOwner = async () => {
+      try {
+        const response = await axios.get(`staff/${staffId}`, {
+          headers: {
+            Authorization: `Bearer ${staffToken}`,
+          },
+        });
+
+        console.log('role', response.data.role);
+        setIsOwner(response.data.role === 32 ? true : false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getIsOwner();
+  }, []);
   return (
     <div className='nav-container'>
       <div className='nav-container-inner'>

@@ -98,7 +98,7 @@ function StaffLoginForm() {
 function ButtomNav() {
   return (
     <div className='buttom-nav-container'>
-      <NavLink to='/'>메인으로 이동</NavLink>
+      <NavLink to='/'>고객이신가요?</NavLink>
       <NavLink to='/staffsignup'>직원 회원가입</NavLink>
     </div>
   );
