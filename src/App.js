@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Router from './Routes';
 import { ContextProvider } from './Context/AuthContext.js';
 
@@ -15,15 +15,10 @@ const staffSocket = io(
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  useEffect(() => {
-    return initSocketNetworkForStaff(staffSocket);
-  }, []);
-
   return (
     <ContextProvider>
       <div className='App'>
         <Router />
-        <ToastContainer />
       </div>
     </ContextProvider>
   );

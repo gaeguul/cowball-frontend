@@ -127,6 +127,7 @@ function StyleComponent(props) {
   // const styleOptions = props.styleOptions;
   const setMyStyleId = props.setMyStyleId;
   const setStylePrice = props.setStylePrice;
+  const dinnerId = props.dinnerId;
 
   const [styles, setStyles] = useState([]);
 
@@ -134,8 +135,13 @@ function StyleComponent(props) {
   const getStyleOptions = async () => {
     try {
       const url = `menu/styles`;
-      const response = await axios.get(url);
-
+      const options = {
+        params: {
+          dinner_id: dinnerId,
+        },
+      };
+      const response = await axios.get(url, options);
+      console.log('스타일', response.data.items);
       setStyles(response.data.items);
     } catch (error) {
       console.log(error);
@@ -510,6 +516,7 @@ function OrderPage() {
             <StyleComponent
               setMyStyleId={setMyStyleId}
               setStylePrice={setStylePrice}
+              dinnerId={dinnerId}
             />
             <SteakDegreeComponent setMySteakDegree={setMySteakDegree} />
             <DeleteMainOptionComponent

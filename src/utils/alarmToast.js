@@ -6,7 +6,7 @@ import { NewOrderToastContent } from '../Component/Toast/NewOrderToast';
 const showNewOrderToast = (order) =>
   toast(<NewOrderToastContent order={order} />, {
     autoClose: 15000,
-    position: 'bottom-right',
+    position: 'top-right',
     progress: undefined,
     hideProgressBar: true,
   });
