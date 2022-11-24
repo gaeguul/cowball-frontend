@@ -31,7 +31,7 @@ function CustomerList() {
         headers: {
           Authorization: `Bearer ${staffToken}`,
         },
-        params: { order_by: 'orderCount' },
+        // params: { order_by: 'orderCount' },
       };
 
       do {

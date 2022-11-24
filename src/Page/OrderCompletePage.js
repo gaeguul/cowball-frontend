@@ -10,7 +10,10 @@ function OrderCompletePage() {
   const location = useLocation();
   const orderId = location.state.orderId;
   const paymentPrice = location.state.paymentPrice;
-  const rsvDate = format(parseISO(location.state.rsvDate), 'yyyy.MM.dd (H:mm)');
+  const rsvDate = format(
+    parseISO(location.state.rsvDate),
+    'yyyy.MM.dd (HH:mm)',
+  );
 
   console.log('orderId', orderId);
   console.log('paymentPrice', paymentPrice);

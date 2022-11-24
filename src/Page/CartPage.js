@@ -116,7 +116,7 @@ function DatePickerComponent(props) {
     <DatePicker
       selected={date}
       onChange={(date) => setDate(date)}
-      dateFormat='yyyy.MM.dd (H:mm)'
+      dateFormat='yyyy.MM.dd (HH:mm)'
       showTimeSelect
       includeTimes={includeTimes}
       minDate={new Date()}

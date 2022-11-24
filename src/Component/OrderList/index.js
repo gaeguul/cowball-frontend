@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { format, parseISO } from 'date-fns';
 
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
 const STATE_NAME = {
@@ -22,6 +23,7 @@ const STATE_NEXT = new Map([
 ]);
 
 function OrderInfo(props) {
+  const orderDate = format(parseISO(props.orderDate), 'yyyy.MM.dd (HH:mm)');
   return (
     <div className='order-info'>
       <div className='title'>주문정보</div>
@@ -31,7 +33,7 @@ function OrderInfo(props) {
         <div className='phone-number subtitle'>연락처</div>
         <div className='phone-number detail'>{props.phoneNumber}</div>
         <div className='order-date subtitle'>주문일</div>
-        <div className='order-date detail'>{props.orderDate}</div>
+        <div className='order-date detail'>{orderDate}</div>
       </div>
     </div>
   );
@@ -242,7 +244,10 @@ function DetailComponent(props) {
                 </div>
               )}
             </div>
-            <div className='rsv-date'>예약 {detailOrderInfo.rsvDate}</div>
+            <div className='rsv-date'>
+              예약{' '}
+              {format(parseISO(detailOrderInfo.rsvDate), 'yyyy.MM.dd (HH:mm)')}
+            </div>
             <div className='number-and-price'>
               <span className='order-number'>
                 메뉴 {detailOrderInfo.orderDinners.length}개
@@ -316,6 +321,8 @@ function LeftComponent(props) {
         </div>
       </div>
       {orders.map((order) => {
+        console.log(typeof order.rsvDate);
+
         return (
           <div
             className='order'
@@ -324,7 +331,13 @@ function LeftComponent(props) {
           >
             <div className='order-id'>배달 {order.orderId}</div>
             <div className='order-number'>메뉴 {order.orderDinnerCount}개</div>
-            <div className='rsv-date'>{order.rsvDate}</div>
+            {!order.rsvDate ? (
+              <div className='rsv-date'></div>
+            ) : (
+              <div className='rsv-date'>
+                {format(parseISO(order.rsvDate), 'yyyy.MM.dd (HH:mm)')}
+              </div>
+            )}
           </div>
         );
       })}
