@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { format, parseISO } from 'date-fns';
+
 import StaffLayout from '../Component/StaffLayout';
 import StaffLogoNav from '../Component/StaffLogoNav';
 import '../scss/StaffListPage.scss';
@@ -7,26 +9,73 @@ import '../scss/StaffListPage.scss';
 // const staffId = localStorage.getItem('staffId');
 const staffToken = localStorage.getItem('staffToken');
 
-function RegisterStaffButton() {
+const STAFF_ROLE_NAME = new Map([
+  [1, '조리(미승인)'],
+  [2, '배달(미승인)'],
+  [17, '조리직원'],
+  [18, '배달직원'],
+  [32, '사장님'],
+]);
+
+function checkStaffRole(value) {
+  return STAFF_ROLE_NAME.get(value);
+}
+
+function RegisterStaffButton({ staffId }) {
+  const handleRegisterStaffButtonClick = async () => {
+    try {
+      const url = `staff/${staffId}/approve`;
+      const response = await axios.post(url, {
+        headers: {
+          Authorization: `Bearer ${staffToken}`,
+        },
+      });
+      console.log(response);
+      alert(`직원을 등록했습니다.`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className='register-staff-button-container'>
-      <div className='register-staff-button'>
+      <div
+        onClick={handleRegisterStaffButtonClick}
+        className='register-staff-button'
+      >
         <div className='button-title'>직원등록</div>
       </div>
     </div>
   );
 }
-function DeleteStaffButton() {
+
+function DeleteStaffButton({ staffId }) {
+  const handleDeleteStaffButtonClick = async () => {
+    try {
+      const url = `staff/${staffId}`;
+      const response = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${staffToken}`,
+        },
+      });
+      console.log(response);
+      alert(`직원을 삭제했습니다.`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className='delete-staff-button-container'>
-      <div className='delete-staff-button'>
+      <div
+        onClick={handleDeleteStaffButtonClick}
+        className='delete-staff-button'
+      >
         <div className='button-title'>삭제</div>
       </div>
     </div>
   );
 }
 
-function AppliedStaffsComponent() {
+function AppliedStaffsComponent({ appliedStaffs }) {
   return (
     <div className='applied-staff-list-container'>
       <div className='title'>회원가입 신청한 직원</div>
@@ -42,33 +91,25 @@ function AppliedStaffsComponent() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>김소공</td>
-              <td>sogong</td>
-              <td>배달</td>
-              <td>2022.11.01</td>
-              <td>
-                <RegisterStaffButton />
-              </td>
-            </tr>
-            <tr>
-              <td>김소공</td>
-              <td>sogong</td>
-              <td>배달</td>
-              <td>2022.11.01</td>
-              <td>
-                <RegisterStaffButton />
-              </td>
-            </tr>
-            <tr>
-              <td>김소공</td>
-              <td>sogong</td>
-              <td>배달</td>
-              <td>2022.11.01</td>
-              <td>
-                <RegisterStaffButton />
-              </td>
-            </tr>
+            {appliedStaffs.map((appliedStaff) => {
+              const joinDate = format(
+                parseISO(appliedStaff.joinDate),
+                'yyyy.MM.dd',
+              );
+              const role = checkStaffRole(appliedStaff.role);
+
+              return (
+                <tr key={appliedStaff.staffId}>
+                  <td>{appliedStaff.staffName}</td>
+                  <td>{appliedStaff.staffId}</td>
+                  <td>{role}</td>
+                  <td>{joinDate}</td>
+                  <td>
+                    <RegisterStaffButton staffId={appliedStaff.staffId} />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -76,41 +117,7 @@ function AppliedStaffsComponent() {
   );
 }
 
-function EmployedStaffsComponent() {
-  const [employedStaffs, setEmployedStaffs] = useState([]);
-
-  const getEmployedStaffs = async () => {
-    let page = 1;
-    let pageMax;
-
-    const url = `users`;
-    const result = [];
-    const headers = {
-      headers: {
-        Authorization: `Bearer ${staffToken}`,
-      },
-    };
-
-    do {
-      await axios
-        .get(`${url}?page=${page}`, headers)
-        .then((res) => res.data)
-        .then((it) => {
-          if (pageMax === undefined) pageMax = it.pageMax;
-          result.push(...it.items);
-        })
-        .catch((e) => console.log(e));
-    } while (++page <= pageMax);
-
-    console.log(result);
-    setEmployedStaffs(result);
-  };
-
-  useEffect(() => {
-    getEmployedStaffs();
-    console.log(employedStaffs);
-  }, []);
-
+function EmployedStaffsComponent({ employedStaffs }) {
   return (
     <div className='employed-staff-list-container'>
       <div className='title'>고용된 직원</div>
@@ -127,22 +134,25 @@ function EmployedStaffsComponent() {
             </tr>
           </thead>
           <tbody>
-            {/* {
-              employedStaffs.map((staff)=> {
-                <EmployedStaffComponent key={staff.}
-                staff={staff}/>
-              })
-            } */}
-            <tr>
-              <td>김소공</td>
-              <td>sogong</td>
-              <td>배달</td>
-              <td>2022.11.01</td>
-              <td>010-1234-1234</td>
-              <td>
-                <DeleteStaffButton />
-              </td>
-            </tr>
+            {employedStaffs.map((employedStaff) => {
+              const joinDate = format(
+                parseISO(employedStaff.joinDate),
+                'yyyy.MM.dd',
+              );
+              const role = checkStaffRole(employedStaff.role);
+              return (
+                <tr key={employedStaff.staffId}>
+                  <td>{employedStaff.staffName}</td>
+                  <td>{employedStaff.staffId}</td>
+                  <td>{role}</td>
+                  <td>{joinDate}</td>
+                  <td>{employedStaff.phoneNumber}</td>
+                  <td>
+                    <DeleteStaffButton staffId={employedStaff.staffId} />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -151,6 +161,42 @@ function EmployedStaffsComponent() {
 }
 
 function StaffList() {
+  const [employedStaffs, setEmployedStaffs] = useState([]);
+  const [appliedStaffs, setAppliedStaffs] = useState([]);
+
+  useEffect(() => {
+    const getStaffs = async () => {
+      let page = 1;
+      let pageMax;
+
+      const url = `staff`;
+      const result = [];
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${staffToken}`,
+        },
+      };
+
+      do {
+        await axios
+          .get(`${url}?page=${page}`, headers)
+          .then((res) => res.data)
+          .then((it) => {
+            if (pageMax === undefined) pageMax = it.pageMax;
+            result.push(...it.items);
+          })
+          .catch((e) => console.log(e));
+      } while (++page <= pageMax);
+
+      const employedResult = result.filter((staff) => staff.role > 2);
+      const appliedResult = result.filter((staff) => staff.role <= 2);
+
+      setEmployedStaffs(employedResult);
+      setAppliedStaffs(appliedResult);
+    };
+    getStaffs();
+  }, []);
+
   return (
     <div className='nexttonav'>
       <div className='stafflist-container'>
@@ -162,8 +208,8 @@ function StaffList() {
           </div>
         </div>
         <div className='content-container'>
-          <AppliedStaffsComponent />
-          <EmployedStaffsComponent />
+          <AppliedStaffsComponent appliedStaffs={appliedStaffs} />
+          <EmployedStaffsComponent employedStaffs={employedStaffs} />
         </div>
       </div>
     </div>
