@@ -106,7 +106,7 @@ function ButtomNav() {
   return (
     <div className='buttom-nav-container'>
       <NavLink to='/signup'>회원가입</NavLink>
-      <NavLink to='/stafflogin'>직원 로그인</NavLink>
+      <NavLink to='/stafflogin'>직원이신가요?</NavLink>
     </div>
   );
 }
