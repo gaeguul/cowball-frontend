@@ -2,9 +2,6 @@
 
 import React, { useState } from 'react';
 
-//import { format } from 'date-fns';
-//import { BiPlus, BiMinus } from 'react-icons/bi';
-
 import IngredientListTable from './IngredientListTable';
 import IngredientScheduleTable from './IngredientScheduleTable';
 

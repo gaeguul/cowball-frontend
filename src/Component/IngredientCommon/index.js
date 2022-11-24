@@ -40,6 +40,9 @@ export const API = {
       return res.data[0].items;
     }),
 
+  getIngredientOrders: async () =>
+    await axios.get(`ingredients/orders`).then((res) => res.data),
+
   getIngredient: async (ingredientId) =>
     await axios
       .get(`ingredients/items/${ingredientId}`)

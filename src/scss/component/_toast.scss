@@ -1,0 +1,38 @@
+.toast-content.toast-new-order {
+  color: black;
+
+  > .toast-header {
+    padding: 0;
+    border-bottom: 1px solid #eaeaea;
+
+    .toast-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: black;
+    }
+    .text-rsv-date {
+      line-height: 16px;
+      font-size: 0.875rem;
+      font-weight: normal;
+      margin: 16px 0 8px 0;
+      color: black;
+      > span.name {
+        line-height: 16px;
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: normal;
+        border-radius: 8px;
+        background-color: var(--color-main);
+        padding: 0 4px;
+        margin-right: 8px;
+      }
+    }
+  }
+  > .toast-body {
+    padding-top: 16px;
+    > *:not(:first-child) {
+      margin-top: 8px;
+    }
+  }
+}

@@ -1,27 +1,43 @@
-/* eslint-disable */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 import { API, LoadingPlaceholder } from '../IngredientCommon';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
-const YOIL = [ '일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일' ];
-const deliveryYoil = [ 1, 4 ]; //월 목
+const YOIL = [
+  '일요일',
+  '월요일',
+  '화요일',
+  '수요일',
+  '목요일',
+  '금요일',
+  '토요일',
+];
+
+function usePrevState(state) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = state;
+  });
+  return ref.current;
+}
 
 function OrderNumberButton({ orderCount, onValueChange }) {
-
-  const [value, setValue] = useState(orderCount)
+  const [value, setValue] = useState(orderCount);
+  const prevValue = usePrevState(value);
 
   const decreaseOrderNumber = () => {
     if (value === 0) console.log('더 이상 줄일 수 없습니다');
-    else setValue(value - 1);
+    else setValue((prev) => prev - 1);
   };
 
   const increaseOrderNumber = () => {
-    setValue(value + 1);
+    setValue((prev) => prev + 1);
   };
 
   useEffect(() => {
-    onValueChange(value);
+    onValueChange(value, prevValue);
   }, [value]);
 
   return (
@@ -31,7 +47,13 @@ function OrderNumberButton({ orderCount, onValueChange }) {
           <BiMinus className='button' onClick={decreaseOrderNumber} />
         </div>
         {/*<div className='number'>{orderCount}</div>*/}
-        <input className='number' type='number' min={0} value={value} onChange={(e) => setValue(Number(e.target.value))} />
+        <input
+          className='number'
+          type='number'
+          min={0}
+          value={value}
+          onChange={(e) => setValue(Number(e.target.value))}
+        />
         <div className='button-container'>
           <BiPlus className='button' onClick={increaseOrderNumber} />
         </div>
@@ -47,9 +69,9 @@ function IngredientItem({ ingredient, amount, category, onAmountChange }) {
     setTotalPrice(amount * ingredient.ingredientPrice);
   }, []);
 
-  const onValueChange = (value) => {
-    setTotalPrice(value * ingredient.ingredientPrice);
-    onAmountChange(value, totalPrice);
+  const onValueChange = (newValue, oldValue) => {
+    setTotalPrice(newValue * ingredient.ingredientPrice);
+    onAmountChange(newValue, oldValue);
   };
 
   return (
@@ -58,10 +80,7 @@ function IngredientItem({ ingredient, amount, category, onAmountChange }) {
       <td>{category.categoryName}</td>
       <td>{ingredient.ingredientPrice.toLocaleString('ko-kr')}원</td>
       <td>
-        <OrderNumberButton
-          orderCount={amount}
-          onValueChange={onValueChange}
-        />
+        <OrderNumberButton orderCount={amount} onValueChange={onValueChange} />
       </td>
       <td>{totalPrice.toLocaleString('ko-kr')}원</td>
     </tr>
@@ -79,24 +98,28 @@ function IngredientOrder() {
   const calculateTotalOrderPrice = (ings, orders) => {
     let price = 0;
     console.log('Orders', orders);
-    orders.forEach(order => {
-      const ingredient = ings.find((ing) => order.ingredientId === ing.ingredientId);
-      if(!ingredient) return null;
+    orders.forEach((order) => {
+      const ingredient = ings.find(
+        (ing) => order.ingredientId === ing.ingredientId,
+      );
+      if (!ingredient) return null;
       const ingredientPrice = ingredient.ingredientPrice;
       price += order.orderAmount * ingredientPrice;
     });
     return price;
-  }
+  };
 
   const [loading, setLoading] = useState(true);
 
   const putRequest = (ingredientId, amount) => {
-    console.log('Put Request: ',ingredientId, amount);
+    console.log('Put Request: ', ingredientId, amount);
 
-    const existingIndex = requests.findIndex((value, index) => value.ingredientId === ingredientId)
+    const existingIndex = requests.findIndex(
+      (value) => value.ingredientId === ingredientId,
+    );
 
     if (existingIndex === -1) {
-      requests.push({ ingredientId: ingredientId, amount: amount })
+      requests.push({ ingredientId: ingredientId, amount: amount });
       setRequests(requests);
     } else {
       requests[existingIndex].amount = amount;
@@ -104,26 +127,38 @@ function IngredientOrder() {
     }
 
     console.log(requests);
-  }
+  };
 
   const handleOrderButtonClick = async () =>
-    await axios.put(`ingredients/orders`, requests)
-      .then(res => {
-        if(res.status < 400) alert("발주 내용을 전송했습니다.");
-        else throw new Error("잘못된 요청입니다.");
+    await axios
+      .put(`ingredients/orders`, requests)
+      .then((res) => {
+        if (res.status < 400) alert('발주 내용을 전송했습니다.');
+        else throw new Error('잘못된 요청입니다.');
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
+
+  const [deliveredDays, setDeliveredDays] = useState([]);
+  const [orderDate, setOrderDate] = useState();
 
   useEffect(() => {
     Promise.all([
+      axios
+        .get(`ingredients/orders/delivered-day`)
+        .then((res) => res.data)
+        .then(setDeliveredDays),
       API.getIngredientCategories().then(setIngredientCategories),
-      API.getIngredientList().then(setIngredientList).finally(() => setLoading(false)),
-      API.getTodayIngredientSchedule().then(items => items.map(item => {
-        return { ingredientId: item.ingredientId, orderAmount: item.orderAmount }
-      })).then(setIngredientOrders),
+      API.getIngredientList()
+        .then(setIngredientList)
+        .finally(() => setLoading(false)),
+      API.getIngredientOrders().then((data) => {
+        setOrderDate(new Date(data.date));
+        setIngredientOrders(data.items);
+        console.log('Orders Data', data);
+      }),
     ])
-
-    .finally(() => setLoading(false));
+      .finally(() => setLoading(false))
+      .finally(() => console.log('orders', ingredientOrders));
   }, []);
 
   useEffect(() => {
@@ -139,10 +174,22 @@ function IngredientOrder() {
         <div className='title-container'>
           <div className='title-main'>발주관리</div>
           <div className='title-detail'>
-            발주를 신청하면 {deliveryYoil.map(yoil => YOIL[yoil]).join(', ')}에 입고됩니다.
+            발주를 신청하면{' '}
+            {deliveredDays
+              .map((bo, i) => (bo ? YOIL[i] : null))
+              .filter((day) => day !== null)
+              .join(', ')}
+            에 입고됩니다.
+            <br />
+            (당일 제외)
           </div>
         </div>
         <div className='content-container'>
+          <div className='delivered-date-info'>
+            아래의 목록은{' '}
+            <strong>{format(orderDate, 'PPP (E)', { locale: ko })}</strong>에
+            도착할 주문에 대한 명세입니다.
+          </div>
           <div className='table-container'>
             <table>
               <thead>
@@ -156,20 +203,31 @@ function IngredientOrder() {
               </thead>
               <tbody>
                 {ingredientList.map((ingredient) => {
+                  const ingOrder = ingredientOrders.find(
+                    (value) => value.ingredientId === ingredient.ingredientId,
+                  );
+                  const orderAmount = ingOrder ? ingOrder.orderAmount : 0;
+
+                  const onAmountChange = (newValue, oldValue) => {
+                    const diff = newValue - oldValue;
+                    if (diff === 0) return;
+
+                    setTotalOrderPrice(
+                      totalOrderPrice + diff * ingredient.ingredientPrice,
+                    );
+
+                    putRequest(ingredient.ingredientId, newValue);
+                  };
+
                   return (
                     <IngredientItem
                       key={ingredient.ingredientId}
                       ingredient={ingredient}
-                      category={ingredientCategories.find(value => value.categoryId === ingredient.categoryId)}
-                      amount={ingredientOrders.find(value => value.ingredientId === ingredient.ingredientId).orderAmount}
-                      onAmountChange={(value, prevPrice) => {
-                        const newPrice = value * ingredient.ingredientPrice;
-                        const difference = newPrice - prevPrice;
-
-                        setTotalOrderPrice(totalOrderPrice + difference);
-
-                        putRequest(ingredient.ingredientId, value);
-                      }}
+                      category={ingredientCategories.find(
+                        (value) => value.categoryId === ingredient.categoryId,
+                      )}
+                      amount={orderAmount}
+                      onAmountChange={onAmountChange}
                     />
                   );
                 })}
@@ -179,7 +237,9 @@ function IngredientOrder() {
           <div className='bottom-container'>
             <div className='total-order-price'>
               <span className='hangeul-text'>총 발주 금액</span>
-              <span className='number'>{totalOrderPrice.toLocaleString('ko-kr')} 원</span>
+              <span className='number'>
+                {totalOrderPrice.toLocaleString('ko-kr')} 원
+              </span>
             </div>
             <div className='order-button-container'>
               <div className='order-button' onClick={handleOrderButtonClick}>
