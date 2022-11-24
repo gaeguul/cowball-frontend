@@ -9,7 +9,7 @@ import { initSocketNetworkForStaff } from './utils/alarmToast';
 import { io } from 'socket.io-client';
 
 const staffSocket = io(
-  'http://ec2-3-38-99-75.ap-northeast-2.compute.amazonaws.com:80/staff',
+  'http://ec2-3-38-99-75.ap-northeast-2.compute.amazonaws.com:8000/staff',
 );
 
 import 'react-toastify/dist/ReactToastify.css';
