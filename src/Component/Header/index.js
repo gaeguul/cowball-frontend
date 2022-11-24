@@ -239,7 +239,7 @@ function Header() {
                     </div>
                     <label className='contents'>{styleName}</label>
                     <div className='title-form'>
-                      <label className='title'>디너 종류</label>
+                      <label className='title'>스테이크 굽기</label>
                       <lable className='explain'>
                         ( 레어, 미디움 레어, 미디움, 미디움 웰, 웰던 )
                       </lable>
