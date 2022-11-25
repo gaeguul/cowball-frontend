@@ -51,6 +51,7 @@ function TopInfoComponent(props) {
       const url = `menu/dinners/${dinnerId}`;
       const response = await axios.get(url);
       setDinnerInfo(response.data);
+      console.log('혹시 스타일 또 불러온 건 아니겠지');
       setTotalPrice(response.data.dinnerPrice);
     } catch (error) {
       console.log(error);
@@ -169,6 +170,7 @@ function StyleComponent(props) {
 
   const handleStyleButtonClick = (event) => {
     setMyStyleId(parseInt(event.target.id));
+    console.log('스타일 바꿨습니다^^', parseInt(event.target.id));
     setStylePrice(parseInt(event.target.value));
   };
 
@@ -242,7 +244,9 @@ function DeleteMainOptionComponent(props) {
       id: parseInt(event.target.id),
       amount: 1,
     };
+    console.log('onChange 들어왔다');
     setMyMainOption(tmpOption);
+    console.log('내 tmpOption은!', tmpOption);
     setDeletePrice(parseInt(event.target.value));
   };
 
@@ -518,34 +522,38 @@ function EditDinnerPage() {
 
   useEffect(() => {
     MY_ORDER['degreeId'] = mySteakDegree;
+    console.log('스테이크 굽기도 바꿨다니까요?', MY_ORDER);
   }, [mySteakDegree]);
 
   useEffect(() => {
     MY_ORDER['styleId'] = myStyleId;
+    console.log('스타일 바꿨다니까요?', MY_ORDER);
   }, [myStyleId]);
 
   useEffect(() => {
     MY_ORDER['dinnerAmount'] = myDinnerNumber;
+    console.log('수량도 바꿨다니까요?', MY_ORDER);
   }, [myDinnerNumber]);
 
   useEffect(() => {
-    // console.log('myExtraOptions', myExtraOptions);
-    // console.log('myMainOption.id', !myMainOption.id);
-    // if (!myMainOption.id) {
-    //   const tmpOptions = [...myExtraOptions];
-    //   tmpOptions.splice(0, 2);
-    //   setMyOptions(tmpOptions);
-    //   console.log(tmpOptions);
-    //   setMyOptions(tmpOptions);
-    //   MY_ORDER['dinnerOptionIds'] = tmpOptions;
-    // } else {
-    //   const tmpOptions = [myMainOption, ...myExtraOptions];
-    //   tmpOptions.splice(1, 2);
-    //   setMyOptions(tmpOptions);
-    //   console.log(tmpOptions);
-    //   setMyOptions(tmpOptions);
-    //   MY_ORDER['dinnerOptionIds'] = tmpOptions;
-    // }
+    console.log('myExtraOptions', myExtraOptions);
+    console.log('myMainOption.id', !myMainOption.id);
+    if (!myMainOption.id) {
+      const tmpOptions = [...myExtraOptions];
+      tmpOptions.splice(0, 2);
+      setMyOptions(tmpOptions);
+      console.log(tmpOptions);
+      setMyOptions(tmpOptions);
+      MY_ORDER['dinnerOptionIds'] = tmpOptions;
+      console.log('삭제 옵션 바뀌었어요!!!', MY_ORDER);
+    } else {
+      const tmpOptions = [myMainOption, ...myExtraOptions];
+      tmpOptions.splice(1, 2);
+      setMyOptions(tmpOptions);
+      console.log(tmpOptions);
+      setMyOptions(tmpOptions);
+      MY_ORDER['dinnerOptionIds'] = tmpOptions;
+    }
   }, [myMainOption, myExtraOptions]);
 
   useEffect(() => {
