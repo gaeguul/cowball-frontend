@@ -31,6 +31,10 @@ function CustomerList() {
         headers: {
           Authorization: `Bearer ${staffToken}`,
         },
+        params: {
+          order_by: 'order_count',
+          order_direction: 'DESC',
+        },
       };
 
       do {
@@ -82,7 +86,6 @@ function CustomerList() {
                   <tr key={customer.userId}>
                     <td>{customer.userName}</td>
                     <td>{customer.userId}</td>
-
                     <td>
                       <div className='grade-container'>
                         {role === '단골' ? (
@@ -98,102 +101,6 @@ function CustomerList() {
                   </tr>
                 );
               })}
-              <tr>
-                <td>김소공</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='vip-grade'>단골</div>
-                  </div>
-                </td>
-                <td>100</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              {/* <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>김소공</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='vip-grade'>단골</div>
-                  </div>
-                </td>
-                <td>100</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>김소공</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='vip-grade'>단골</div>
-                  </div>
-                </td>
-                <td>100</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr>
-              <tr>
-                <td>나일반</td>
-                <td>sogong</td>
-                <td>
-                  <div className='grade-container'>
-                    <div className='default-grade'>일반</div>
-                  </div>
-                </td>
-                <td>5</td>
-                <td>2022.10.01</td>
-                <td>010-1234-5678</td>
-              </tr> */}
             </tbody>
           </table>
         </div>
