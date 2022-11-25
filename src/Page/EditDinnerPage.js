@@ -492,7 +492,7 @@ function EditDinnerPage() {
   const handleChangeDinnerClick = () => {
     // MY_ORDER['dinnerOptionIds'] = myOptions;
     console.log('myOptions', myOptions);
-    console.log('MY_ORDER', MY_ORDER);
+    console.log('보내지는 값: MY_ORDER', MY_ORDER);
     console.log('orderId', orderId);
   };
 
@@ -512,6 +512,8 @@ function EditDinnerPage() {
 
   useEffect(() => {
     MY_ORDER['dinnerOptionIds'] = myOptions;
+    console.log('됐냐?', MY_ORDER['dinnerOptionIds']);
+    console.log('사실 이게 진짜 나야', MY_ORDER);
   }, [myOptions]);
 
   useEffect(() => {
