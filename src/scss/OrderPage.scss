@@ -133,6 +133,22 @@
       flex-direction: column;
       align-items: flex-start;
 
+      .single-style {
+        display: flex;
+        flex-direction: row;
+        .style-detail-container {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          .bottom {
+            padding-top: 5px;
+            font-size: 0.9em;
+            color: #888888;
+            font-weight: 400;
+          }
+        }
+      }
+
       label {
         @include select-item;
         margin: 5px 0px;
