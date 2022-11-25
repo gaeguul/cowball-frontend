@@ -55,12 +55,18 @@ function DevlieryInfoComponent(props) {
             <div className='address-input-container second-col'>
               {myOrder.deliveryAddress}
             </div>
-            <div className='request-title content-title'>요청사항</div>
-            <div className='request-input-container second-col'>
-              {myOrder.request}
-            </div>
             <div className='card-number-title content-title'>카드번호</div>
             <div className='card-number second-col'>{myOrder.cardNumber}</div>
+            {myOrder.request == '' || myOrder.request == null ? (
+              <></>
+            ) : (
+              <>
+                <div className='request-title content-title'>요청사항</div>
+                <div className='request-input-container second-col'>
+                  {myOrder.request}
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className='payment-info-container'>
@@ -338,7 +344,7 @@ function MyOrderComponent() {
         tmpOrders = [...tmpOrders, ...newItems];
       }
 
-      // console.log('tmpOrders', tmpOrders);
+      console.log('tmpOrders', tmpOrders);
       setMyOrders(tmpOrders);
 
       setLoading(false);
@@ -357,15 +363,19 @@ function MyOrderComponent() {
         <div className='main-title'>주문내역</div>
         <div className='myorder-list-container'>
           {!loading &&
-            myOrders.map((myOrder) => {
-              return (
-                <MyOrderItem
-                  key={myOrder.orderId}
-                  myOrder={myOrder}
-                  orderId={myOrder.orderId}
-                />
-              );
-            })}
+            (myOrders.length != 0 ? (
+              myOrders.map((myOrder) => {
+                return (
+                  <MyOrderItem
+                    key={myOrder.orderId}
+                    myOrder={myOrder}
+                    orderId={myOrder.orderId}
+                  />
+                );
+              })
+            ) : (
+              <div className='no-my-order'>주문내역이 없습니다.</div>
+            ))}
         </div>
       </div>
     </div>

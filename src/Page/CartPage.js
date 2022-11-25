@@ -423,15 +423,22 @@ function CartPage() {
           <div className='main-title'>장바구니</div>
           <div className='dinner-cart-list-container'>
             <div className='menu-container'>
-              {dinners.map((dinner) => {
-                return (
-                  <DinnerItem
-                    key={dinner.orderDinnerId}
-                    dinner={dinner}
-                    getCartInfo={getCartInfo}
-                  />
-                );
-              })}
+              {dinners.length === 0 ? (
+                <span className='no-dinner'>
+                  장바구니에 담긴 디너가 없습니다.
+                </span>
+              ) : (
+                dinners.map((dinner) => {
+                  return (
+                    <DinnerItem
+                      key={dinner.orderDinnerId}
+                      dinner={dinner}
+                      getCartInfo={getCartInfo}
+                    />
+                  );
+                })
+              )}
+
               <div className='total-container'>
                 <div className='title'>주문금액</div>
                 <div className='total-price'>{cartInfo.totalPrice}원</div>
