@@ -329,7 +329,11 @@ function MyOrderComponent() {
     try {
       const url = `orders`;
       let options = {
-        params: { user_id: `${customerId}` },
+        params: {
+          user_id: `${customerId}`,
+          order_by: 'order_date',
+          order_direction: 'DESC',
+        },
         headers: {
           Authorization: `Bearer ${customerToken}`,
         },
