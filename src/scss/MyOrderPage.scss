@@ -3,6 +3,12 @@
 @import './component/customerlayout';
 @import './component/header';
 
+.no-my-order {
+  padding-top: 100px;
+  font-size: 20px;
+  color: gray;
+}
+
 .change-dinner-detail-button {
   position: absolute;
   font-size: 20px;

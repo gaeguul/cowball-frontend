@@ -51,35 +51,52 @@ function TopInfoComponent(props) {
   const dinnerId = props.dinnerId;
   const setTotalPrice = props.setTotalPrice;
   const [dinnerInfo, setDinnerInfo] = useState({});
+  const [loading, setLoading] = useState(true);
 
   /** 선택한 디너 정보 API 호출 */
-  const getDinnerInfo = async () => {
-    try {
-      const url = `menu/dinners/${dinnerId}`;
-      const response = await axios.get(url);
-      setDinnerInfo(response.data);
-      setTotalPrice(response.data.dinnerPrice);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   useEffect(() => {
+    const getDinnerInfo = async () => {
+      try {
+        setLoading(true);
+        const url = `menu/dinners/${dinnerId}`;
+        const response = await axios.get(url);
+        setDinnerInfo(response.data);
+        setTotalPrice(response.data.dinnerPrice);
+        console.log('정보', response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getDinnerInfo();
   }, []);
+
   return (
     <div className='top-info-container'>
-      <div className='img-container'>
-        <img className='steak-image' alt='steak-image' src='/img/steak2.png' />
-      </div>
-      <div className='right-info-container'>
-        <div className='dinner-title-ko'>{dinnerInfo.dinnerName}</div>
-        <div className='dinner-title-en'>Valentine Dinner</div>
-        <div className='dinner-detail'>{dinnerInfo.dinnerDetail}</div>
-        <div className='dinner-price-title'>
-          <span className='dinner-price'>{dinnerInfo.dinnerPrice}</span>
-          <span>원</span>
-        </div>
-      </div>
+      {loading ? (
+        <></>
+      ) : (
+        <>
+          <div className='img-container'>
+            <img
+              className='steak-image'
+              alt='steak-image'
+              src={dinnerInfo.dinnerImageUrl}
+            />
+          </div>
+          <div className='right-info-container'>
+            <div className='dinner-title-ko'>{dinnerInfo.dinnerName}</div>
+            <div className='dinner-title-en'>{dinnerInfo.dinnerNameEn}</div>
+            <div className='dinner-detail'>{dinnerInfo.dinnerDetail}</div>
+            <div className='dinner-price-title'>
+              <span className='dinner-price'>{dinnerInfo.dinnerPrice}</span>
+              <span>원</span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -125,6 +142,11 @@ function SteakDegreeComponent(props) {
 
 function StyleComponent(props) {
   // const styleOptions = props.styleOptions;
+  const STYLE_ITEMS = new Map([
+    [1, '상자 접시, 일반 냅킨, 플라스틱 쟁반'],
+    [2, '도자기 접시, 플라스틱 컵, 흰색 면 냅킨, 나무 쟁반'],
+    [3, '은 쟁반, 작은 꽃병, 도자기 접시, 린넨 냅킨'],
+  ]);
   const setMyStyleId = props.setMyStyleId;
   const setStylePrice = props.setStylePrice;
   const dinnerId = props.dinnerId;
@@ -161,24 +183,25 @@ function StyleComponent(props) {
     <div className='select-style-container'>
       <div className='title-container'>
         <div className='main-title'>스타일 선택</div>
-        <div className='sub-title'>
-          심플 스타일: 상자 접시/일반 냅킨/플라스틱 쟁반<br></br>그랜드 스타일:
-          도자기 접시/플라스틱 컵/흰색 면 냅킨/나무 쟁반
-          <br></br>
-          디럭스 스타일: 은 쟁반/작은 꽃병/도자기 접시/린넨 냅킨
-        </div>
         <div className='radio-container' onChange={handleStyleButtonClick}>
           {styles.map((style) => {
             return (
-              <label key={style.styleId}>
+              <label className='single-style' key={style.styleId}>
                 <input
                   type='radio'
                   name='style'
                   id={style.styleId}
                   value={style.stylePrice}
                 />
-                {style.styleName} 스타일
-                <span className='option-price'>(+{style.stylePrice}원)</span>
+                <div className='style-detail-container'>
+                  <div className='top'>
+                    {style.styleName} 스타일
+                    <span className='option-price'>
+                      (+{style.stylePrice}원)
+                    </span>
+                  </div>
+                  <div className='bottom'>{STYLE_ITEMS.get(style.styleId)}</div>
+                </div>
               </label>
             );
           })}

@@ -15,7 +15,7 @@ function DinnerItem(props) {
           <img
             className='steak-image'
             alt='steak-image'
-            src='/img/steak2.png'
+            src={props.dinner.dinnerImageUrl}
           />
         </div>
         <div className='dinner-info'>
@@ -42,14 +42,17 @@ function DinnerList(props) {
 
 function MainPage() {
   const [dinners, setDinners] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getDinners = async () => {
       try {
+        setLoading(true);
         const url = `menu/dinners`;
         const response = await axios.get(url);
         // console.log(response.data.items);
         setDinners(response.data.items);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -60,7 +63,7 @@ function MainPage() {
   return (
     <CustomerLayout>
       <Header />
-      <DinnerList dinners={dinners} />
+      {loading ? <></> : <DinnerList dinners={dinners} />}
     </CustomerLayout>
   );
 }
