@@ -100,7 +100,7 @@ function ChangeDinnerNumberButton({
   const [newDinnerNumber, setNewDinnerNumber] = useState(dinnerNumber);
 
   const decreaseDinnerNumber = () => {
-    if (newDinnerNumber == 0) {
+    if (newDinnerNumber == 1) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
       setNewDinnerNumber((prev) => prev - 1);
@@ -338,7 +338,7 @@ function CartPage() {
         deliveryAddress: data['delivery-address'],
         request: data['request'],
         cardNumber: data['card-number'],
-        phoneNumber: '01012345678',
+        phoneNumber: data['phone-number'],
       };
 
       makeNewOrder(newDeliveryData);
@@ -352,7 +352,7 @@ function CartPage() {
   const [dinners, setDinners] = useState([]);
   // const [grade, setGrade] = useState(0);
 
-  const getCartInfo = useCallback(async () => {
+  const getCartInfo = async () => {
     try {
       const url = `cart/${customerId}`;
       const headers = {
@@ -369,11 +369,12 @@ function CartPage() {
     } catch (error) {
       console.log(error);
     }
-  }, [customerToken, customerId]);
+  };
 
   useEffect(() => {
     getCartInfo();
-  }, [getCartInfo]);
+    // console.log('결과', cartInfo.totalPrice - cartInfo.paymentPrice === 0);
+  }, []);
 
   return (
     <CustomerLayout>
@@ -438,6 +439,17 @@ function CartPage() {
                         {...register('card-number')}
                       />
                     </div>
+                    <div className='phone-number-title content-title'>
+                      전화번호
+                    </div>
+                    <div className='request-input-container'>
+                      <input
+                        id='phone-number'
+                        type='text'
+                        name='phone-number'
+                        {...register('phone-number')}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className='payment-info-container'>
@@ -449,23 +461,21 @@ function CartPage() {
                     <div className='total-price-number'>
                       {cartInfo.totalPrice}원
                     </div>
-                    {cartInfo.totalPrice &&
-                      (cartInfo.totalPrice - cartInfo.paymentPrice ===
-                      0 ? null : (
-                        <>
-                          <div className='discount-price-title content-title'>
-                            단골할인금액
-                          </div>
-                          <div className='discount-price-number'>
-                            - {cartInfo.totalPrice - cartInfo.paymentPrice}원
-                          </div>
-                        </>
-                      ))}
-
+                    {cartInfo.totalPrice - cartInfo.paymentPrice ===
+                    0 ? null : (
+                      <>
+                        <div className='discount-price-title content-title'>
+                          단골할인금액
+                        </div>
+                        <div className='discount-price-number'>
+                          - {cartInfo.totalPrice - cartInfo.paymentPrice}원
+                        </div>
+                      </>
+                    )}
                     <div className='payment-price-title  content-title'>
                       총 결제금액
                     </div>
-                    <div className='payment-price-number '>
+                    <div className='payment-price-number'>
                       {cartInfo.paymentPrice}원
                     </div>
                   </div>
