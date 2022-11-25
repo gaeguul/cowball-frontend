@@ -11,7 +11,7 @@ import { RiCloseCircleFill } from 'react-icons/ri';
 import DatePicker from 'react-datepicker';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
-import format from 'date-fns/format';
+// import format from 'date-fns/format';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -76,7 +76,7 @@ function DatePickerComponent(props) {
 
   useEffect(() => {
     props.setRsvDate(date);
-    console.log(format(date, 'yyyy.MM.dd'));
+    console.log('선택된 예약 일시', date);
   }, [date]);
 
   return (
@@ -129,7 +129,7 @@ function ChangeDinnerNumberButton({
           data,
           options,
         );
-        console.log('디너수량변경 응답', response.data);
+        // console.log('디너수량변경 응답', response.data);
         setTotalDinnerPrice(response.data.totalDinnerPrice);
       } catch (error) {
         console.log(error);
@@ -282,39 +282,15 @@ function CartPage() {
   const customerToken = localStorage.getItem('customerToken');
 
   const navigate = useNavigate();
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { isSubmitting },
-  // } = useForm();
 
-  const [address, setAddress] = useState(null);
-  const [request, setRequest] = useState(null);
-  const [cardNumber, setCardNumber] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState(null);
-  const [rsvDate, setRsvDate] = useState(null);
-
-  // const onSubmit = async (data) => {
-  //   try {
-  //     await new Promise((r) => setTimeout(r, 1000));
-
-  //     const newDeliveryData = {
-  //       rsvDate: rsvDate,
-  //       deliveryAddress: data['delivery-address'],
-  //       request: data['request'],
-  //       cardNumber: data['card-number'],
-  //       phoneNumber: data['phone-number'],
-  //     };
-
-  //     makeNewOrder(newDeliveryData);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const [address, setAddress] = useState('');
+  const [request, setRequest] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [rsvDate, setRsvDate] = useState('');
 
   const [cartInfo, setCartInfo] = useState({});
   const [dinners, setDinners] = useState([]);
-  // const [grade, setGrade] = useState(0);
 
   const getCartInfo = async () => {
     try {
@@ -325,8 +301,8 @@ function CartPage() {
         },
       };
       const response = await axios.get(url, headers);
-      console.log('response.data', response.data);
-      console.log('response.data.orderDinners', response.data?.orderDinners);
+      // console.log('response.data', response.data);
+      // console.log('response.data.orderDinners', response.data?.orderDinners);
       setCartInfo(response.data);
       setDinners(response.data.orderDinners);
       // setLoading(false);
@@ -335,9 +311,7 @@ function CartPage() {
     }
   };
 
-  /**기존 배달정보 불러오기
-   *
-   */
+  /**기존 배달정보 불러오기 */
   const handleLoadMyInfoButtonClick = async () => {
     const customerId = localStorage.getItem('customerId');
     const customerToken = localStorage.getItem('customerToken');
@@ -413,17 +387,23 @@ function CartPage() {
 
   const handlePayButtonClick = async () => {
     try {
-      await new Promise((r) => setTimeout(r, 1000));
+      if (dinners.length === 0) {
+        alert('디너를 장바구니에 담아주세요.');
+      } else if (address == '' || phoneNumber == '' || cardNumber == '') {
+        alert('배달정보를 모두 입력해주세요.');
+      } else {
+        await new Promise((r) => setTimeout(r, 1000));
 
-      const newDeliveryData = {
-        rsvDate: rsvDate,
-        deliveryAddress: address,
-        request: request,
-        cardNumber: cardNumber,
-        phoneNumber: phoneNumber,
-      };
+        const newDeliveryData = {
+          rsvDate: rsvDate,
+          deliveryAddress: address,
+          request: request,
+          cardNumber: cardNumber,
+          phoneNumber: phoneNumber,
+        };
 
-      makeNewOrder(newDeliveryData);
+        makeNewOrder(newDeliveryData);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -455,10 +435,7 @@ function CartPage() {
                 <div className='total-price'>{cartInfo.totalPrice}원</div>
               </div>
             </div>
-            <div
-              className='right-info-container'
-              // onSubmit={handleSubmit(onSubmit)}
-            >
+            <div className='right-info-container'>
               <div className='top-info-container'>
                 <div className='delivery-info-container'>
                   <div className='title-and-button'>
@@ -475,28 +452,6 @@ function CartPage() {
                     <div className='rsv-date date-picker'>
                       <DatePickerComponent setRsvDate={setRsvDate} />
                     </div>
-                    <div className='address-title content-title'>배송지</div>
-                    <div className='address-input-container'>
-                      <input
-                        id='delivery-address'
-                        type='text'
-                        name='delivery-address'
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        // {...register('delivery-address')}
-                      />
-                    </div>
-                    <div className='request-title content-title'>요청사항</div>
-                    <div className='request-input-container'>
-                      <input
-                        id='request'
-                        type='text'
-                        name='request'
-                        value={request}
-                        onChange={(e) => setRequest(e.target.value)}
-                        // {...register('request')}
-                      />
-                    </div>
                     <div className='card-number-title content-title'>
                       카드번호
                     </div>
@@ -506,8 +461,17 @@ function CartPage() {
                         type='text'
                         name='card-number'
                         value={cardNumber}
-                        onChange={(e) => setCardNumber(e.target.cardNumber)}
-                        // {...register('card-number')}
+                        onChange={(e) => setCardNumber(e.target.value)}
+                      />
+                    </div>
+                    <div className='address-title content-title'>배송지</div>
+                    <div className='address-input-container'>
+                      <input
+                        id='delivery-address'
+                        type='text'
+                        name='delivery-address'
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
                       />
                     </div>
                     <div className='phone-number-title content-title'>
@@ -519,8 +483,17 @@ function CartPage() {
                         type='text'
                         name='phone-number'
                         value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.phoneNumber)}
-                        // {...register('phone-number')}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                      />
+                    </div>
+                    <div className='request-title content-title'>요청사항</div>
+                    <div className='request-input-container'>
+                      <input
+                        id='request'
+                        type='text'
+                        name='request'
+                        value={request}
+                        onChange={(e) => setRequest(e.target.value)}
                       />
                     </div>
                   </div>
@@ -554,12 +527,7 @@ function CartPage() {
                   </div>
                 </div>
               </div>
-              <button
-                // type='submit'
-                className='pay-button'
-                // disabled={isSubmitting}
-                onClick={handlePayButtonClick}
-              >
+              <button className='pay-button' onClick={handlePayButtonClick}>
                 <span className='payment-price-number'>
                   {cartInfo.paymentPrice}
                 </span>
