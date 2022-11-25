@@ -3,10 +3,10 @@ import React, { useState, useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
 
-const staffToken = localStorage.getItem('staffToken');
-const staffId = localStorage.getItem('staffId');
-
 function Nav() {
+  const staffToken = localStorage.getItem('staffToken');
+  const staffId = localStorage.getItem('staffId');
+
   const value = useContext(AuthContext);
   const setIsStaffLogin = value.setIsStaffLogin;
 
