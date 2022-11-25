@@ -17,10 +17,10 @@ const ORDER_STATE = new Map([
   [255, '완료'],
 ]);
 
-const customerId = localStorage.getItem('customerId');
-const customerToken = localStorage.getItem('customerToken');
-
 function DevlieryInfoComponent(props) {
+  const customerId = localStorage.getItem('customerId');
+  const customerToken = localStorage.getItem('customerToken');
+
   const orderId = props.orderId;
   const myOrder = props.myOrder;
   const rsvDate = format(parseISO(myOrder.rsvDate), 'yyyy.MM.dd (HH:mm)');
@@ -244,6 +244,8 @@ function DinnerItem(props) {
 }
 
 function MenuInfo(props) {
+  const customerToken = localStorage.getItem('customerToken');
+
   const orderId = props.orderId;
   const totalPrice = props.totalPrice;
   const orderDate = format(parseISO(props.orderDate), 'yyyy년 MM월 dd일');
@@ -317,6 +319,9 @@ function MyOrderItem(props) {
 }
 
 function MyOrderComponent() {
+  const customerId = localStorage.getItem('customerId');
+  const customerToken = localStorage.getItem('customerToken');
+
   const [myOrders, setMyOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
