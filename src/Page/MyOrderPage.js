@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { format, parseISO } from 'date-fns';
 import axios from 'axios';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
@@ -22,6 +23,7 @@ const customerToken = localStorage.getItem('customerToken');
 function DevlieryInfoComponent(props) {
   const orderId = props.orderId;
   const myOrder = props.myOrder;
+  const rsvDate = format(parseISO(myOrder.rsvDate), 'yyyy.MM.dd (HH:mm)');
 
   const handlePutCartButtonClick = async () => {
     try {
@@ -48,7 +50,7 @@ function DevlieryInfoComponent(props) {
           <div className='title'>배달정보</div>
           <div className='content-container'>
             <div className='rsv-date-title content-title'>예약일시</div>
-            <div className='rsv-date second-col'>{myOrder.rsvDate}</div>
+            <div className='rsv-date second-col'>{rsvDate}</div>
             <div className='address-title content-title'>배송지</div>
             <div className='address-input-container second-col'>
               {myOrder.deliveryAddress}
@@ -238,7 +240,7 @@ function DinnerItem(props) {
 function MenuInfo(props) {
   const orderId = props.orderId;
   const totalPrice = props.totalPrice;
-  const orderDate = props.orderDate;
+  const orderDate = format(parseISO(props.orderDate), 'yyyy년 MM월 dd일');
   const orderState = props.orderState;
 
   const [dinners, setDinners] = useState([]);

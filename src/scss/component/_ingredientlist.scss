@@ -4,6 +4,10 @@
   padding-left: 50px;
   height: 80vh;
 
+  * {
+    box-sizing: border-box;
+  }
+
   .title-container {
     display: flex;
     justify-content: flex-start;
@@ -29,23 +33,125 @@
   }
 
   .content-container {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    // height: 100%;
-    white-space: nowrap;
-    overflow: auto;
-
-    table {
+    >.content-tab {
+      padding: 16px 0;
       width: 100%;
-      padding-top: 30px;
-      border-spacing: 0;
-      white-space: nowrap;
-      overflow: auto;
+
+      overflow: hidden;
+
+      label {
+        cursor: pointer;
+      }
+
+      input[type="radio"] {
+        display: none;
+      }
+
+      input[type="radio"]+span {
+        transition: .2s ease-in;
+        display: inline-block;
+        width: 128px;
+        font-size: 1.125rem;
+        font-weight: bold;
+        line-height: 32px;
+        border-radius: 16px;
+      }
+
+      input[type="radio"]:checked+span {
+        background-color: var(--color-main);
+      }
+    }
+
+    overflow-y: auto;
+    position: relative;
+
+    >.content-body {
+      width: 100%;
+      overflow-x: auto;
+      top: 0;
+      position: sticky;
+    }
+
+    >.content-body::-webkit-scrollbar,
+    &::-webkit-scrollbar {
+      background-color: transparent;
+      width: 16px;
+    }
+    
+    >.content-body::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, .125);
+      background-clip: padding-box;
+      border: 4px solid transparent;
+      border-radius: 16px;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, .250);
+      }
+    }
+
+    //
+    // Ingredient List
+    // 
+
+    .ingredient-list-table {
+      width: 100%;
+
+      margin: 0 auto;
+      padding: 16px 0;
+
+      border-collapse: collapse;
+
+      thead {
+        background-color: white;
+        position: sticky;
+        top: -64px;
+      }
+
+      tr {
+        height: 48px;
+        min-height: 48px;
+      }
 
       tbody td {
-        height: 30px;
+        line-height: 24px;
+        vertical-align: middle;
       }
+
+      .td-editable {
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, .125);
+        }
+
+        >span {
+          border-bottom: 1px solid #aeaeae;
+          padding-left: 4px;
+          background-color: var(--color-main-light);
+
+          .icon-edit {
+            >* {
+              vertical-align: middle;
+            }
+
+            margin-left: 4px;
+          }
+
+        }
+
+      }
+
+      .td-amount {}
+
+      .td-empty>span {
+        &::before {
+          content: '·';
+          opacity: .875;
+        }
+      }
+
+      .td-in {}
 
       th,
       td {
@@ -53,19 +159,15 @@
       }
 
       thead {
-        font-weight: 600;
-        font-size: 1.2em;
+        font-weight: bold;
+        font-size: 1.125rem;
       }
-
-      // tr > :nth-child(1) {
-      //   text-align: left;
-      // }
 
       tbody tr:hover {
         background-color: #f5f5f5;
       }
 
-      .arrived-number-button-container {
+      /*.arrived-number-button-container {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -108,7 +210,286 @@
             width: 30px;
           }
         }
+      } */
+    }
+
+    // 
+    // Ingredient Schedule
+
+    .ingredient-schedule-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .ingredient-schedule-table {
+
+      margin: 0 auto;
+
+      white-space: normal;
+      table-layout: auto;
+
+      border-collapse: collapse;
+      border: 1px solid #eaeaea;
+
+      td:first-child {
+        width: 192px;
+        max-width: 256px;
+        min-width: 192px;
+        padding: 0 16px;
+        text-align: end;
+        border-inline-end: 1px solid #eaeaea;
+
+        &::before {
+          content: attr(data-id);
+          display: inline;
+          font-size: .875rem;
+          opacity: .5;
+          margin-inline-end: 8px;
+        }
+
+        position: sticky;
+      }
+
+      td:nth-child(4n+2) {
+        border-inline-end: 1px solid #eaeaea;
+      }
+
+      .td-amount {
+        text-align: end;
+        padding: 0 8px;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      td {
+        width: 48px;
+        min-width: 48px;
+        border-bottom: 1px solid #eaeaea;
+        position: relative;
+      }
+
+      th {
+        line-height: 32px;
+        background-color: #f2f2f2;
+        border: 1px solid #cacaca;
+      }
+
+      .th-today {
+        background-color: var(--color-main);
+      }
+
+      tbody tr {
+        line-height: 24px;
+        min-height: 64px;
+        padding: 8px 0;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, .125);
+        }
+
+        >.td-rsv {
+          font-weight: bold;
+        }
+
+        >.td-in {
+          color: royalblue;
+
+          &::before {
+            content: '+';
+          }
+        }
+
+        >.td-out {
+          color: tomato;
+
+          &::before {
+            content: '-';
+          }
+        }
+
+        >.td-empty {
+          &::before {
+            content: '·';
+          }
+        }
       }
     }
+  }
+}
+
+.h-modal-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  >.h-modal-background {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, .375);
+    z-index: 0;
+  }
+}
+
+.number-picker-dialog {
+  display: block;
+  max-width: 480px;
+  background-color: white;
+  border-radius: 8px;
+  margin: 0 auto;
+  z-index: 1;
+
+  .dialog-top {
+    padding: 16px 16px 0 16px;
+    display: flex;
+    flex-direction: row;
+
+    >.dialog-title-container {
+      flex: auto;
+
+      >.dialog-title {
+        margin: 0;
+        font-weight: bold;
+        font-size: 1.375rem;
+        line-height: 32px;
+      }
+    }
+
+    >.dialog-top-button-exit {
+      flex: auto;
+
+      margin-left: 8px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: .2s ease-in;
+      border-radius: 4px;
+      width: 32px;
+      height: 32px;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, .125);
+      }
+
+      &:active {
+        background-color: rgba(0, 0, 0, .250);
+      }
+    }
+  }
+
+  .dialog-body {
+    padding: 16px;
+
+    >input {
+      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      border: none;
+      line-height: 24px;
+      font-size: 1.125rem;
+      text-align: center;
+
+      border-bottom: 1px solid rgba(0, 0, 0, .125);
+
+      &::-webkit-inner-spin-button {
+        display: none;
+      }
+
+      &:focus {
+        outline: none;
+        border-bottom-color: rgba(0, 0, 0, .250);
+      }
+    }
+  }
+
+  .dialog-foot {
+    padding: 0 16px 16px 16px;
+
+    .dialog-button-ok {
+      display: block;
+      text-align: center;
+      line-height: 32px;
+      width: 100%;
+      min-height: 32px;
+      background-color: var(--color-main);
+      border-radius: 8px;
+      transition: .2s ease-in;
+      cursor: pointer;
+
+      &:hover {
+        filter: brightness(.875);
+      }
+
+      &:active {
+        filter: brightness(.750);
+      }
+
+      &.--loading {
+        &::before {
+          content: '';
+          border: 1px solid black;
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          margin-right: 8px;
+          border-radius: 50%;
+          border-right-color: transparent;
+          animation-name: loading-rotation;
+          animation-duration: .25s;
+          animation-delay: .2s;
+          animation-timing-function: ease-in;
+          animation-iteration-count: infinite;
+        }
+
+        @keyframes loading-rotation {
+          from {
+            rotate: 24deg;
+          }
+
+          to {
+            rotate: 384deg;
+          }
+        }
+      }
+    }
+  }
+}
+
+.h-loading-container {
+  display: flex;
+  width: 100%;
+  padding: 64px 64px;
+  justify-content: center;
+  align-items: center;
+
+  .h-loading-indicator {
+    display: block;
+    width: 48px;
+    height: 48px;
+
+    border-radius: 50%;
+    border: 4px solid var(--color-main);
+    border-right-color: transparent;
+
+    animation-name: loading-rotate;
+    animation-duration: .8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  @keyframes loading-rotate {
+    from { rotate: 28deg; }
+    to { rotate: 388deg; }
   }
 }

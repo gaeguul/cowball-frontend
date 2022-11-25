@@ -27,6 +27,9 @@ function StaffSignupForm() {
       const url = `staff`;
       const response = await axios.post(url, data);
       console.log(response.data);
+      alert(
+        '회원가입 신청이 완료되었습니다. 승인이 완료되면 로그인이 가능합니다.',
+      );
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -36,20 +39,22 @@ function StaffSignupForm() {
   return (
     <div className='staff-signup-form-container'>
       <form className='staff-signup-form' onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor='name'>이름</label>
+        <label htmlFor='staffName'>이름</label>
         <input
-          id='name'
+          id='staffName'
           type='text'
-          name='name'
+          name='staffName'
           placeholder='이름'
-          aria-invalid={!isDirty ? undefined : errors.name ? 'true' : 'false'}
-          {...register('name', {
+          aria-invalid={
+            !isDirty ? undefined : errors.staffName ? 'true' : 'false'
+          }
+          {...register('staffName', {
             required: '이름을 입력해주세요.',
           })}
         />
-        {errors.name && (
+        {errors.staffName && (
           <small role='alert' className='input-alert'>
-            {errors.name.message}
+            {errors.staffName.message}
           </small>
         )}
         <label htmlFor='staffId'>아이디</label>

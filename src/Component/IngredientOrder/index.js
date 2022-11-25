@@ -1,24 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { BiPlus, BiMinus } from 'react-icons/bi';
+import { API, LoadingPlaceholder } from '../IngredientCommon';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
-const CATEGORY_NAME = ['식사', '술', '음료', '기타'];
+const YOIL = [
+  '일요일',
+  '월요일',
+  '화요일',
+  '수요일',
+  '목요일',
+  '금요일',
+  '토요일',
+];
 
-function OrderNumberButton(props) {
-  const orderCount = props.orderCount;
-  const setOrderCount = props.setOrderCount;
+function usePrevState(state) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = state;
+  });
+  return ref.current;
+}
+
+function OrderNumberButton({ orderCount, onValueChange }) {
+  const [value, setValue] = useState(orderCount);
+  const prevValue = usePrevState(value);
 
   const decreaseOrderNumber = () => {
-    if (orderCount == 0) {
-      console.log('더 이상 줄일 수 없습니다');
-    } else {
-      setOrderCount((prev) => prev - 1);
-    }
+    if (value === 0) console.log('더 이상 줄일 수 없습니다');
+    else setValue((prev) => prev - 1);
   };
 
   const increaseOrderNumber = () => {
-    setOrderCount((prev) => prev + 1);
+    setValue((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    onValueChange(value, prevValue);
+  }, [value]);
 
   return (
     <div className='order-number-button-container'>
@@ -26,7 +46,14 @@ function OrderNumberButton(props) {
         <div className='button-container'>
           <BiMinus className='button' onClick={decreaseOrderNumber} />
         </div>
-        <div className='number'>{orderCount}</div>
+        {/*<div className='number'>{orderCount}</div>*/}
+        <input
+          className='number'
+          type='number'
+          min={0}
+          value={value}
+          onChange={(e) => setValue(Number(e.target.value))}
+        />
         <div className='button-container'>
           <BiPlus className='button' onClick={increaseOrderNumber} />
         </div>
@@ -35,129 +62,111 @@ function OrderNumberButton(props) {
   );
 }
 
-function IngredientItem(props) {
-  const ingredient = props.ingredient;
-  const setTotalOrderPrice = props.setTotalOrderPrice;
-  const setNewIngredientOrder = props.setNewIngredientOrder;
-  const ingredientId = ingredient.ingredientId;
-  const categoryName = CATEGORY_NAME[ingredient.categoryId - 1];
-
-  const [orderCount, setOrderCount] = useState(0); //OrderNumberButton에 의해 변경됨
-  const [totalPrice, setTotalPrice] = useState(0); //해당 ingredient의 orderCount에 따른 총 가격
-
-  const getOrderCount = async () => {
-    try {
-      const url = `ingredients/orders`;
-      const response = await axios.get(url);
-      const tmpItems = response.data.items;
-      const tmpItem = tmpItems.find((item) => {
-        return item.ingredientId === ingredientId;
-      });
-
-      if (tmpItem) {
-        const tmpNumber = tmpItem.orderedNumber;
-        setOrderCount(tmpNumber);
-      } else {
-        setOrderCount(0);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+function IngredientItem({ ingredient, amount, category, onAmountChange }) {
+  const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    getOrderCount();
+    setTotalPrice(amount * ingredient.ingredientPrice);
   }, []);
 
-  useEffect(() => {
-    setTotalPrice(orderCount * ingredient.ingredientPrice);
-    setTotalOrderPrice((prev) => prev + ingredient.ingredientPrice);
-
-    const newIngredientOrder = {
-      ingredientId: ingredientId,
-      amount: orderCount,
-    };
-    setNewIngredientOrder(newIngredientOrder);
-  }, [orderCount]);
+  const onValueChange = (newValue, oldValue) => {
+    setTotalPrice(newValue * ingredient.ingredientPrice);
+    onAmountChange(newValue, oldValue);
+  };
 
   return (
     <tr>
       <td>{ingredient.ingredientName}</td>
-      <td>{categoryName}</td>
-      <td>{ingredient.ingredientPrice}원</td>
+      <td>{category.categoryName}</td>
+      <td>{ingredient.ingredientPrice.toLocaleString('ko-kr')}원</td>
       <td>
-        <OrderNumberButton
-          orderCount={orderCount}
-          setOrderCount={setOrderCount}
-        />
+        <OrderNumberButton orderCount={amount} onValueChange={onValueChange} />
       </td>
-      <td>{totalPrice}원</td>
+      <td>{totalPrice.toLocaleString('ko-kr')}원</td>
     </tr>
   );
 }
 
 function IngredientOrder() {
   const [ingredientList, setIngredientList] = useState([]);
+  const [ingredientOrders, setIngredientOrders] = useState([]);
+  const [ingredientCategories, setIngredientCategories] = useState([]);
+
+  const [requests, setRequests] = useState([]);
+
   const [totalOrderPrice, setTotalOrderPrice] = useState(0);
-  const [newIngredientOrder, setNewIngredientOrder] = useState({});
-  const [ingredientOrderList, setIngredientOrderList] = useState([]);
-
-  const getIngredientList = async () => {
-    try {
-      const url = `ingredients/items`;
-      const response = await axios.get(url);
-      setIngredientList(response.data.items);
-      // console.log(response.data.items);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const makeIngredientOrderList = () => {
-    const IsExit = ingredientOrderList.find(
-      (ingredient) =>
-        ingredient.ingredientId === newIngredientOrder.ingredientId,
-    );
-    if (!IsExit) {
-      //리스트에 없는 경우
-      const newIngredientOrderList = [
-        ...ingredientOrderList,
-        newIngredientOrder,
-      ];
-      setIngredientOrderList(newIngredientOrderList);
-      console.log(newIngredientOrderList);
-    } else {
-      //리스트에 있는 경우
-      const newIngredientOrderList = ingredientOrderList.map((i) =>
-        i.ingredientId == newIngredientOrder.ingredientId
-          ? { ...i, amount: newIngredientOrder.amount }
-          : i,
+  const calculateTotalOrderPrice = (ings, orders) => {
+    let price = 0;
+    console.log('Orders', orders);
+    orders.forEach((order) => {
+      const ingredient = ings.find(
+        (ing) => order.ingredientId === ing.ingredientId,
       );
-      setIngredientOrderList(newIngredientOrderList);
-      console.log(newIngredientOrderList);
-    }
+      if (!ingredient) return null;
+      const ingredientPrice = ingredient.ingredientPrice;
+      price += order.orderAmount * ingredientPrice;
+    });
+    return price;
   };
 
-  const handleOrderButtonClick = async () => {
-    try {
-      /** ingredientOrderList의 [0], [1]항에 알 수 없는 게 들어가있어서 자름*/
-      const data = ingredientOrderList.slice(2);
-      console.log('data', data);
-      const url = `ingredients/orders`;
-      const response = await axios.put(url, data);
-      console.log('[handleOrderButtonClick] ', response.data);
-    } catch (error) {
-      console.log(error);
+  const [loading, setLoading] = useState(true);
+
+  const putRequest = (ingredientId, amount) => {
+    console.log('Put Request: ', ingredientId, amount);
+
+    const existingIndex = requests.findIndex(
+      (value) => value.ingredientId === ingredientId,
+    );
+
+    if (existingIndex === -1) {
+      requests.push({ ingredientId: ingredientId, amount: amount });
+      setRequests(requests);
+    } else {
+      requests[existingIndex].amount = amount;
+      setRequests(requests);
     }
+
+    console.log(requests);
   };
+
+  const handleOrderButtonClick = async () =>
+    await axios
+      .put(`ingredients/orders`, requests)
+      .then((res) => {
+        if (res.status < 400) alert('발주 내용을 전송했습니다.');
+        else throw new Error('잘못된 요청입니다.');
+      })
+      .catch((e) => console.log(e));
+
+  const [deliveredDays, setDeliveredDays] = useState([]);
+  const [orderDate, setOrderDate] = useState();
 
   useEffect(() => {
-    getIngredientList();
+    Promise.all([
+      axios
+        .get(`ingredients/orders/delivered-day`)
+        .then((res) => res.data)
+        .then(setDeliveredDays),
+      API.getIngredientCategories().then(setIngredientCategories),
+      API.getIngredientList()
+        .then(setIngredientList)
+        .finally(() => setLoading(false)),
+      API.getIngredientOrders().then((data) => {
+        setOrderDate(new Date(data.date));
+        setIngredientOrders(data.items);
+        console.log('Orders Data', data);
+      }),
+    ])
+      .finally(() => setLoading(false))
+      .finally(() => console.log('orders', ingredientOrders));
   }, []);
 
   useEffect(() => {
-    makeIngredientOrderList();
-  }, [newIngredientOrder]);
+    const price = calculateTotalOrderPrice(ingredientList, ingredientOrders);
+    setTotalOrderPrice(price);
+  }, [ingredientOrders, ingredientList]);
+
+  if (loading) return <LoadingPlaceholder />;
 
   return (
     <div className='nexttonav'>
@@ -165,10 +174,22 @@ function IngredientOrder() {
         <div className='title-container'>
           <div className='title-main'>발주관리</div>
           <div className='title-detail'>
-            발주를 신청하면 화요일과 목요일에 입고됩니다.
+            발주를 신청하면{' '}
+            {deliveredDays
+              .map((bo, i) => (bo ? YOIL[i] : null))
+              .filter((day) => day !== null)
+              .join(', ')}
+            에 입고됩니다.
+            <br />
+            (당일 제외)
           </div>
         </div>
         <div className='content-container'>
+          <div className='delivered-date-info'>
+            아래의 목록은{' '}
+            <strong>{format(orderDate, 'PPP (E)', { locale: ko })}</strong>에
+            도착할 주문에 대한 명세입니다.
+          </div>
           <div className='table-container'>
             <table>
               <thead>
@@ -182,12 +203,31 @@ function IngredientOrder() {
               </thead>
               <tbody>
                 {ingredientList.map((ingredient) => {
+                  const ingOrder = ingredientOrders.find(
+                    (value) => value.ingredientId === ingredient.ingredientId,
+                  );
+                  const orderAmount = ingOrder ? ingOrder.orderAmount : 0;
+
+                  const onAmountChange = (newValue, oldValue) => {
+                    const diff = newValue - oldValue;
+                    if (diff === 0) return;
+
+                    setTotalOrderPrice(
+                      totalOrderPrice + diff * ingredient.ingredientPrice,
+                    );
+
+                    putRequest(ingredient.ingredientId, newValue);
+                  };
+
                   return (
                     <IngredientItem
                       key={ingredient.ingredientId}
                       ingredient={ingredient}
-                      setNewIngredientOrder={setNewIngredientOrder}
-                      setTotalOrderPrice={setTotalOrderPrice}
+                      category={ingredientCategories.find(
+                        (value) => value.categoryId === ingredient.categoryId,
+                      )}
+                      amount={orderAmount}
+                      onAmountChange={onAmountChange}
                     />
                   );
                 })}
@@ -197,7 +237,9 @@ function IngredientOrder() {
           <div className='bottom-container'>
             <div className='total-order-price'>
               <span className='hangeul-text'>총 발주 금액</span>
-              <span className='number'>{totalOrderPrice} 원</span>
+              <span className='number'>
+                {totalOrderPrice.toLocaleString('ko-kr')} 원
+              </span>
             </div>
             <div className='order-button-container'>
               <div className='order-button' onClick={handleOrderButtonClick}>

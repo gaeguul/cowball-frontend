@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { format, parseISO } from 'date-fns';
 
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
 const STATE_NAME = {
@@ -22,6 +23,7 @@ const STATE_NEXT = new Map([
 ]);
 
 function OrderInfo(props) {
+  const orderDate = format(parseISO(props.orderDate), 'yyyy.MM.dd (HH:mm)');
   return (
     <div className='order-info'>
       <div className='title'>주문정보</div>
@@ -31,7 +33,7 @@ function OrderInfo(props) {
         <div className='phone-number subtitle'>연락처</div>
         <div className='phone-number detail'>{props.phoneNumber}</div>
         <div className='order-date subtitle'>주문일</div>
-        <div className='order-date detail'>{props.orderDate}</div>
+        <div className='order-date detail'>{orderDate}</div>
       </div>
     </div>
   );
@@ -98,7 +100,7 @@ function DinnerOptionItem(props) {
 
 function OrderDinnerItem(props) {
   const orderDinner = props.orderDinner; //하나의 배달 안에서 시킨 각 디너
-  const orderDinnerAmount = orderDinner.orderDinnerAmount;
+  const orderDinnerAmount = orderDinner.dinnerAmount;
   const orderDinnerOptions = orderDinner.orderDinnerOptions; //선택한 디너 옵션
   const [styleInfo, setStyleInfo] = useState({});
 
@@ -115,6 +117,7 @@ function OrderDinnerItem(props) {
 
   useEffect(() => {
     getStyleInfo();
+    console.log('orderDinner', orderDinner);
   }, []);
 
   return (
@@ -192,6 +195,7 @@ function DetailComponent(props) {
       const url = `orders/${detailOrderId}`;
       const response = await axios.get(url);
       setDetailOrderInfo(response.data);
+      console.log('detailOrderInfo', response.data);
       const orderState = response.data.orderState;
       setOrderStateNumber(orderState);
       // const tmp = orderState === 8 || orderState === 255 ? true : false;
@@ -242,7 +246,10 @@ function DetailComponent(props) {
                 </div>
               )}
             </div>
-            <div className='rsv-date'>예약 {detailOrderInfo.rsvDate}</div>
+            <div className='rsv-date'>
+              예약{' '}
+              {format(parseISO(detailOrderInfo.rsvDate), 'yyyy.MM.dd (HH:mm)')}
+            </div>
             <div className='number-and-price'>
               <span className='order-number'>
                 메뉴 {detailOrderInfo.orderDinners.length}개
@@ -287,17 +294,42 @@ function LeftComponent(props) {
 
   const getOrders = async () => {
     try {
+      const staffToken = localStorage.getItem('staffToken');
+
       const url = `orders`;
       if (state === 'in-delivery') state = 'in_delivery';
       const options = {
+        headers: {
+          Authorization: `Bearer ${staffToken}`,
+        },
         params: {
           state: state,
         },
       };
       const response = await axios.get(url, options);
       console.log('response.data', response.data);
-      setOrderCount(response.data.count);
-      setOrders(response.data.items);
+
+      let page = 1;
+      let pageMax;
+
+      const result = [];
+      let countMax;
+
+      do {
+        await axios
+          .get(`${url}?page=${page}`, options)
+          .then((res) => res.data)
+          .then((it) => {
+            if (pageMax === undefined) pageMax = it.pageMax;
+            if (countMax === undefined) countMax = it.countMax;
+            result.push(...it.items);
+            console.log(it.items);
+          })
+          .catch((e) => console.log(e));
+      } while (++page <= pageMax);
+
+      setOrderCount(countMax); //총 주문 수
+      setOrders(result); //주문들
     } catch (error) {
       console.log(error);
     }
@@ -316,6 +348,8 @@ function LeftComponent(props) {
         </div>
       </div>
       {orders.map((order) => {
+        console.log(typeof order.rsvDate);
+
         return (
           <div
             className='order'
@@ -324,7 +358,13 @@ function LeftComponent(props) {
           >
             <div className='order-id'>배달 {order.orderId}</div>
             <div className='order-number'>메뉴 {order.orderDinnerCount}개</div>
-            <div className='rsv-date'>{order.rsvDate}</div>
+            {!order.rsvDate ? (
+              <div className='rsv-date'></div>
+            ) : (
+              <div className='rsv-date'>
+                {format(parseISO(order.rsvDate), 'yyyy.MM.dd (HH:mm)')}
+              </div>
+            )}
           </div>
         );
       })}

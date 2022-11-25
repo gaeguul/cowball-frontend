@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import { useForm } from 'react-hook-form';
+// import { useForm } from 'react-hook-form';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
@@ -11,6 +11,8 @@ import { RiCloseCircleFill } from 'react-icons/ri';
 import DatePicker from 'react-datepicker';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
+import format from 'date-fns/format';
+
 import 'react-datepicker/dist/react-datepicker.css';
 
 import '../scss/CartPage.scss';
@@ -18,11 +20,9 @@ import '../scss/CartPage.scss';
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
 const DINNER_NAME = ['발렌타인', '프렌치', '잉글리시', '샴페인 축제'];
 
-const customerId = localStorage.getItem('customerId');
-const customerToken = localStorage.getItem('customerToken');
-
-function DeleteDinnerButton(props) {
-  const orderDinnerId = props.orderDinnerId;
+function DeleteDinnerButton({ orderDinnerId }) {
+  const customerId = localStorage.getItem('customerId');
+  const customerToken = localStorage.getItem('customerToken');
 
   const deleteDinnerButtonClick = async () => {
     await new Promise((r) => setTimeout(r, 1000));
@@ -53,37 +53,6 @@ function DeleteDinnerButton(props) {
   );
 }
 
-function ChangeDinnerNumberButton(props) {
-  const dinnerNumber = props.dinnerNumber;
-  const [newDinnerNumber, setNewDinnerNumber] = useState(dinnerNumber);
-
-  const decreaseDinnerNumber = () => {
-    if (newDinnerNumber == 0) {
-      console.log('더 이상 줄일 수 없습니다');
-    } else {
-      setNewDinnerNumber((prev) => prev - 1);
-    }
-  };
-
-  const increaseDinnerNumber = () => {
-    setNewDinnerNumber((prev) => prev + 1);
-  };
-
-  return (
-    <div className='dinner-number-button-container'>
-      <div className='dinner-number-button'>
-        <div className='button-container'>
-          <BiMinus className='button' onClick={decreaseDinnerNumber} />
-        </div>
-        <div className='number'>{newDinnerNumber}</div>
-        <div className='button-container'>
-          <BiPlus className='button' onClick={increaseDinnerNumber} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /**배달 예약일시 선택하는 컴포넌트 */
 function DatePickerComponent(props) {
   const [date, setDate] = useState(setHours(setMinutes(new Date(), 30), 16));
@@ -107,17 +76,81 @@ function DatePickerComponent(props) {
 
   useEffect(() => {
     props.setRsvDate(date);
+    console.log(format(date, 'yyyy.MM.dd'));
   }, [date]);
 
   return (
     <DatePicker
       selected={date}
       onChange={(date) => setDate(date)}
-      dateFormat='yyyy.MM.dd (h:mm aa)'
+      dateFormat='yyyy.MM.dd (HH:mm)'
       showTimeSelect
       includeTimes={includeTimes}
       minDate={new Date()}
     />
+  );
+}
+
+function ChangeDinnerNumberButton({
+  dinnerNumber,
+  orderDinnerId,
+  setTotalDinnerPrice,
+  getCartInfo,
+}) {
+  const [newDinnerNumber, setNewDinnerNumber] = useState(dinnerNumber);
+
+  const customerId = localStorage.getItem('customerId');
+  const customerToken = localStorage.getItem('customerToken');
+
+  const decreaseDinnerNumber = () => {
+    if (newDinnerNumber == 1) {
+      console.log('더 이상 줄일 수 없습니다');
+    } else {
+      setNewDinnerNumber((prev) => prev - 1);
+    }
+  };
+
+  const increaseDinnerNumber = () => {
+    setNewDinnerNumber((prev) => prev + 1);
+  };
+
+  /**newDinnerNumber가 변함에 따라 api PATCH */
+  useEffect(() => {
+    const patchDinnerNumber = async () => {
+      try {
+        const data = { dinnerAmount: newDinnerNumber };
+        const options = {
+          headers: {
+            Authorization: `Bearer ${customerToken}`,
+          },
+        };
+        const response = await axios.patch(
+          `cart/${customerId}/${orderDinnerId}`,
+          data,
+          options,
+        );
+        console.log('디너수량변경 응답', response.data);
+        setTotalDinnerPrice(response.data.totalDinnerPrice);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    patchDinnerNumber();
+    getCartInfo();
+  }, [newDinnerNumber]);
+
+  return (
+    <div className='dinner-number-button-container'>
+      <div className='dinner-number-button'>
+        <div className='button-container'>
+          <BiMinus className='button' onClick={decreaseDinnerNumber} />
+        </div>
+        <div className='number'>{newDinnerNumber}</div>
+        <div className='button-container'>
+          <BiPlus className='button' onClick={increaseDinnerNumber} />
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -178,8 +211,12 @@ function DinnerItem(props) {
   const dinner = props.dinner;
   const options = dinner.orderDinnerOptions;
   const orderDinnerId = dinner.orderDinnerId;
+  const getCartInfo = props.getCartInfo;
 
   const [styleInfo, setStyleInfo] = useState({});
+  const [totalDinnerPrice, setTotalDinnerPrice] = useState(
+    dinner.totalDinnerPrice,
+  );
 
   const getStyleInfo = useCallback(async () => {
     /**선택한 스타일 한글명과 가격 조회 */
@@ -195,6 +232,10 @@ function DinnerItem(props) {
   useEffect(() => {
     getStyleInfo();
   }, [getStyleInfo]);
+
+  useEffect(() => {
+    console.log('totalDinnerPrice 업데이트 ', totalDinnerPrice);
+  }, [totalDinnerPrice]);
 
   return (
     <div className='cart-dinner'>
@@ -224,21 +265,105 @@ function DinnerItem(props) {
         })}
       </div>
       <div className='dinner-number'>
-        <ChangeDinnerNumberButton dinnerNumber={dinner.dinnerAmount} />
+        <ChangeDinnerNumberButton
+          dinnerNumber={dinner.dinnerAmount}
+          orderDinnerId={orderDinnerId}
+          setTotalDinnerPrice={setTotalDinnerPrice}
+          getCartInfo={getCartInfo}
+        />
       </div>
-      <div className='dinner-price'>{dinner.totalDinnerPrice}원</div>
+      <div className='dinner-price'>{totalDinnerPrice}원</div>
     </div>
   );
 }
 
 function CartPage() {
-  const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm();
+  const customerId = localStorage.getItem('customerId');
+  const customerToken = localStorage.getItem('customerToken');
 
+  const navigate = useNavigate();
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { isSubmitting },
+  // } = useForm();
+
+  const [address, setAddress] = useState(null);
+  const [request, setRequest] = useState(null);
+  const [cardNumber, setCardNumber] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [rsvDate, setRsvDate] = useState(null);
+
+  // const onSubmit = async (data) => {
+  //   try {
+  //     await new Promise((r) => setTimeout(r, 1000));
+
+  //     const newDeliveryData = {
+  //       rsvDate: rsvDate,
+  //       deliveryAddress: data['delivery-address'],
+  //       request: data['request'],
+  //       cardNumber: data['card-number'],
+  //       phoneNumber: data['phone-number'],
+  //     };
+
+  //     makeNewOrder(newDeliveryData);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const [cartInfo, setCartInfo] = useState({});
+  const [dinners, setDinners] = useState([]);
+  // const [grade, setGrade] = useState(0);
+
+  const getCartInfo = async () => {
+    try {
+      const url = `cart/${customerId}`;
+      const headers = {
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+      };
+      const response = await axios.get(url, headers);
+      console.log('response.data', response.data);
+      console.log('response.data.orderDinners', response.data?.orderDinners);
+      setCartInfo(response.data);
+      setDinners(response.data.orderDinners);
+      // setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**기존 배달정보 불러오기
+   *
+   */
+  const handleLoadMyInfoButtonClick = async () => {
+    const customerId = localStorage.getItem('customerId');
+    const customerToken = localStorage.getItem('customerToken');
+
+    try {
+      const url = `users/${customerId}`;
+      const options = {
+        headers: {
+          Authorization: `Bearer ${customerToken}`,
+        },
+      };
+      const response = await axios.get(url, options);
+      console.log('handleLoadMyInfoButtonClick', response.data);
+
+      setAddress(response.data.address);
+      setPhoneNumber(response.data.phoneNumber);
+      setCardNumber(response.data.cardNumber);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /**결제하기 버튼 눌렀을 때
+   * 1. 배달정보 묶어서 전송하고 (PATCH)
+   * 2. 결제하기 (POST)
+   */
   const makeNewOrder = async (newDeliveryData) => {
     try {
       /**1. 장바구니 배달정보 수정 */
@@ -286,16 +411,16 @@ function CartPage() {
     }
   };
 
-  const onSubmit = async (data) => {
+  const handlePayButtonClick = async () => {
     try {
       await new Promise((r) => setTimeout(r, 1000));
 
       const newDeliveryData = {
         rsvDate: rsvDate,
-        deliveryAddress: data['delivery-address'],
-        request: data['request'],
-        cardNumber: data['card-number'],
-        phoneNumber: '01012345678',
+        deliveryAddress: address,
+        request: request,
+        cardNumber: cardNumber,
+        phoneNumber: phoneNumber,
       };
 
       makeNewOrder(newDeliveryData);
@@ -304,52 +429,8 @@ function CartPage() {
     }
   };
 
-  const [rsvDate, setRsvDate] = useState('');
-  const [cartInfo, setCartInfo] = useState({});
-  const [dinners, setDinners] = useState([]);
-  // const [grade, setGrade] = useState(0);
-
-  const getCartInfo = useCallback(async () => {
-    try {
-      const url = `cart/${customerId}`;
-      const headers = {
-        headers: {
-          Authorization: `Bearer ${customerToken}`,
-        },
-      };
-      const response = await axios.get(url, headers);
-      console.log('response.data', response.data);
-      console.log('response.data.orderDinners', response.data?.orderDinners);
-      setCartInfo(response.data);
-      setDinners(response.data.orderDinners);
-      // setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [customerToken, customerId]);
-
   useEffect(() => {
     getCartInfo();
-  }, [getCartInfo]);
-
-  useEffect(() => {
-    // const getUserGrade = async () => {
-    //   try {
-    //     const options = {
-    //       headers: {
-    //         Authorization: `Bearer ${customerToken}`,
-    //       },
-    //     };
-    //     const url = `users/${customerId}`;
-    //     const response = await axios.get(url, options);
-    //     console.log(response.data);
-    //     setGrade(response.data.grade);
-    //     console.log('grade', response.data.grade);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
-    // getUserGrade();
   }, []);
 
   return (
@@ -362,7 +443,11 @@ function CartPage() {
             <div className='menu-container'>
               {dinners.map((dinner) => {
                 return (
-                  <DinnerItem key={dinner.orderDinnerId} dinner={dinner} />
+                  <DinnerItem
+                    key={dinner.orderDinnerId}
+                    dinner={dinner}
+                    getCartInfo={getCartInfo}
+                  />
                 );
               })}
               <div className='total-container'>
@@ -370,13 +455,21 @@ function CartPage() {
                 <div className='total-price'>{cartInfo.totalPrice}원</div>
               </div>
             </div>
-            <form
+            <div
               className='right-info-container'
-              onSubmit={handleSubmit(onSubmit)}
+              // onSubmit={handleSubmit(onSubmit)}
             >
               <div className='top-info-container'>
                 <div className='delivery-info-container'>
-                  <div className='title'>배달정보</div>
+                  <div className='title-and-button'>
+                    <div className='title'>배달정보</div>
+                    <div
+                      onClick={handleLoadMyInfoButtonClick}
+                      className='load-myinfo-button'
+                    >
+                      내정보 불러오기
+                    </div>
+                  </div>
                   <div className='content-container'>
                     <div className='rsv-date-title content-title'>예약일시</div>
                     <div className='rsv-date date-picker'>
@@ -388,7 +481,9 @@ function CartPage() {
                         id='delivery-address'
                         type='text'
                         name='delivery-address'
-                        {...register('delivery-address')}
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        // {...register('delivery-address')}
                       />
                     </div>
                     <div className='request-title content-title'>요청사항</div>
@@ -397,7 +492,9 @@ function CartPage() {
                         id='request'
                         type='text'
                         name='request'
-                        {...register('request')}
+                        value={request}
+                        onChange={(e) => setRequest(e.target.value)}
+                        // {...register('request')}
                       />
                     </div>
                     <div className='card-number-title content-title'>
@@ -408,7 +505,22 @@ function CartPage() {
                         id='card-number'
                         type='text'
                         name='card-number'
-                        {...register('card-number')}
+                        value={cardNumber}
+                        onChange={(e) => setCardNumber(e.target.cardNumber)}
+                        // {...register('card-number')}
+                      />
+                    </div>
+                    <div className='phone-number-title content-title'>
+                      전화번호
+                    </div>
+                    <div className='request-input-container'>
+                      <input
+                        id='phone-number'
+                        type='text'
+                        name='phone-number'
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.phoneNumber)}
+                        // {...register('phone-number')}
                       />
                     </div>
                   </div>
@@ -433,27 +545,27 @@ function CartPage() {
                         </div>
                       </>
                     )}
-
                     <div className='payment-price-title  content-title'>
                       총 결제금액
                     </div>
-                    <div className='payment-price-number '>
+                    <div className='payment-price-number'>
                       {cartInfo.paymentPrice}원
                     </div>
                   </div>
                 </div>
               </div>
               <button
-                type='submit'
+                // type='submit'
                 className='pay-button'
-                disabled={isSubmitting}
+                // disabled={isSubmitting}
+                onClick={handlePayButtonClick}
               >
                 <span className='payment-price-number'>
                   {cartInfo.paymentPrice}
                 </span>
                 원 결제하기
               </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>

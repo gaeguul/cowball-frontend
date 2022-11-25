@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CustomerLayout from '../Component/CustomerLayout';
 import Header from '../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../scss/OrderPage.scss';
 
@@ -21,7 +21,7 @@ function ChangeDinnerNumberButton(props) {
   const setMyDinnerNumber = props.setMyDinnerNumber;
 
   const decreaseDinnerNumber = () => {
-    if (myDinnerNumber == 0) {
+    if (myDinnerNumber == 1) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
       setMyDinnerNumber((prev) => prev - 1);
@@ -127,6 +127,7 @@ function StyleComponent(props) {
   // const styleOptions = props.styleOptions;
   const setMyStyleId = props.setMyStyleId;
   const setStylePrice = props.setStylePrice;
+  const dinnerId = props.dinnerId;
 
   const [styles, setStyles] = useState([]);
 
@@ -134,8 +135,13 @@ function StyleComponent(props) {
   const getStyleOptions = async () => {
     try {
       const url = `menu/styles`;
-      const response = await axios.get(url);
-
+      const options = {
+        params: {
+          dinner_id: dinnerId,
+        },
+      };
+      const response = await axios.get(url, options);
+      console.log('스타일', response.data.items);
       setStyles(response.data.items);
     } catch (error) {
       console.log(error);
@@ -413,6 +419,7 @@ function OrderPage() {
   const [totalPrice, setTotalPrice] = useState(0); // totalPrice = 디너 가격 + 옵션s 가격
   const [finalPrice, setFinalPrice] = useState(0); // FinalPrice = dinner-number * (totalPrice + stylePrice - deletePrice)
 
+  const navigate = useNavigate();
   /**주문할 디너 개수 */
   const [myDinnerNumber, setMyDinnerNumber] = useState(1);
 
@@ -422,22 +429,27 @@ function OrderPage() {
 
     /** [POST] 장바구니에 추가 */
     try {
-      const token = localStorage.getItem('customerToken');
-      const userId = localStorage.getItem('customerId');
+      if (mySteakDegree == 0 || myStyleId == 0) {
+        alert('스타일과 스테이크 굽기 단계를 설정해주세요.');
+      } else {
+        const token = localStorage.getItem('customerToken');
+        const userId = localStorage.getItem('customerId');
 
-      const options = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+        const options = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
 
-      const data = MY_ORDER;
-      const url = `cart/${userId}`;
-      const response = await axios.post(url, data, options);
-      console.log('MY_ORDER', data);
-      console.log('[handlePutCartButtonClick] ', response.data);
-      alert('디너가 장바구니에 담겼습니다. 장바구니를 확인하세요.');
-      // window.location.replace('/cart');
+        const data = MY_ORDER;
+        const url = `cart/${userId}`;
+        const response = await axios.post(url, data, options);
+        console.log('MY_ORDER', data);
+        console.log('[handlePutCartButtonClick] ', response.data);
+        alert('디너가 장바구니에 담겼습니다. 장바구니를 확인하세요.');
+        // window.location.replace('/cart');
+        navigate('/cart');
+      }
     } catch (error) {
       console.log(error);
       console.log('MY_ORDER', MY_ORDER);
@@ -504,6 +516,7 @@ function OrderPage() {
             <StyleComponent
               setMyStyleId={setMyStyleId}
               setStylePrice={setStylePrice}
+              dinnerId={dinnerId}
             />
             <SteakDegreeComponent setMySteakDegree={setMySteakDegree} />
             <DeleteMainOptionComponent
