@@ -242,11 +242,37 @@ input#phone-number {
       width: 100%;
       text-align: left;
 
-      .title {
-        text-align: left;
-        font-size: 1.3em;
-        font-weight: 600;
-        padding-bottom: 20px;
+      .title-and-button {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .load-myinfo-button {
+          width: max-content;
+          padding: 0px 15px;
+          height: 26px;
+          background-color: #ffcd43c0;
+
+          border-radius: 15px;
+          font-weight: 600;
+          font-size: 14px;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          &:hover {
+            background-color: #ffcd43;
+            cursor: pointer;
+          }
+        }
+
+        .title {
+          text-align: left;
+          font-size: 1.3em;
+          font-weight: 600;
+          padding-bottom: 20px;
+        }
       }
 
       .content-container {
