@@ -100,7 +100,7 @@ function DinnerOptionItem(props) {
 
 function OrderDinnerItem(props) {
   const orderDinner = props.orderDinner; //하나의 배달 안에서 시킨 각 디너
-  const orderDinnerAmount = orderDinner.orderDinnerAmount;
+  const orderDinnerAmount = orderDinner.dinnerAmount;
   const orderDinnerOptions = orderDinner.orderDinnerOptions; //선택한 디너 옵션
   const [styleInfo, setStyleInfo] = useState({});
 
@@ -117,6 +117,7 @@ function OrderDinnerItem(props) {
 
   useEffect(() => {
     getStyleInfo();
+    console.log('orderDinner', orderDinner);
   }, []);
 
   return (
@@ -194,6 +195,7 @@ function DetailComponent(props) {
       const url = `orders/${detailOrderId}`;
       const response = await axios.get(url);
       setDetailOrderInfo(response.data);
+      console.log('detailOrderInfo', response.data);
       const orderState = response.data.orderState;
       setOrderStateNumber(orderState);
       // const tmp = orderState === 8 || orderState === 255 ? true : false;
@@ -292,17 +294,42 @@ function LeftComponent(props) {
 
   const getOrders = async () => {
     try {
+      const staffToken = localStorage.getItem('staffToken');
+
       const url = `orders`;
       if (state === 'in-delivery') state = 'in_delivery';
       const options = {
+        headers: {
+          Authorization: `Bearer ${staffToken}`,
+        },
         params: {
           state: state,
         },
       };
       const response = await axios.get(url, options);
       console.log('response.data', response.data);
-      setOrderCount(response.data.count);
-      setOrders(response.data.items);
+
+      let page = 1;
+      let pageMax;
+
+      const result = [];
+      let countMax;
+
+      do {
+        await axios
+          .get(`${url}?page=${page}`, options)
+          .then((res) => res.data)
+          .then((it) => {
+            if (pageMax === undefined) pageMax = it.pageMax;
+            if (countMax === undefined) countMax = it.countMax;
+            result.push(...it.items);
+            console.log(it.items);
+          })
+          .catch((e) => console.log(e));
+      } while (++page <= pageMax);
+
+      setOrderCount(countMax); //총 주문 수
+      setOrders(result); //주문들
     } catch (error) {
       console.log(error);
     }

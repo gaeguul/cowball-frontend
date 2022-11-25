@@ -21,7 +21,7 @@ function ChangeDinnerNumberButton(props) {
   const setMyDinnerNumber = props.setMyDinnerNumber;
 
   const decreaseDinnerNumber = () => {
-    if (myDinnerNumber == 0) {
+    if (myDinnerNumber == 1) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
       setMyDinnerNumber((prev) => prev - 1);

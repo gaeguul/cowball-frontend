@@ -6,8 +6,6 @@ import StaffLayout from '../Component/StaffLayout';
 import StaffLogoNav from '../Component/StaffLogoNav';
 import '../scss/CustomerListPage.scss';
 
-const staffToken = localStorage.getItem('staffToken');
-
 function checkGrade(value) {
   const GRADE_NAME = new Map([
     [0, '일반'],
@@ -21,6 +19,8 @@ function CustomerList() {
   const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
+    const staffToken = localStorage.getItem('staffToken');
+
     const getCustomers = async () => {
       let page = 1;
       let pageMax;
