@@ -391,6 +391,8 @@ function CartPage() {
         alert('디너를 장바구니에 담아주세요.');
       } else if (address == '' || phoneNumber == '' || cardNumber == '') {
         alert('배달정보를 모두 입력해주세요.');
+      } else if (!Number(phoneNumber) || !Number(cardNumber)) {
+        alert('카드번호와 전화번호를 숫자로 입력해주세요.');
       } else {
         await new Promise((r) => setTimeout(r, 1000));
 
