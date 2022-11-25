@@ -51,35 +51,52 @@ function TopInfoComponent(props) {
   const dinnerId = props.dinnerId;
   const setTotalPrice = props.setTotalPrice;
   const [dinnerInfo, setDinnerInfo] = useState({});
+  const [loading, setLoading] = useState(true);
 
   /** 선택한 디너 정보 API 호출 */
-  const getDinnerInfo = async () => {
-    try {
-      const url = `menu/dinners/${dinnerId}`;
-      const response = await axios.get(url);
-      setDinnerInfo(response.data);
-      setTotalPrice(response.data.dinnerPrice);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   useEffect(() => {
+    const getDinnerInfo = async () => {
+      try {
+        setLoading(true);
+        const url = `menu/dinners/${dinnerId}`;
+        const response = await axios.get(url);
+        setDinnerInfo(response.data);
+        setTotalPrice(response.data.dinnerPrice);
+        console.log('정보', response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getDinnerInfo();
   }, []);
+
   return (
     <div className='top-info-container'>
-      <div className='img-container'>
-        <img className='steak-image' alt='steak-image' src='/img/steak2.png' />
-      </div>
-      <div className='right-info-container'>
-        <div className='dinner-title-ko'>{dinnerInfo.dinnerName}</div>
-        <div className='dinner-title-en'>Valentine Dinner</div>
-        <div className='dinner-detail'>{dinnerInfo.dinnerDetail}</div>
-        <div className='dinner-price-title'>
-          <span className='dinner-price'>{dinnerInfo.dinnerPrice}</span>
-          <span>원</span>
-        </div>
-      </div>
+      {loading ? (
+        <></>
+      ) : (
+        <>
+          <div className='img-container'>
+            <img
+              className='steak-image'
+              alt='steak-image'
+              src={dinnerInfo.dinnerImageUrl}
+            />
+          </div>
+          <div className='right-info-container'>
+            <div className='dinner-title-ko'>{dinnerInfo.dinnerName}</div>
+            <div className='dinner-title-en'>{dinnerInfo.dinnerNameEn}</div>
+            <div className='dinner-detail'>{dinnerInfo.dinnerDetail}</div>
+            <div className='dinner-price-title'>
+              <span className='dinner-price'>{dinnerInfo.dinnerPrice}</span>
+              <span>원</span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

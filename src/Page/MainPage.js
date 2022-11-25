@@ -15,7 +15,7 @@ function DinnerItem(props) {
           <img
             className='steak-image'
             alt='steak-image'
-            src='/img/steak2.png'
+            src={props.dinner.dinnerImageUrl}
           />
         </div>
         <div className='dinner-info'>
