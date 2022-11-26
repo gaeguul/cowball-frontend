@@ -50,7 +50,6 @@ function TopInfoComponent(props) {
       const url = `menu/dinners/${dinnerId}`;
       const response = await axios.get(url);
       setDinnerInfo(response.data);
-      setTotalPrice(response.data.dinnerPrice);
     } catch (error) {
       console.log('getDinnerInfo', error);
     }
@@ -58,6 +57,11 @@ function TopInfoComponent(props) {
   useEffect(() => {
     getDinnerInfo();
   }, []);
+
+  useEffect(() => {
+    console.log('[dinnerInfo]', dinnerInfo);
+    setTotalPrice((totalPrice) => totalPrice + dinnerInfo.dinnerPrice);
+  }, [dinnerInfo]);
   return (
     <div className='top-info-container'>
       <div className='img-container'>
@@ -174,9 +178,11 @@ function StyleComponent(props) {
   }, []);
 
   useEffect(() => {
-    console.log('[styles]', styles);
-    const price = parseInt(styles[parseInt(myOrder['styleId']) - 1].stylePrice);
-    setStylePrice(price);
+    console.log('[styles]', styles); // 출력 안 됨
+    if (styles.length === 3) {
+      const price = styles[parseInt(myOrder['styleId']) - 1].stylePrice;
+      setStylePrice(price);
+    }
   }, [styles]);
 
   return (
@@ -217,9 +223,10 @@ function DeleteMainOptionComponent(props) {
   const myOrder = props.myOrder;
   const setDeletePrice = props.setDeletePrice;
   const setMyMainOption = props.setMyMainOption;
+  const myOldOptions = props.myOldOptions;
 
   const dinnerId = myOrder['dinnerId'];
-  const myOptions = myOrder['dinnerOptionIds'];
+  // const myOptions = myOrder['dinnerOptionIds'];
 
   const [mainOptions, setMainOptions] = useState([]); // 삭제 디너 옵션 리스트
 
@@ -245,20 +252,21 @@ function DeleteMainOptionComponent(props) {
 
   useEffect(() => {
     console.log('[mainOptions]', mainOptions);
-    /** 처음 myMainOption 설정 */
-    myOptions.map((myOption) => {
-      mainOptions.map((mainOption) => {
-        console.log('비교가 잘 되고 있을까', myOption, mainOption);
-        if (myOption.id === mainOption.id) {
-          const tmpOption = {
-            id: myOption.id,
-            amount: 1,
-          };
-          setMyMainOption(tmpOption);
-          setDeletePrice(parseInt(mainOption.value));
-        }
+    if (mainOptions.length != 0) {
+      /** 처음 myMainOption 설정 */
+      myOldOptions.map((myOption) => {
+        mainOptions.map((mainOption) => {
+          if (myOption.dinnerOptionId === mainOption.dinnerOptionId) {
+            const tmpOption = {
+              id: mainOption.dinnerOptionId,
+              amount: 1,
+            };
+            setMyMainOption(tmpOption);
+            setDeletePrice(mainOption.dinnerOptionPrice);
+          }
+        });
       });
-    });
+    }
   }, [mainOptions]);
 
   const handleMainOptionClick = (event) => {
@@ -288,7 +296,7 @@ function DeleteMainOptionComponent(props) {
                 name='delete-menu'
                 id={mainOption.dinnerOptionId}
                 value={mainOption.dinnerOptionPrice}
-                defaultChecked={myOptions.some(
+                defaultChecked={myOldOptions.some(
                   (myOption) =>
                     myOption.dinnerOptionId === mainOption.dinnerOptionId,
                 )}
@@ -467,15 +475,13 @@ function EditDinnerPage() {
 
   const orderDinnerId = location.state.orderDinnerId; //수정하려는 오더디너번호
   const dinner = location.state.dinner; //수정하려는 오더디너 정보
+  // degreeId, dinnerAmount, dinnerId, orderDinnerId, orderDinnerOptions, orderId, styleId, totalDinnerPrice
   const orderId = dinner.orderId; // 수정하려는 오더번호
   const dinnerId = dinner.dinnerId; // 수정하려는 디너번호
 
   const [myMainOption, setMyMainOption] = useState({});
   const [myExtraOptions, setMyExtraOptions] = useState([]);
   const [myOptions, setMyOptions] = useState([]);
-
-  // console.log('orderDinnerId', orderDinnerId);
-  // console.log('dinner', dinner); // degreeId, dinnerAmount, dinnerId, orderDinnerId, orderDinnerOptions, orderId, styleId, totalDinnerPrice
 
   const [stylePrice, setStylePrice] = useState(0);
   const [deletePrice, setDeletePrice] = useState(0);
@@ -491,6 +497,8 @@ function EditDinnerPage() {
     dinnerOptionIds: dinner.orderDinnerOptions,
     dinnerAmount: dinner.dinnerAmount,
   }); // 잘 저장 됨
+
+  const myOldOptions = dinner.orderDinnerOptions;
 
   useEffect(() => {
     setMyOptions([...myExtraOptions, myMainOption]);
@@ -538,7 +546,6 @@ function EditDinnerPage() {
       stylePrice,
       deletePrice,
     );
-    setTotalPrice(totalPrice);
     setFinalPrice(
       myOrder['dinnerAmount'] * (totalPrice + stylePrice + deletePrice),
     );
@@ -562,6 +569,7 @@ function EditDinnerPage() {
               myOrder={myOrder}
               setDeletePrice={setDeletePrice}
               setMyMainOption={setMyMainOption}
+              myOldOptions={myOldOptions}
             />
           </div>
           <div className='bottom-right-container'>
@@ -573,6 +581,7 @@ function EditDinnerPage() {
               setTotalPrice={setTotalPrice}
               myExtraOptions={myExtraOptions}
               setMyExtraOptions={setMyExtraOptions}
+              myOldOptions={myOldOptions}
             />
             <div className='dinner-number-and-price-container'>
               <div className='dinner-number-title title'>디너 수량</div>
