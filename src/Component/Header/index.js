@@ -5,7 +5,7 @@ import { HiMicrophone } from 'react-icons/hi';
 //import ReactModal from 'react-modal';
 import Modal from 'react-awesome-modal';
 import '../../scss/component/_modal.scss';
-import '../../Page/OrderPage.js';
+import '../../Page/Customer/OrderPage.js';
 import { useSpeechRecognition } from 'react-speech-kit';
 import axios from 'axios';
 
@@ -40,27 +40,12 @@ function Header() {
   const [degreeId, setDegreeId] = useState(0);
   const [degreeName, setDegreeName] = useState('');
 
-  // const setCustomerToken = value.setCustomerToken;
-
-  // const handleMikeButtonClick = () => {
-  //   console.log(`handleMikeButtonClick`);
-  //   setIsVoiceModalOpen(true);
-  // };
-
   const handleLogoutButtonClick = () => {
     localStorage.clear();
     setIsCustomerLogin(false);
-    // setCustomerToken(null);
   };
 
-  // const handleMsg = () => {
-  //   stop;
-  //   console.log('listening', listening);
-  //   console.log(msg);
-  // };
-
   useEffect(() => {
-    // console.log('sg', msg);
     if (dinnerId == 0) {
       if (msg.includes('발렌타인')) setDinnerId(1);
       else if (msg.includes('프렌치')) setDinnerId(2);
@@ -77,7 +62,6 @@ function Header() {
     else if (msg.includes('미디움 웰')) setDegreeId(4);
     else if (msg.includes('미디움')) setDegreeId(3);
     else if (msg.includes('웰던')) setDegreeId(5);
-    // console.log(dinnerId, styleId, degreeId);
   }, [msg]);
 
   useEffect(() => {
@@ -159,8 +143,6 @@ function Header() {
 
   return (
     <div className='header-container'>
-      {/* {isVoiceModalOpen ? <Modal isOpen={isVoiceModalOpen}></Modal> : null} */}
-
       <div className='header-inner'>
         <div className='logo-container'>
           <NavLink to='/'>
@@ -203,7 +185,6 @@ function Header() {
                       className='voice-button'
                       onMouseDown={listen}
                       onMouseUp={stop}
-                      // onClick={setReset}
                     >
                       🎤
                     </button>

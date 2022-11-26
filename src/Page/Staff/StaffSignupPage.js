@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
-import '../scss/StaffSignupPage.scss';
+import '../../scss/StaffSignupPage.scss';
 
 function StaffSignupForm() {
   const [role, setRole] = useState('');

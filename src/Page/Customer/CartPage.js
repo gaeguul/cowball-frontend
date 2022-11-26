@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // import { useForm } from 'react-hook-form';
-import CustomerLayout from '../Component/CustomerLayout';
-import Header from '../Component/Header';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 import { RiCloseCircleFill } from 'react-icons/ri';
 
@@ -15,7 +15,7 @@ import setMinutes from 'date-fns/setMinutes';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import '../scss/CartPage.scss';
+import '../../scss/CartPage.scss';
 
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
 const DINNER_NAME = ['발렌타인', '프렌치', '잉글리시', '샴페인 축제'];
@@ -277,7 +277,7 @@ function DinnerItem(props) {
   );
 }
 
-function CartPage() {
+function CartForm() {
   const customerId = localStorage.getItem('customerId');
   const customerToken = localStorage.getItem('customerToken');
 
@@ -416,136 +416,141 @@ function CartPage() {
   }, []);
 
   return (
-    <CustomerLayout>
-      <Header />
-      <div className='main-container'>
-        <div className='cart-container'>
-          <div className='main-title'>장바구니</div>
-          <div className='dinner-cart-list-container'>
-            <div className='menu-container'>
-              {dinners.length === 0 ? (
-                <span className='no-dinner'>
-                  장바구니에 담긴 디너가 없습니다.
-                </span>
-              ) : (
-                dinners.map((dinner) => {
-                  return (
-                    <DinnerItem
-                      key={dinner.orderDinnerId}
-                      dinner={dinner}
-                      getCartInfo={getCartInfo}
-                    />
-                  );
-                })
-              )}
+    <div className='main-container'>
+      <div className='cart-container'>
+        <div className='main-title'>장바구니</div>
+        <div className='dinner-cart-list-container'>
+          <div className='menu-container'>
+            {dinners.length === 0 ? (
+              <span className='no-dinner'>
+                장바구니에 담긴 디너가 없습니다.
+              </span>
+            ) : (
+              dinners.map((dinner) => {
+                return (
+                  <DinnerItem
+                    key={dinner.orderDinnerId}
+                    dinner={dinner}
+                    getCartInfo={getCartInfo}
+                  />
+                );
+              })
+            )}
 
-              <div className='total-container'>
-                <div className='title'>주문금액</div>
-                <div className='total-price'>{cartInfo.totalPrice}원</div>
-              </div>
+            <div className='total-container'>
+              <div className='title'>주문금액</div>
+              <div className='total-price'>{cartInfo.totalPrice}원</div>
             </div>
-            <div className='right-info-container'>
-              <div className='top-info-container'>
-                <div className='delivery-info-container'>
-                  <div className='title-and-button'>
-                    <div className='title'>배달정보</div>
-                    <div
-                      onClick={handleLoadMyInfoButtonClick}
-                      className='load-myinfo-button'
-                    >
-                      내정보 불러오기
-                    </div>
-                  </div>
-                  <div className='content-container'>
-                    <div className='rsv-date-title content-title'>예약일시</div>
-                    <div className='rsv-date date-picker'>
-                      <DatePickerComponent setRsvDate={setRsvDate} />
-                    </div>
-                    <div className='card-number-title content-title'>
-                      카드번호
-                    </div>
-                    <div className='request-input-container'>
-                      <input
-                        id='card-number'
-                        type='text'
-                        name='card-number'
-                        value={cardNumber}
-                        onChange={(e) => setCardNumber(e.target.value)}
-                      />
-                    </div>
-                    <div className='address-title content-title'>배송지</div>
-                    <div className='address-input-container'>
-                      <input
-                        id='delivery-address'
-                        type='text'
-                        name='delivery-address'
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                      />
-                    </div>
-                    <div className='phone-number-title content-title'>
-                      전화번호
-                    </div>
-                    <div className='request-input-container'>
-                      <input
-                        id='phone-number'
-                        type='text'
-                        name='phone-number'
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                      />
-                    </div>
-                    <div className='request-title content-title'>요청사항</div>
-                    <div className='request-input-container'>
-                      <input
-                        id='request'
-                        type='text'
-                        name='request'
-                        value={request}
-                        onChange={(e) => setRequest(e.target.value)}
-                      />
-                    </div>
+          </div>
+          <div className='right-info-container'>
+            <div className='top-info-container'>
+              <div className='delivery-info-container'>
+                <div className='title-and-button'>
+                  <div className='title'>배달정보</div>
+                  <div
+                    onClick={handleLoadMyInfoButtonClick}
+                    className='load-myinfo-button'
+                  >
+                    내정보 불러오기
                   </div>
                 </div>
-                <div className='payment-info-container'>
-                  <div className='title'>결제금액</div>
-                  <div className='content-container'>
-                    <div className='total-price-title content-title'>
-                      주문금액
-                    </div>
-                    <div className='total-price-number'>
-                      {cartInfo.totalPrice}원
-                    </div>
-                    {cartInfo.totalPrice - cartInfo.paymentPrice ===
-                    0 ? null : (
-                      <>
-                        <div className='discount-price-title content-title'>
-                          단골할인금액
-                        </div>
-                        <div className='discount-price-number'>
-                          - {cartInfo.totalPrice - cartInfo.paymentPrice}원
-                        </div>
-                      </>
-                    )}
-                    <div className='payment-price-title  content-title'>
-                      총 결제금액
-                    </div>
-                    <div className='payment-price-number'>
-                      {cartInfo.paymentPrice}원
-                    </div>
+                <div className='content-container'>
+                  <div className='rsv-date-title content-title'>예약일시</div>
+                  <div className='rsv-date date-picker'>
+                    <DatePickerComponent setRsvDate={setRsvDate} />
+                  </div>
+                  <div className='card-number-title content-title'>
+                    카드번호
+                  </div>
+                  <div className='request-input-container'>
+                    <input
+                      id='card-number'
+                      type='text'
+                      name='card-number'
+                      value={cardNumber}
+                      onChange={(e) => setCardNumber(e.target.value)}
+                    />
+                  </div>
+                  <div className='address-title content-title'>배송지</div>
+                  <div className='address-input-container'>
+                    <input
+                      id='delivery-address'
+                      type='text'
+                      name='delivery-address'
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </div>
+                  <div className='phone-number-title content-title'>
+                    전화번호
+                  </div>
+                  <div className='request-input-container'>
+                    <input
+                      id='phone-number'
+                      type='text'
+                      name='phone-number'
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                    />
+                  </div>
+                  <div className='request-title content-title'>요청사항</div>
+                  <div className='request-input-container'>
+                    <input
+                      id='request'
+                      type='text'
+                      name='request'
+                      value={request}
+                      onChange={(e) => setRequest(e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
-              <button className='pay-button' onClick={handlePayButtonClick}>
-                <span className='payment-price-number'>
-                  {cartInfo.paymentPrice}
-                </span>
-                원 결제하기
-              </button>
+              <div className='payment-info-container'>
+                <div className='title'>결제금액</div>
+                <div className='content-container'>
+                  <div className='total-price-title content-title'>
+                    주문금액
+                  </div>
+                  <div className='total-price-number'>
+                    {cartInfo.totalPrice}원
+                  </div>
+                  {cartInfo.totalPrice - cartInfo.paymentPrice === 0 ? null : (
+                    <>
+                      <div className='discount-price-title content-title'>
+                        단골할인금액
+                      </div>
+                      <div className='discount-price-number'>
+                        - {cartInfo.totalPrice - cartInfo.paymentPrice}원
+                      </div>
+                    </>
+                  )}
+                  <div className='payment-price-title  content-title'>
+                    총 결제금액
+                  </div>
+                  <div className='payment-price-number'>
+                    {cartInfo.paymentPrice}원
+                  </div>
+                </div>
+              </div>
             </div>
+            <button className='pay-button' onClick={handlePayButtonClick}>
+              <span className='payment-price-number'>
+                {cartInfo.paymentPrice}
+              </span>
+              원 결제하기
+            </button>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function CartPage() {
+  return (
+    <CustomerLayout>
+      <Header />
+      <CartForm />
     </CustomerLayout>
   );
 }

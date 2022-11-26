@@ -3,10 +3,9 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 import { BiPlus, BiMinus } from 'react-icons/bi';
-import CustomerLayout from '../Component/CustomerLayout';
-import Header from '../Component/Header';
-import '../scss/EditDinnerPage.scss';
-import { useNavigate } from 'react-router-dom';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
+import '../../scss/EditDinnerPage.scss';
 
 function ChangeDinnerNumberButton(props) {
   const myOrder = props.myOrder;

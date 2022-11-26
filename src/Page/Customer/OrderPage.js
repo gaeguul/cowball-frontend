@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import CustomerLayout from '../Component/CustomerLayout';
-import Header from '../Component/Header';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../scss/OrderPage.scss';
+import '../../scss/OrderPage.scss';
 
 const MY_ORDER = {
   degreeId: 0,
@@ -101,7 +101,7 @@ function TopInfoComponent(props) {
   );
 }
 
-function SteakDegreeComponent(props) {
+function SteakDegreeForm(props) {
   const setMySteakDegree = props.setMySteakDegree;
 
   const handleDegreeButtonClick = (event) => {
@@ -140,7 +140,7 @@ function SteakDegreeComponent(props) {
   );
 }
 
-function StyleComponent(props) {
+function StyleForm(props) {
   // const styleOptions = props.styleOptions;
   const STYLE_ITEMS = new Map([
     [1, '상자 접시, 일반 냅킨, 플라스틱 쟁반'],
@@ -211,7 +211,7 @@ function StyleComponent(props) {
   );
 }
 
-function DeleteMainOptionComponent(props) {
+function DeleteMainOptionForm(props) {
   const dinnerId = props.dinnerId;
   const setMyMainOption = props.setMyMainOption;
   const setDeletePrice = props.setDeletePrice;
@@ -348,7 +348,7 @@ function ExtraOptionItem(props) {
   );
 }
 
-function ExtraOptionComponent(props) {
+function ExtraOptionForm(props) {
   const dinnerId = props.dinnerId;
   const myExtraOptions = props.myExtraOptions;
   const setMyExtraOptions = props.setMyExtraOptions;
@@ -536,13 +536,13 @@ function OrderPage() {
         <TopInfoComponent dinnerId={dinnerId} setTotalPrice={setTotalPrice} />
         <div className='bottom-info-container'>
           <div className='bottom-left-container'>
-            <StyleComponent
+            <StyleForm
               setMyStyleId={setMyStyleId}
               setStylePrice={setStylePrice}
               dinnerId={dinnerId}
             />
-            <SteakDegreeComponent setMySteakDegree={setMySteakDegree} />
-            <DeleteMainOptionComponent
+            <SteakDegreeForm setMySteakDegree={setMySteakDegree} />
+            <DeleteMainOptionForm
               dinnerId={dinnerId}
               setMyMainOption={setMyMainOption}
               setDeletePrice={setDeletePrice}
@@ -552,7 +552,7 @@ function OrderPage() {
             <div className='title-container'>
               <div className='main-title'>추가할 디너 옵션</div>
             </div>
-            <ExtraOptionComponent
+            <ExtraOptionForm
               dinnerId={dinnerId}
               myExtraOptions={myExtraOptions}
               setMyExtraOptions={setMyExtraOptions}
