@@ -230,6 +230,7 @@ function DeleteMainOptionComponent(props) {
   const setMyMainOption = props.setMyMainOption;
   const myOldOptions = props.myOldOptions;
   const setTFdelete = props.setTFdelete;
+  const setModify = props.setModify;
 
   const dinnerId = myOrder['dinnerId'];
   // const myOptions = myOrder['dinnerOptionIds'];
@@ -264,7 +265,7 @@ function DeleteMainOptionComponent(props) {
         mainOptions.map((mainOption) => {
           if (myOption.dinnerOptionId === mainOption.dinnerOptionId) {
             const tmpOption = {
-              id: mainOption.dinnerOptionId,
+              id: parseInt(myOption.dinnerOptionId),
               amount: 1,
             };
             setMyMainOption(tmpOption);
@@ -277,6 +278,7 @@ function DeleteMainOptionComponent(props) {
   }, [mainOptions]);
 
   const handleMainOptionClick = (event) => {
+    setModify(true);
     const tmpOption = {
       id: parseInt(event.target.id),
       amount: 1,
@@ -327,18 +329,20 @@ function ChangeOptionNumberButton(props) {
   const setOptionPrice = props.setOptionPrice;
   const dinnerOptionPrice = props.dinnerOptionPrice;
   const myOldOptions = props.myOldOptions;
-  const setNewExtraOption = props.setNewExtraOption;
+  const setModify = props.setModify;
 
   const decreaseOptionNumber = () => {
     if (optionNumber == 0) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
+      setModify(true);
       setOptionNumber((prev) => prev - 1);
       setOptionPrice((prev) => prev - dinnerOptionPrice);
     }
   };
 
   const increaseOptionNumber = () => {
+    setModify(true);
     setOptionNumber((prev) => prev + 1);
     setOptionPrice((prev) => prev + dinnerOptionPrice);
   };
@@ -348,11 +352,6 @@ function ChangeOptionNumberButton(props) {
       (o) => o.dinnerOptionId === extraOption.dinnerOptionId,
     );
     if (option) {
-      const tmpObject = {
-        id: option.dinnerOptionId,
-        amount: option.amount,
-      };
-      setNewExtraOption(tmpObject);
       setOptionNumber(option.amount);
     } else setOptionNumber(0);
   }, []);
@@ -378,7 +377,8 @@ function ExtraOptionItem(props) {
   const setNewExtraOption = props.setNewExtraOption;
   const setOptionPrice = props.setOptionPrice;
   const myOldOptions = props.myOldOptions;
-
+  const setModify = props.setModify;
+  const modify = props.modify;
   const [optionNumber, setOptionNumber] = useState(0);
 
   useEffect(() => {
@@ -386,7 +386,9 @@ function ExtraOptionItem(props) {
       id: extraOption.dinnerOptionId,
       amount: optionNumber,
     };
-    setNewExtraOption(tmpObject);
+    if (modify) {
+      setNewExtraOption(tmpObject);
+    }
   }, [optionNumber]);
 
   return (
@@ -403,7 +405,7 @@ function ExtraOptionItem(props) {
           setOptionNumber={setOptionNumber}
           optionNumber={optionNumber}
           extraOption={extraOption}
-          setNewExtraOption={setNewExtraOption}
+          setModify={setModify}
         />
       </div>
     </>
@@ -416,6 +418,8 @@ function ExtraOptionComponent(props) {
   const myExtraOptions = props.myExtraOptions;
   const setMyExtraOptions = props.setMyExtraOptions;
   const myOldOptions = props.myOldOptions;
+  const setModify = props.setModify;
+  const modify = props.modify;
 
   const [loading, setLoading] = useState(true);
   const [extraOptions, setExtraOptions] = useState([]); // 추가 구성품 모든 목록
@@ -445,33 +449,44 @@ function ExtraOptionComponent(props) {
     getExtraOptions();
   }, []); // 딱 시작할 때 가져올 수 있도록
 
-  const [check, setCheck] = useState(false);
+  const [check, setCheck] = useState(true); // 시작하면 false, 단순히 newExtraOption의 id가 myExtraOptions에 있으면 잠시 true가 되는 확인용
 
   useEffect(() => {
-    console.log('newExtraOption', newExtraOption);
+    console.log('[newExtraOption]', newExtraOption);
     const newId = newExtraOption.id;
-    const newAmount = newExtraOption.amount;
-
     /**
      * 만약 newExtraOption의 id가 myExtraOptions에 있으면
      * amount값만 변경하고
      * myExtraOptions에 없으면 해당 newExtraOption을 추가한다
      */
-
     setCheck(false);
-    myExtraOptions.map((option) => option.id == newId ? setCheck(true) : {});
-    if (check) {
+    if (modify) {
+      myExtraOptions.map((option) => {
+        if (parseInt(option['dinnerOptionId']) === parseInt(newId)) {
+          setCheck(true);
+        }
+      });
+    }
+  }, [newExtraOption]);
+
+  useEffect(() => {
+    console.log('[check]', check);
+    const newId = newExtraOption.id;
+    const newAmount = newExtraOption.amount;
+    if (modify && check) {
       //myExtraOptions에 newId가 있는 경우
       setMyExtraOptions(
-        myExtraOptions.some((option) =>
+        myExtraOptions.map((option) =>
           option.id === newId ? { ...option, amount: newAmount } : option,
         ),
       );
     } else {
-      //myExtraOptions에 newId가 없는 경우      
+      //myExtraOptions에 newId가 없는 경우  
+      console.log('못들어감');
       setMyExtraOptions((prev) => [...prev, newExtraOption]);
     }
-  }, [newExtraOption]);
+    setCheck(false);
+  }, [check])
 
   return (
     <div className='dinner-option-list'>
@@ -489,6 +504,8 @@ function ExtraOptionComponent(props) {
                     setNewExtraOption={setNewExtraOption}
                     setOptionPrice={setOptionPrice}
                     myOldOptions={myOldOptions}
+                    setModify={setModify}
+                    modify={modify}
                   />
                 );
               })}
@@ -540,21 +557,31 @@ function EditDinnerPage() {
   }, [temp1]);
 
   useEffect(() => {
-    setTemp1([...myExtraOptions, myMainOption]);
+    console.log('[myMainOption]', myMainOption);
+    if (modify) {
+      setTemp1([...myExtraOptions, myMainOption]);
+    } else {
+      setMyExtraOptions(myOrder['dinnerOptionIds'].filter((option) => option.dinnerOptionId !== myMainOption.id));
+    }
   }, [myMainOption]);
 
   useEffect(() => {
-    if (myMainOption == {}) {
-      setTemp1(myExtraOptions);
-    } else {
-      console.log('myExtraOptions', myExtraOptions);
-      console.log('myMainOption', myMainOption);
-      // setTemp1([...myExtraOptions, myMainOption]);
+    console.log('[myExtraOptions]', myExtraOptions)
+    if (modify) {
+      if (myMainOption == {}) {
+        setTemp1(myExtraOptions);
+      } else {
+        console.log('myExtraOptions', myExtraOptions);
+        console.log('myMainOption', myMainOption);
+        // setTemp1([...myExtraOptions, myMainOption]);
+      }
     }
   }, [myExtraOptions]);
 
   useEffect(() => {
-    setMyOrder({ ...myOrder, dinnerOptionIds: myOptions });
+    if (modify) {
+      setMyOrder({ ...myOrder, dinnerOptionIds: myOptions });
+    }
   }, [myOptions]);
 
   const handleChangeDinnerClick = async () => {
@@ -578,10 +605,11 @@ function EditDinnerPage() {
     }
   };
 
-  const [start, setStart] = useState(true);
-  const [TFtotal, setTFtotal] = useState(false);
-  const [TFstyle, setTFstyle] = useState(false);
-  const [TFdelete, setTFdelete] = useState(false);
+  const [start, setStart] = useState(true); // 시작하면 true, 맨 처음에 가격 다 불러온 후 optionPrice 계산하면 false
+  const [TFtotal, setTFtotal] = useState(false); // 시작하면 false, total 가격 불러오면 true
+  const [TFstyle, setTFstyle] = useState(false); // 시작하면 false, style 가격 불러오면 true
+  const [TFdelete, setTFdelete] = useState(false); // 시작하면 false, delete 가격 불러오면 true
+  const [modify, setModify] = useState(false); // 버튼 누르기 전까지 false, option(delete든 extra든) 수정 버튼 한 개라도 누르면 true
 
   /** 업로드 될 때마다 가격 수정 */
   useEffect(() => {
@@ -596,6 +624,7 @@ function EditDinnerPage() {
     setFinalPrice(
       myOrder['dinnerAmount'] * (totalPrice + optionPrice + stylePrice + deletePrice),
     );
+    console.log('[myOrder]', myOrder);
     if (start && TFtotal && TFstyle && TFdelete) {
       setOptionPrice(dinner['totalDinnerPrice'] / myOrder['dinnerAmount'] - totalPrice - stylePrice - deletePrice);
       setStart(false);
@@ -622,6 +651,7 @@ function EditDinnerPage() {
               setMyMainOption={setMyMainOption}
               myOldOptions={myOldOptions}
               setTFdelete={setTFdelete}
+              setModify={setModify}
             />
           </div>
           <div className='bottom-right-container'>
@@ -634,6 +664,8 @@ function EditDinnerPage() {
               myExtraOptions={myExtraOptions}
               setMyExtraOptions={setMyExtraOptions}
               myOldOptions={myOldOptions}
+              setModify={setModify}
+              modify={modify}
             />
             <div className='dinner-number-and-price-container'>
               <div className='dinner-number-title title'>디너 수량</div>
