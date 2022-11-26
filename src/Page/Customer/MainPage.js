@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import CustomerLayout from '../Component/CustomerLayout';
-import Header from '../Component/Header';
-import '../scss/MainPage.scss';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
+import '../../scss/MainPage.scss';
 
 function Dinner(props) {
   const dinnerId = props.dinner.dinnerId;

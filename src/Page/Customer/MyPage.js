@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import CustomerLayout from '../Component/CustomerLayout';
-import Header from '../Component/Header';
-
-import '../scss/MyPage.scss';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
+import '../../scss/MyPage.scss';
 import { NavLink } from 'react-router-dom';
 
 function MyPageForm() {

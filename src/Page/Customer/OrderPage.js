@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import CustomerLayout from '../Component/CustomerLayout';
-import Header from '../Component/Header';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../scss/OrderPage.scss';
+import '../../scss/OrderPage.scss';
 
 const MY_ORDER = {
   degreeId: 0,

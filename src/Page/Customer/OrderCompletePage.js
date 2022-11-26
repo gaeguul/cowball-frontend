@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Header from '../Component/Header';
-import CustomerLayout from '../Component/CustomerLayout';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
 import { BsCheckCircle } from 'react-icons/bs';
-import '../scss/OrderCompletePage.scss';
+import '../../scss/OrderCompletePage.scss';
 import { format, parseISO } from 'date-fns';
 
 function OrderCompletePage() {

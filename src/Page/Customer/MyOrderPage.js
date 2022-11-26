@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { format, parseISO } from 'date-fns';
 import axios from 'axios';
-import CustomerLayout from '../Component/CustomerLayout';
-import Header from '../Component/Header';
-import '../scss/MyOrderPage.scss';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
+import '../../scss/MyOrderPage.scss';
 
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
 const DINNER_NAME = ['발렌타인', '프렌치', '잉글리시', '샴페인 축제'];

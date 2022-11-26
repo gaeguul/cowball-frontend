@@ -2,11 +2,11 @@ import axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import CustomerLayout from '../Component/CustomerLayout';
-import Header from '../Component/Header';
-import { AuthContext } from '../Context/AuthContext';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
+import { AuthContext } from '../../Context/AuthContext';
 
-import '../scss/CustomerExitPage.scss';
+import '../../scss/CustomerExitPage.scss';
 
 function CustomerExitForm() {
   const customerId = localStorage.getItem('customerId');

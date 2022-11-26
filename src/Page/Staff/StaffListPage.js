@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';
 
-import StaffLayout from '../Component/StaffLayout';
-import StaffLogoNav from '../Component/StaffLogoNav';
-import '../scss/StaffListPage.scss';
+import StaffLayout from '../../Component/StaffLayout';
+import StaffLogoNav from '../../Component/StaffLogoNav';
+import '../../scss/StaffListPage.scss';
 
 const staffToken = localStorage.getItem('staffToken');
 

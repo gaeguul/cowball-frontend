@@ -2,29 +2,30 @@ import axios from 'axios';
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
-import '../scss/CustomerLoginPage.scss';
+import '../../scss/StaffLoginPage.scss';
 
-import { AuthContext } from '../Context/AuthContext';
+import { AuthContext } from '../../Context/AuthContext';
 
-function CustomerLoginLogo() {
+function StaffLoginLogo() {
   return (
-    <div className='customer-login-logo-container'>
-      <NavLink to='/login'>
+    <div className='staff-login-logo-container'>
+      <NavLink to='/stafflogin'>
         <img
-          className='MrDaebakLogo'
-          alt='MrDaebakLogo'
-          src='/img/MrDaebakLogo.png'
+          className='MrDaebakStaffLogo'
+          alt='MrDaebakStaffLogo'
+          src='/img/MrDaebakStaffLogo.png'
         />
       </NavLink>
     </div>
   );
 }
 
-function CustomerLoginForm() {
+function StaffLoginForm() {
   /**상태관리 */
   const value = useContext(AuthContext);
-  const setIsCustomerLogin = value.setIsCustomerLogin;
+  const setIsStaffLogin = value.setIsStaffLogin;
 
+  /** */
   const {
     register,
     handleSubmit,
@@ -35,17 +36,14 @@ function CustomerLoginForm() {
     try {
       await new Promise((r) => setTimeout(r, 1000));
 
-      console.log(data);
-
-      const url = `auth/users`;
+      const url = `auth/staff`;
       const response = await axios.post(url, data);
-
       console.log(response.data['access-token']); //access-token
 
-      localStorage.setItem('customerId', response.data['userId']);
-      localStorage.setItem('customerToken', response.data['access-token']);
+      localStorage.setItem('staffId', response.data['staffId']);
+      localStorage.setItem('staffToken', response.data['access-token']);
 
-      setIsCustomerLogin(true);
+      setIsStaffLogin(true);
     } catch (error) {
       console.log(error);
       alert('아이디 또는 비밀번호를 다시 입력해주세요.');
@@ -53,21 +51,23 @@ function CustomerLoginForm() {
   };
 
   return (
-    <div className='customer-login-form-container'>
-      <form className='customer-login-form' onSubmit={handleSubmit(onSubmit)}>
+    <div className='staff-login-form-container'>
+      <form className='staff-login-form' onSubmit={handleSubmit(onSubmit)}>
         <input
-          id='userId'
+          id='staffId'
           type='text'
-          name='userId'
+          name='staffId'
           placeholder='아이디'
-          aria-invalid={!isDirty ? undefined : errors.userId ? 'true' : 'false'}
-          {...register('userId', {
+          aria-invalid={
+            !isDirty ? undefined : errors.staffId ? 'true' : 'false'
+          }
+          {...register('staffId', {
             required: '아이디를 입력해주세요.',
           })}
         />
-        {errors.userId && (
+        {errors.staffId && (
           <small role='alert' className='input-alert'>
-            {errors.userId.message}
+            {errors.staffId.message}
           </small>
         )}
         <input
@@ -98,28 +98,28 @@ function CustomerLoginForm() {
 function ButtomNav() {
   return (
     <div className='buttom-nav-container'>
-      <NavLink to='/signup'>회원가입</NavLink>
-      <NavLink to='/stafflogin'>직원이신가요?</NavLink>
+      <NavLink to='/'>고객이신가요?</NavLink>
+      <NavLink to='/staffsignup'>직원 회원가입</NavLink>
     </div>
   );
 }
 
-function CustomerLoginBox() {
+function StaffLoginBox() {
   return (
-    <div className='customer-login-box'>
-      <CustomerLoginLogo />
-      <CustomerLoginForm />
+    <div className='staff-login-box'>
+      <StaffLoginLogo />
+      <StaffLoginForm />
       <ButtomNav />
     </div>
   );
 }
 
-function CustomerLoginPage() {
+function StaffLoginPage() {
   return (
-    <div className='customer-login-container'>
-      <CustomerLoginBox />
+    <div className='staff-login-container'>
+      <StaffLoginBox />
     </div>
   );
 }
 
-export default CustomerLoginPage;
+export default StaffLoginPage;

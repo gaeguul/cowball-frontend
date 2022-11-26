@@ -5,7 +5,7 @@ import { HiMicrophone } from 'react-icons/hi';
 //import ReactModal from 'react-modal';
 import Modal from 'react-awesome-modal';
 import '../../scss/component/_modal.scss';
-import '../../Page/OrderPage.js';
+import '../../Page/Customer/OrderPage.js';
 import { useSpeechRecognition } from 'react-speech-kit';
 import axios from 'axios';
 

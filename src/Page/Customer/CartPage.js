@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // import { useForm } from 'react-hook-form';
-import CustomerLayout from '../Component/CustomerLayout';
-import Header from '../Component/Header';
+import CustomerLayout from '../../Component/CustomerLayout';
+import Header from '../../Component/Header';
 import { BiPlus, BiMinus } from 'react-icons/bi';
 import { RiCloseCircleFill } from 'react-icons/ri';
 
@@ -15,7 +15,7 @@ import setMinutes from 'date-fns/setMinutes';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-import '../scss/CartPage.scss';
+import '../../scss/CartPage.scss';
 
 const STEAK_DEGREE = ['레어', '미디움레어', '미디움', '미디움웰', '웰던'];
 const DINNER_NAME = ['발렌타인', '프렌치', '잉글리시', '샴페인 축제'];
