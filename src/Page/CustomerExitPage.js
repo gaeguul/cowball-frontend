@@ -8,7 +8,7 @@ import { AuthContext } from '../Context/AuthContext';
 
 import '../scss/CustomerExitPage.scss';
 
-function CustomerExitPage() {
+function CustomerExitForm() {
   const customerId = localStorage.getItem('customerId');
   const customerToken = localStorage.getItem('customerToken');
 
@@ -58,30 +58,36 @@ function CustomerExitPage() {
   };
 
   return (
-    <CustomerLayout>
-      <Header />
-      <div className='center-container'>
-        <div className='exit-container'>
-          <div className='top-title'>
-            <span className='title-text'>회원을 탈퇴하시겠습니까?</span>
-          </div>
-          <div className='exit-info-container'>
-            <div className='info-title'>아이디</div>
-            <div className='info-content'>{userInfo.userId}</div>
-            <div className='info-title'>주문횟수</div>
-            <div className='info-content'>{userInfo.orderCount}회</div>
-          </div>
-          <div className='bottom-container'>
-            <NavLink to='/'>
-              <div className='cancel-button'></div>
-              취소
-            </NavLink>
-            <button className='exit-button' onClick={handleExitButtonClick}>
-              <span>회원탈퇴</span>
-            </button>
-          </div>
+    <div className='center-container'>
+      <div className='exit-container'>
+        <div className='top-title'>
+          <span className='title-text'>회원을 탈퇴하시겠습니까?</span>
+        </div>
+        <div className='exit-info-container'>
+          <div className='info-title'>아이디</div>
+          <div className='info-content'>{userInfo.userId}</div>
+          <div className='info-title'>주문횟수</div>
+          <div className='info-content'>{userInfo.orderCount}회</div>
+        </div>
+        <div className='bottom-container'>
+          <NavLink to='/'>
+            <div className='cancel-button'></div>
+            취소
+          </NavLink>
+          <button className='exit-button' onClick={handleExitButtonClick}>
+            <span>회원탈퇴</span>
+          </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function CustomerExitPage() {
+  return (
+    <CustomerLayout>
+      <Header />
+      <CustomerExitForm />
     </CustomerLayout>
   );
 }

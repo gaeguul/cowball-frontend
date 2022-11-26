@@ -6,8 +6,6 @@ export { default as OrderCompletePage } from './OrderCompletePage';
 export { default as MyOrderPage } from './MyOrderPage';
 export { default as EditDinnerPage } from './EditDinnerPage';
 export { default as MyPage } from './MyPage';
-export { default as ChangePasswordPage } from './ChangePasswordPage';
-export { default as ChangeMyInfoPage } from './ChangeMyInfoPage';
 
 export { default as CustomerLoginPage } from './CustomerLoginPage';
 export { default as CustomerSignupPage } from './CustomerSignupPage';

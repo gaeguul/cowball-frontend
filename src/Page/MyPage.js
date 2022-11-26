@@ -6,7 +6,7 @@ import Header from '../Component/Header';
 import '../scss/MyPage.scss';
 import { NavLink } from 'react-router-dom';
 
-function MyPage() {
+function MyPageForm() {
   const customerId = localStorage.getItem('customerId');
   const customerToken = localStorage.getItem('customerToken');
 
@@ -81,84 +81,89 @@ function MyPage() {
       console.log(error);
     }
   };
-
   return (
-    <CustomerLayout>
-      <Header />
-      <div className='mypage-center-container'>
-        <div className='mypage-container'>
-          <div className='top-title'>
-            <span className='title-text'>마이페이지</span>
+    <div className='mypage-center-container'>
+      <div className='mypage-container'>
+        <div className='top-title'>
+          <span className='title-text'>마이페이지</span>
+        </div>
+        <div className='form-container'>
+          <div className='input-container'>
+            <label className='title' htmlFor='userId'>
+              아이디
+            </label>
+            <input
+              disabled={true}
+              id='userId'
+              type='text'
+              name='userId'
+              placeholder={userId}
+              defaultValue={userId}
+            />
+            <label className='title' htmlFor='userName'>
+              이름
+            </label>
+            <input
+              id='userName'
+              type='text'
+              name='userName'
+              placeholder={name}
+              defaultValue={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+            <label className='title' htmlFor='phoneNumber'>
+              전화번호
+            </label>
+            <input
+              id='phoneNumber'
+              type='text'
+              name='phoneNumber'
+              placeholder={phoneNumber}
+              defaultValue={phoneNumber}
+              onChange={(event) => setPhoneNumber(event.target.value)}
+            />
+            <label className='title' htmlFor='address'>
+              주소
+            </label>
+            <input
+              id='address'
+              type='text'
+              name='address'
+              placeholder={address}
+              defaultValue={address}
+              onChange={(event) => setAddress(event.target.value)}
+            />
+            <label className='title' htmlFor='cardNumber'>
+              카드번호
+            </label>
+            <input
+              id='cardNumber'
+              type='text'
+              name='cardNumber'
+              placeholder={cardNumber}
+              defaultValue={cardNumber}
+              onChange={(event) => setCardNumber(event.target.value)}
+            />
           </div>
-          <div className='form-container'>
-            <div className='input-container'>
-              <label className='title' htmlFor='userId'>
-                아이디
-              </label>
-              <input
-                disabled={true}
-                id='userId'
-                type='text'
-                name='userId'
-                placeholder={userId}
-                defaultValue={userId}
-              />
-              <label className='title' htmlFor='userName'>
-                이름
-              </label>
-              <input
-                id='userName'
-                type='text'
-                name='userName'
-                placeholder={name}
-                defaultValue={name}
-                onChange={(event) => setName(event.target.value)}
-              />
-              <label className='title' htmlFor='phoneNumber'>
-                전화번호
-              </label>
-              <input
-                id='phoneNumber'
-                type='text'
-                name='phoneNumber'
-                placeholder={phoneNumber}
-                defaultValue={phoneNumber}
-                onChange={(event) => setPhoneNumber(event.target.value)}
-              />
-              <label className='title' htmlFor='address'>
-                주소
-              </label>
-              <input
-                id='address'
-                type='text'
-                name='address'
-                placeholder={address}
-                defaultValue={address}
-                onChange={(event) => setAddress(event.target.value)}
-              />
-              <label className='title' htmlFor='cardNumber'>
-                카드번호
-              </label>
-              <input
-                id='cardNumber'
-                type='text'
-                name='cardNumber'
-                placeholder={cardNumber}
-                defaultValue={cardNumber}
-                onChange={(event) => setCardNumber(event.target.value)}
-              />
-            </div>
-            <div className='bottom-container'>
-              <button className='edit-button' onClick={submitInfo}>
-                <span>수정</span>
-              </button>
-              <NavLink to='/exit' className='exit-button'>
-                <span>회원탈퇴</span>
-              </NavLink>
-            </div>
+          <div className='bottom-container'>
+            <button className='edit-button' onClick={submitInfo}>
+              <span>수정</span>
+            </button>
+            <NavLink to='/exit' className='exit-button'>
+              <span>회원탈퇴</span>
+            </NavLink>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function MyPage() {
+  return (
+    <CustomerLayout>
+      <Header />
+      <MyPageForm />
     </CustomerLayout>
   );
 }

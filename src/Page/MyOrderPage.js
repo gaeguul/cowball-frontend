@@ -321,7 +321,7 @@ function MyOrderItem(props) {
   );
 }
 
-function MyOrderComponent() {
+function MyOrderForm() {
   const customerId = localStorage.getItem('customerId');
   const customerToken = localStorage.getItem('customerToken');
 
@@ -341,6 +341,7 @@ function MyOrderComponent() {
           Authorization: `Bearer ${customerToken}`,
         },
       };
+
       const response = await axios.get(url, options);
       setMyOrders(response.data.items);
       console.log('[getMyOrders]', response.data);
@@ -398,7 +399,7 @@ function MyOrderPage() {
   return (
     <CustomerLayout>
       <Header />
-      <MyOrderComponent />
+      <MyOrderForm />
     </CustomerLayout>
   );
 }
