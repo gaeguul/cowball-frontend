@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -42,6 +43,7 @@ function ChangeDinnerNumberButton(props) {
 function TopInfoComponent(props) {
   const dinnerId = props.dinnerId;
   const setTotalPrice = props.setTotalPrice;
+  const setTFtotal = props.setTFtotal;
   const [dinnerInfo, setDinnerInfo] = useState({});
 
   /** 선택한 디너 정보 API 호출 */
@@ -61,6 +63,7 @@ function TopInfoComponent(props) {
   useEffect(() => {
     console.log('[dinnerInfo]', dinnerInfo);
     setTotalPrice(dinnerInfo.dinnerPrice);
+    setTFtotal(true);
   }, [dinnerInfo]);
   return (
     <div className='top-info-container'>
@@ -154,6 +157,7 @@ function StyleComponent(props) {
   const myOrder = props.myOrder;
   const setMyOrder = props.setMyOrder;
   const setStylePrice = props.setStylePrice;
+  const setTFstyle = props.setTFstyle;
 
   const [styles, setStyles] = useState([]); // 스타일 목록
 
@@ -178,10 +182,11 @@ function StyleComponent(props) {
   }, []);
 
   useEffect(() => {
-    console.log('[styles]', styles); // 출력 안 됨
+    console.log('[styles]', styles);
     if (styles.length === 3) {
       const price = styles[parseInt(myOrder['styleId']) - 1].stylePrice;
       setStylePrice(price);
+      setTFstyle(true);
     }
   }, [styles]);
 
@@ -224,6 +229,7 @@ function DeleteMainOptionComponent(props) {
   const setDeletePrice = props.setDeletePrice;
   const setMyMainOption = props.setMyMainOption;
   const myOldOptions = props.myOldOptions;
+  const setTFdelete = props.setTFdelete;
 
   const dinnerId = myOrder['dinnerId'];
   // const myOptions = myOrder['dinnerOptionIds'];
@@ -263,6 +269,7 @@ function DeleteMainOptionComponent(props) {
             };
             setMyMainOption(tmpOption);
             setDeletePrice(mainOption.dinnerOptionPrice);
+            setTFdelete(true);
           }
         });
       });
@@ -314,31 +321,40 @@ function DeleteMainOptionComponent(props) {
 }
 
 function ChangeOptionNumberButton(props) {
+  const extraOption = props.extraOption;
   const optionNumber = props.optionNumber;
   const setOptionNumber = props.setOptionNumber;
-  const setTotalPrice = props.setTotalPrice;
+  const setOptionPrice = props.setOptionPrice;
   const dinnerOptionPrice = props.dinnerOptionPrice;
-  const myOptions = props.myOptions;
-  const dinnerOptionId = props.dinnerOptionId;
+  const myOldOptions = props.myOldOptions;
+  const setNewExtraOption = props.setNewExtraOption;
 
   const decreaseOptionNumber = () => {
     if (optionNumber == 0) {
       console.log('더 이상 줄일 수 없습니다');
     } else {
       setOptionNumber((prev) => prev - 1);
-      setTotalPrice((totalPrice) => totalPrice - dinnerOptionPrice);
+      setOptionPrice((prev) => prev - dinnerOptionPrice);
     }
   };
 
   const increaseOptionNumber = () => {
     setOptionNumber((prev) => prev + 1);
-    setTotalPrice((totalPrice) => totalPrice + dinnerOptionPrice);
+    setOptionPrice((prev) => prev + dinnerOptionPrice);
   };
 
   useEffect(() => {
-    const option = myOptions.find((o) => o.dinnerOptionId === dinnerOptionId);
-    if (option) setOptionNumber(option.amount);
-    else setOptionNumber(0);
+    const option = myOldOptions.find(
+      (o) => o.dinnerOptionId === extraOption.dinnerOptionId,
+    );
+    if (option) {
+      const tmpObject = {
+        id: option.dinnerOptionId,
+        amount: option.amount,
+      };
+      setNewExtraOption(tmpObject);
+      setOptionNumber(option.amount);
+    } else setOptionNumber(0);
   }, []);
 
   return (
@@ -359,11 +375,19 @@ function ChangeOptionNumberButton(props) {
 /** 옵션 한 줄! */
 function ExtraOptionItem(props) {
   const extraOption = props.extraOption; // 그 배열 자체
-  const dinnerOptionId = extraOption.dinnerOptionId; // 배열 id!
-  const setTotalPrice = props.setTotalPrice;
-  const myOptions = props.myOptions;
+  const setNewExtraOption = props.setNewExtraOption;
+  const setOptionPrice = props.setOptionPrice;
+  const myOldOptions = props.myOldOptions;
 
   const [optionNumber, setOptionNumber] = useState(0);
+
+  useEffect(() => {
+    const tmpObject = {
+      id: extraOption.dinnerOptionId,
+      amount: optionNumber,
+    };
+    setNewExtraOption(tmpObject);
+  }, [optionNumber]);
 
   return (
     <>
@@ -373,12 +397,13 @@ function ExtraOptionItem(props) {
       </div>
       <div className='dinner-option-button'>
         <ChangeOptionNumberButton
-          setTotalPrice={setTotalPrice}
+          setOptionPrice={setOptionPrice}
           dinnerOptionPrice={props.extraOption.dinnerOptionPrice}
-          dinnerOptionId={dinnerOptionId}
-          myOptions={myOptions}
+          myOldOptions={myOldOptions}
           setOptionNumber={setOptionNumber}
           optionNumber={optionNumber}
+          extraOption={extraOption}
+          setNewExtraOption={setNewExtraOption}
         />
       </div>
     </>
@@ -387,15 +412,15 @@ function ExtraOptionItem(props) {
 
 function ExtraOptionComponent(props) {
   const myOrder = props.myOrder;
-  const setTotalPrice = props.setTotalPrice;
+  const setOptionPrice = props.setOptionPrice;
   const myExtraOptions = props.myExtraOptions;
   const setMyExtraOptions = props.setMyExtraOptions;
+  const myOldOptions = props.myOldOptions;
 
-  const myOptions = myOrder['dinnerOptionIds'];
   const [loading, setLoading] = useState(true);
-  const [extraOptions, setExtraOptions] = useState([]);
+  const [extraOptions, setExtraOptions] = useState([]); // 추가 구성품 모든 목록
+
   const [newExtraOption, setNewExtraOption] = useState({});
-  // const myExtraOptions = props.myExtraOptions;
 
   /** 선택한 디너 옵션 정보 호출 */
   const getExtraOptions = async () => {
@@ -418,8 +443,9 @@ function ExtraOptionComponent(props) {
 
   useEffect(() => {
     getExtraOptions();
-    console.log('myOptions', myOptions);
   }, []); // 딱 시작할 때 가져올 수 있도록
+
+  const [check, setCheck] = useState(false);
 
   useEffect(() => {
     console.log('newExtraOption', newExtraOption);
@@ -431,16 +457,19 @@ function ExtraOptionComponent(props) {
      * amount값만 변경하고
      * myExtraOptions에 없으면 해당 newExtraOption을 추가한다
      */
-    if (!myExtraOptions.find((option) => option.id === newId)) {
-      //myExtraOptions에 newId가 없는 경우
-      setMyExtraOptions((prev) => [...prev, newExtraOption]);
-    } else {
+
+    setCheck(false);
+    myExtraOptions.map((option) => option.id == newId ? setCheck(true) : {});
+    if (check) {
       //myExtraOptions에 newId가 있는 경우
       setMyExtraOptions(
-        myExtraOptions.map((option) =>
+        myExtraOptions.some((option) =>
           option.id === newId ? { ...option, amount: newAmount } : option,
         ),
       );
+    } else {
+      //myExtraOptions에 newId가 없는 경우      
+      setMyExtraOptions((prev) => [...prev, newExtraOption]);
     }
   }, [newExtraOption]);
 
@@ -456,10 +485,10 @@ function ExtraOptionComponent(props) {
                 return (
                   <ExtraOptionItem // 그 option들 딱 배열될 수 있도록
                     key={extraOption.dinnerOptionId} // 배열 id랑
-                    extraOption={extraOption} // 그 배열 자체랑
+                    extraOption={extraOption}
                     setNewExtraOption={setNewExtraOption}
-                    setTotalPrice={setTotalPrice}
-                    myOptions={myOptions}
+                    setOptionPrice={setOptionPrice}
+                    myOldOptions={myOldOptions}
                   />
                 );
               })}
@@ -485,6 +514,7 @@ function EditDinnerPage() {
 
   const [stylePrice, setStylePrice] = useState(0);
   const [deletePrice, setDeletePrice] = useState(0);
+  const [optionPrice, setOptionPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0); // totalPrice = 디너 가격 + 옵션s 가격
   const [finalPrice, setFinalPrice] = useState(0); // FinalPrice = dinner-number * (totalPrice + stylePrice - deletePrice)
 
@@ -500,15 +530,26 @@ function EditDinnerPage() {
 
   const myOldOptions = dinner.orderDinnerOptions;
 
+  const [temp1, setTemp1] = useState([]);
+  const [temp2, setTemp2] = useState([]);
+
   useEffect(() => {
-    setMyOptions([...myExtraOptions, myMainOption]);
+    console.log('[temp1]', temp1);
+    setTemp2(temp1.filter((option) => option.id > 0 && option.amount > 0));
+    setMyOptions(temp2);
+  }, [temp1]);
+
+  useEffect(() => {
+    setTemp1([...myExtraOptions, myMainOption]);
   }, [myMainOption]);
 
   useEffect(() => {
     if (myMainOption == {}) {
-      setMyOptions(myExtraOptions);
+      setTemp1(myExtraOptions);
     } else {
-      setMyOptions([...myExtraOptions, myMainOption]);
+      console.log('myExtraOptions', myExtraOptions);
+      console.log('myMainOption', myMainOption);
+      // setTemp1([...myExtraOptions, myMainOption]);
     }
   }, [myExtraOptions]);
 
@@ -537,32 +578,42 @@ function EditDinnerPage() {
     }
   };
 
+  const [start, setStart] = useState(true);
+  const [TFtotal, setTFtotal] = useState(false);
+  const [TFstyle, setTFstyle] = useState(false);
+  const [TFdelete, setTFdelete] = useState(false);
+
   /** 업로드 될 때마다 가격 수정 */
   useEffect(() => {
     console.log(
-      '[가격] %d * ( %d + %d %d)',
+      '[가격] %d * ( %d + %d + %d %d)',
       myOrder['dinnerAmount'],
       totalPrice,
+      optionPrice,
       stylePrice,
       deletePrice,
     );
     setFinalPrice(
-      myOrder['dinnerAmount'] * (totalPrice + stylePrice + deletePrice),
+      myOrder['dinnerAmount'] * (totalPrice + optionPrice + stylePrice + deletePrice),
     );
-    console.log('[myOrder]', myOrder);
-  }, [totalPrice, myOrder, stylePrice, deletePrice]);
+    if (start && TFtotal && TFstyle && TFdelete) {
+      setOptionPrice(dinner['totalDinnerPrice'] / myOrder['dinnerAmount'] - totalPrice - stylePrice - deletePrice);
+      setStart(false);
+    }
+  }, [totalPrice, optionPrice, myOrder, stylePrice, deletePrice]);
 
   return (
     <CustomerLayout>
       <Header />
       <div className='order-container'>
-        <TopInfoComponent dinnerId={dinnerId} setTotalPrice={setTotalPrice} />
+        <TopInfoComponent dinnerId={dinnerId} setTotalPrice={setTotalPrice} setTFtotal={setTFtotal} />
         <div className='bottom-info-container'>
           <div className='bottom-left-container'>
             <StyleComponent
               myOrder={myOrder}
               setMyOrder={setMyOrder}
               setStylePrice={setStylePrice}
+              setTFstyle={setTFstyle}
             />
             <SteakDegreeComponent myOrder={myOrder} setMyOrder={setMyOrder} />
             <DeleteMainOptionComponent
@@ -570,6 +621,7 @@ function EditDinnerPage() {
               setDeletePrice={setDeletePrice}
               setMyMainOption={setMyMainOption}
               myOldOptions={myOldOptions}
+              setTFdelete={setTFdelete}
             />
           </div>
           <div className='bottom-right-container'>
@@ -578,7 +630,7 @@ function EditDinnerPage() {
             </div>
             <ExtraOptionComponent
               myOrder={myOrder}
-              setTotalPrice={setTotalPrice}
+              setOptionPrice={setOptionPrice}
               myExtraOptions={myExtraOptions}
               setMyExtraOptions={setMyExtraOptions}
               myOldOptions={myOldOptions}
