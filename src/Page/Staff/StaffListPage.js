@@ -74,7 +74,24 @@ function DeleteStaffButton({ staffId }) {
   );
 }
 
-function AppliedStaffsComponent({ appliedStaffs }) {
+function AppliedStaff({ appliedStaff }) {
+  const joinDate = format(parseISO(appliedStaff.joinDate), 'yyyy.MM.dd');
+  const role = checkStaffRole(appliedStaff.role);
+
+  return (
+    <tr key={appliedStaff.staffId}>
+      <td>{appliedStaff.staffName}</td>
+      <td>{appliedStaff.staffId}</td>
+      <td>{role}</td>
+      <td>{joinDate}</td>
+      <td>
+        <RegisterStaffButton staffId={appliedStaff.staffId} />
+      </td>
+    </tr>
+  );
+}
+
+function AppliedStaffList({ appliedStaffs }) {
   return (
     <div className='applied-staff-list-container'>
       <div className='title'>회원가입 신청한 직원</div>
@@ -90,25 +107,12 @@ function AppliedStaffsComponent({ appliedStaffs }) {
             </tr>
           </thead>
           <tbody>
-            {appliedStaffs.map((appliedStaff) => {
-              const joinDate = format(
-                parseISO(appliedStaff.joinDate),
-                'yyyy.MM.dd',
-              );
-              const role = checkStaffRole(appliedStaff.role);
-
-              return (
-                <tr key={appliedStaff.staffId}>
-                  <td>{appliedStaff.staffName}</td>
-                  <td>{appliedStaff.staffId}</td>
-                  <td>{role}</td>
-                  <td>{joinDate}</td>
-                  <td>
-                    <RegisterStaffButton staffId={appliedStaff.staffId} />
-                  </td>
-                </tr>
-              );
-            })}
+            {appliedStaffs.map((appliedStaff) => (
+              <AppliedStaff
+                key={appliedStaff.staffId}
+                appliedStaff={appliedStaff}
+              />
+            ))}
           </tbody>
         </table>
       </div>
@@ -116,7 +120,24 @@ function AppliedStaffsComponent({ appliedStaffs }) {
   );
 }
 
-function EmployedStaffsComponent({ employedStaffs }) {
+function EmployedStaff({ employedStaff }) {
+  const joinDate = format(parseISO(employedStaff.joinDate), 'yyyy.MM.dd');
+  const role = checkStaffRole(employedStaff.role);
+  return (
+    <tr key={employedStaff.staffId}>
+      <td>{employedStaff.staffName}</td>
+      <td>{employedStaff.staffId}</td>
+      <td>{role}</td>
+      <td>{joinDate}</td>
+      <td>{employedStaff.phoneNumber}</td>
+      <td>
+        <DeleteStaffButton staffId={employedStaff.staffId} />
+      </td>
+    </tr>
+  );
+}
+
+function EmployedStaffList({ employedStaffs }) {
   return (
     <div className='employed-staff-list-container'>
       <div className='title'>고용된 직원</div>
@@ -133,25 +154,12 @@ function EmployedStaffsComponent({ employedStaffs }) {
             </tr>
           </thead>
           <tbody>
-            {employedStaffs.map((employedStaff) => {
-              const joinDate = format(
-                parseISO(employedStaff.joinDate),
-                'yyyy.MM.dd',
-              );
-              const role = checkStaffRole(employedStaff.role);
-              return (
-                <tr key={employedStaff.staffId}>
-                  <td>{employedStaff.staffName}</td>
-                  <td>{employedStaff.staffId}</td>
-                  <td>{role}</td>
-                  <td>{joinDate}</td>
-                  <td>{employedStaff.phoneNumber}</td>
-                  <td>
-                    <DeleteStaffButton staffId={employedStaff.staffId} />
-                  </td>
-                </tr>
-              );
-            })}
+            {employedStaffs.map((employedStaff) => (
+              <EmployedStaff
+                key={employedStaff.staffId}
+                employedStaff={employedStaff}
+              />
+            ))}
           </tbody>
         </table>
       </div>
@@ -207,8 +215,8 @@ function StaffList() {
           </div>
         </div>
         <div className='content-container'>
-          <AppliedStaffsComponent appliedStaffs={appliedStaffs} />
-          <EmployedStaffsComponent employedStaffs={employedStaffs} />
+          <AppliedStaffList appliedStaffs={appliedStaffs} />
+          <EmployedStaffList employedStaffs={employedStaffs} />
         </div>
       </div>
     </div>
