@@ -6,15 +6,6 @@ import StaffLayout from '../../Component/StaffLayout';
 import StaffLogoNav from '../../Component/StaffLogoNav';
 import '../../scss/CustomerListPage.scss';
 
-function checkGrade(value) {
-  const GRADE_NAME = new Map([
-    [0, '일반'],
-    [1, '단골'],
-  ]);
-
-  return GRADE_NAME.get(value);
-}
-
 function CustomerList() {
   const [customers, setCustomers] = useState([]);
 
@@ -53,6 +44,15 @@ function CustomerList() {
     };
     getCustomers();
   }, []);
+
+  const checkGrade = (value) => {
+    const GRADE_NAME = new Map([
+      [0, '일반'],
+      [1, '단골'],
+    ]);
+
+    return GRADE_NAME.get(value);
+  };
 
   return (
     <div className='nexttonav'>
