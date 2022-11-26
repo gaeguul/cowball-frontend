@@ -118,22 +118,6 @@ function CustomerSignupForm() {
             {errors.address.message}
           </small>
         )}
-        {/* <p className='role-title'>지원역할</p>
-        <div className='role-container' onChange={handleRoleClick}>
-          <label>
-            <input
-              type='radio'
-              name='role'
-              id='delivery'
-              value='PENDING_DELIVERY'
-            />
-            배달
-          </label>
-          <label>
-            <input type='radio' name='role' id='cook' value='PENDING_COOK' />
-            조리
-          </label>
-        </div> */}
         <div className='signup-button-container'>
           <button
             className='signup-button'

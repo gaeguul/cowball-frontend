@@ -17,7 +17,9 @@ const ORDER_STATE = new Map([
   [255, '완료'],
 ]);
 
-function DevlieryInfoComponent(props) {
+function DevlieryInfo(props) {
+  const navigate = useNavigate();
+
   const customerId = localStorage.getItem('customerId');
   const customerToken = localStorage.getItem('customerToken');
 
@@ -38,6 +40,7 @@ function DevlieryInfoComponent(props) {
       const response = await axios.post(url, data, options);
       alert('해당 주문이 장바구니에 추가되었습니다.');
       console.log('response.statusText', response.statusText);
+      navigate('/cart');
     } catch (error) {
       console.log(error);
     }
@@ -313,7 +316,7 @@ function MyOrderItem(props) {
         orderDate={orderDate}
         orderState={orderState}
       />
-      <DevlieryInfoComponent orderId={orderId} myOrder={myOrder} />
+      <DevlieryInfo orderId={orderId} myOrder={myOrder} />
     </div>
   );
 }
