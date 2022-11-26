@@ -158,9 +158,7 @@ function StyleComponent(props) {
     try {
       const url = `menu/styles`;
       const response = await axios.get(url);
-
       setStyles(response.data.items);
-      console.log('getStyleOptions', styles); // 안 불러와짐 ***
     } catch (error) {
       console.log('getStyleOptions', error);
     }
@@ -173,12 +171,13 @@ function StyleComponent(props) {
 
   useEffect(() => {
     getStyleOptions();
-    setStylePrice(parseInt(styles[myOrder['styleId']]));
   }, []);
 
   useEffect(() => {
-    console.log('[myOrder]', myOrder);
-  }, [myOrder]);
+    console.log('[styles]', styles);
+    const price = parseInt(styles[parseInt(myOrder['styleId']) - 1].stylePrice);
+    setStylePrice(price);
+  }, [styles]);
 
   return (
     <div className='select-style-container'>
@@ -240,9 +239,12 @@ function DeleteMainOptionComponent(props) {
     }
   };
 
-  // useEffect도 안 들어가짐
   useEffect(() => {
     getMainOptions();
+  }, []);
+
+  useEffect(() => {
+    console.log('[mainOptions]', mainOptions);
     /** 처음 myMainOption 설정 */
     myOptions.map((myOption) => {
       mainOptions.map((mainOption) => {
@@ -257,7 +259,7 @@ function DeleteMainOptionComponent(props) {
         }
       });
     });
-  }, []);
+  }, [mainOptions]);
 
   const handleMainOptionClick = (event) => {
     const tmpOption = {
@@ -267,7 +269,7 @@ function DeleteMainOptionComponent(props) {
     setMyMainOption(tmpOption);
     setDeletePrice(parseInt(event.target.value));
   };
-  // 여기서 onChange 안 먹힘 ***
+
   return (
     <div className='menu-item-container'>
       <div className='title-container'>
@@ -286,14 +288,10 @@ function DeleteMainOptionComponent(props) {
                 name='delete-menu'
                 id={mainOption.dinnerOptionId}
                 value={mainOption.dinnerOptionPrice}
-                defaultChecked={
-                  myOptions &&
-                  myOptions.map((myOption) => {
-                    myOption.dinnerOptionId === mainOption.dinnerOptionId
-                      ? true
-                      : false;
-                  })
-                }
+                defaultChecked={myOptions.some(
+                  (myOption) =>
+                    myOption.dinnerOptionId === mainOption.dinnerOptionId,
+                )}
               />
               {mainOption.dinnerOptionDetail}
               <span className='option-price'>
@@ -349,7 +347,7 @@ function ChangeOptionNumberButton(props) {
     </div>
   );
 }
-/** 이제 여기가 추가 구성품들 예쁘게 나열될 곳: 한 줄 !!! */
+
 /** 옵션 한 줄! */
 function ExtraOptionItem(props) {
   const extraOption = props.extraOption; // 그 배열 자체
@@ -495,23 +493,16 @@ function EditDinnerPage() {
   }); // 잘 저장 됨
 
   useEffect(() => {
-    if (!myMainOption.id) {
-      // myMainOption.id 가 없으면 -> myMainOption 선택된 게 없다는 뜻
-      const tmpOptions = [...myExtraOptions];
-      tmpOptions.splice(0, 2);
-      setMyOptions(tmpOptions);
-      console.log('tmpOptions', tmpOptions);
-      setMyOptions(tmpOptions);
-      setMyOrder({ ...myOrder, dinnerOptionIds: tmpOptions });
+    setMyOptions([...myExtraOptions, myMainOption]);
+  }, [myMainOption]);
+
+  useEffect(() => {
+    if (myMainOption == {}) {
+      setMyOptions(myExtraOptions);
     } else {
-      const tmpOptions = [myMainOption, ...myExtraOptions];
-      tmpOptions.splice(1, 2);
-      setMyOptions(tmpOptions);
-      console.log('tmpOptions', tmpOptions);
-      setMyOptions(tmpOptions);
-      setMyOrder({ ...myOrder, dinnerOptionIds: tmpOptions });
+      setMyOptions([...myExtraOptions, myMainOption]);
     }
-  }, [myMainOption, myExtraOptions]);
+  }, [myExtraOptions]);
 
   useEffect(() => {
     setMyOrder({ ...myOrder, dinnerOptionIds: myOptions });
@@ -541,7 +532,7 @@ function EditDinnerPage() {
   /** 업로드 될 때마다 가격 수정 */
   useEffect(() => {
     console.log(
-      '%d * ( %d + %d %d)',
+      '[가격] %d * ( %d + %d %d)',
       myOrder['dinnerAmount'],
       totalPrice,
       stylePrice,
@@ -551,7 +542,8 @@ function EditDinnerPage() {
     setFinalPrice(
       myOrder['dinnerAmount'] * (totalPrice + stylePrice + deletePrice),
     );
-  }, [totalPrice, myOrder['dinnerAmount'], stylePrice, deletePrice]);
+    console.log('[myOrder]', myOrder);
+  }, [totalPrice, myOrder, stylePrice, deletePrice]);
 
   return (
     <CustomerLayout>
