@@ -35,7 +35,7 @@ export const API = {
   getIngredientCategories: async () => getAllItems(`ingredients/categories`),
 
   getTodayIngredientSchedule: async () =>
-    await axios.get(`ing-schedule`).then((res) => {
+    await axios.get(`ingredients/schedule`).then((res) => {
       console.log('Schedule', res.data);
       return res.data[0].items;
     }),
@@ -51,7 +51,7 @@ export const API = {
   getIngredientSchedule: async (dateFrom, dateTo) =>
     await axios
       .get(
-        `ing-schedule?date_from=${format(
+        `ingredients/schedule?date_from=${format(
           dateFrom,
           'yyyy-MM-dd',
         )}&date_to=${format(dateTo, 'yyyy-MM-dd')}`,
