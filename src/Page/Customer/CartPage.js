@@ -135,8 +135,7 @@ function ChangeDinnerNumberButton({
         console.log(error);
       }
     };
-    patchDinnerNumber();
-    getCartInfo();
+    patchDinnerNumber().finally(getCartInfo);
   }, [newDinnerNumber]);
 
   return (
