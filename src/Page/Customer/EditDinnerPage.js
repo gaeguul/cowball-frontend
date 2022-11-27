@@ -231,9 +231,9 @@ function DeleteMainOptionComponent(props) {
   const myOldOptions = props.myOldOptions;
   const setTFdelete = props.setTFdelete;
   const setModify = props.setModify;
+  const myMainOption = props.myMainOption;
 
   const dinnerId = myOrder['dinnerId'];
-  // const myOptions = myOrder['dinnerOptionIds'];
 
   const [mainOptions, setMainOptions] = useState([]); // 삭제 디너 옵션 리스트
 
@@ -275,6 +275,7 @@ function DeleteMainOptionComponent(props) {
         });
       });
     }
+    if (!(myMainOption.id == 1 || myMainOption.id == 2 || myMainOption.id == 3)) setTFdelete(true);
   }, [mainOptions]);
 
   const handleMainOptionClick = (event) => {
@@ -449,44 +450,30 @@ function ExtraOptionComponent(props) {
     getExtraOptions();
   }, []); // 딱 시작할 때 가져올 수 있도록
 
-  const [check, setCheck] = useState(true); // 시작하면 false, 단순히 newExtraOption의 id가 myExtraOptions에 있으면 잠시 true가 되는 확인용
-
   useEffect(() => {
     console.log('[newExtraOption]', newExtraOption);
     const newId = newExtraOption.id;
+    const newAmount = newExtraOption.amount;
+
     /**
      * 만약 newExtraOption의 id가 myExtraOptions에 있으면
      * amount값만 변경하고
      * myExtraOptions에 없으면 해당 newExtraOption을 추가한다
      */
-    setCheck(false);
     if (modify) {
-      myExtraOptions.map((option) => {
-        if (parseInt(option['dinnerOptionId']) === parseInt(newId)) {
-          setCheck(true);
-        }
-      });
+      if (!myExtraOptions.find((option) => option.id === newId)) {
+        //myExtraOptions에 newId가 없는 경우
+        setMyExtraOptions((prev) => [...prev, newExtraOption]);
+      } else {
+        //myExtraOptions에 newId가 있는 경우
+        setMyExtraOptions(
+          myExtraOptions.map((option) =>
+            option.id === newId ? { ...option, amount: newAmount } : option,
+          ),
+        );
+      }
     }
   }, [newExtraOption]);
-
-  useEffect(() => {
-    console.log('[check]', check);
-    const newId = newExtraOption.id;
-    const newAmount = newExtraOption.amount;
-    if (modify && check) {
-      //myExtraOptions에 newId가 있는 경우
-      setMyExtraOptions(
-        myExtraOptions.map((option) =>
-          option.id === newId ? { ...option, amount: newAmount } : option,
-        ),
-      );
-    } else {
-      //myExtraOptions에 newId가 없는 경우  
-      console.log('못들어감');
-      setMyExtraOptions((prev) => [...prev, newExtraOption]);
-    }
-    setCheck(false);
-  }, [check])
 
   return (
     <div className='dinner-option-list'>
@@ -541,47 +528,54 @@ function EditDinnerPage() {
     degreeId: dinner.degreeId,
     dinnerId: dinner.dinnerId,
     styleId: dinner.styleId,
-    dinnerOptionIds: dinner.orderDinnerOptions,
+    dinnerOptionIds: [],
     dinnerAmount: dinner.dinnerAmount,
   }); // 잘 저장 됨
 
   const myOldOptions = dinner.orderDinnerOptions;
 
-  const [temp1, setTemp1] = useState([]);
-  const [temp2, setTemp2] = useState([]);
-
-  useEffect(() => {
-    console.log('[temp1]', temp1);
-    setTemp2(temp1.filter((option) => option.id > 0 && option.amount > 0));
-    setMyOptions(temp2);
-  }, [temp1]);
+  const [temp3, setTemp3] = useState([]);
 
   useEffect(() => {
     console.log('[myMainOption]', myMainOption);
     if (modify) {
-      setTemp1([...myExtraOptions, myMainOption]);
+      setMyOptions([...myExtraOptions, myMainOption]);
     } else {
-      setMyExtraOptions(myOrder['dinnerOptionIds'].filter((option) => option.dinnerOptionId !== myMainOption.id));
+      setTemp3(myOldOptions.filter((option) => option.dinnerOptionId !== myMainOption.id));
     }
   }, [myMainOption]);
 
+  const [temp4, setTemp4] = useState([]);
+
   useEffect(() => {
-    console.log('[myExtraOptions]', myExtraOptions)
-    if (modify) {
-      if (myMainOption == {}) {
-        setTemp1(myExtraOptions);
-      } else {
-        console.log('myExtraOptions', myExtraOptions);
-        console.log('myMainOption', myMainOption);
-        // setTemp1([...myExtraOptions, myMainOption]);
-      }
+    console.log('[temp3]', temp3);
+    if (!modify) {
+      const tmpDinnerOptions = temp3.map((dinnerOption) => {
+        return {
+          id: dinnerOption.dinnerOptionId,
+          amount: dinnerOption.amount,
+        };
+      });
+      setTemp4(tmpDinnerOptions);
     }
+  }, [temp3]);
+
+  useEffect(() => {
+    console.log('[temp4]', temp4);
+    if (!modify) {
+      setMyExtraOptions(temp4);
+    }
+  }, [temp4]);
+
+  useEffect(() => {
+    console.log('[myExtraOptions]', myExtraOptions);
+    if (!(myMainOption.id == 1 || myMainOption.id == 2 || myMainOption.id == 3)) setMyOptions(myExtraOptions);
+    else setMyOptions([...myExtraOptions, myMainOption]);
   }, [myExtraOptions]);
 
   useEffect(() => {
-    if (modify) {
-      setMyOrder({ ...myOrder, dinnerOptionIds: myOptions });
-    }
+    console.log('[myOptions]', myOptions);
+    setMyOrder({ ...myOrder, dinnerOptionIds: myOptions });
   }, [myOptions]);
 
   const handleChangeDinnerClick = async () => {
@@ -652,6 +646,7 @@ function EditDinnerPage() {
               myOldOptions={myOldOptions}
               setTFdelete={setTFdelete}
               setModify={setModify}
+              myMainOption={myMainOption}
             />
           </div>
           <div className='bottom-right-container'>
